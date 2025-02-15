@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Simulate how concurrently running experiments affect each other"
+    />
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="web/index.css" />
+    <title>Care Clock</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="app"></div>
+
+    <style type="text/tailwindcss">
+      @theme {
+        --color-primary: var(--color-sky-600);
+        --color-primary-foreground: var(--color-white);
+        --color-destructive: var(--color-red-600);
+        --color-destructive-foreground: var(--color-white);
+      }
+    </style>
+    <script type="importmap">
+      {
+        "imports": {
+          "class-variance-authority": "https://esm.sh/class-variance-authority@0.7.1",
+          "clsx": "https://esm.sh/clsx@2.1.1",
+          "htm/preact": "https://esm.sh/htm@3.1.1/preact?external=preact",
+          "preact": "https://esm.sh/preact@10.25.4",
+          "preact/hooks": "https://esm.sh/preact@10.25.4/hooks?external=/preact",
+          "remeda": "https://esm.sh/remeda@2.20.1",
+          "tailwind-merge": "https://esm.sh/tailwind-merge@3.0.1"
+        }
+      }
+    </script>
+    <script type="module" src="./web/index.js"></script>
+  </body>
+</html>
