@@ -1,4 +1,6 @@
 import { html } from "htm/preact";
+import { useSignal } from "@preact/signals";
+
 import { Card, CardContent } from "./components/Card.js";
 import { Button } from "./components/Button.js";
 import { Input } from "./components/Input.js";
@@ -6,21 +8,46 @@ import { Label } from "./components/Label.js";
 
 export const App = () => {
   const patientName = "Bob";
-  const formatTime = (milliseconds) => {
-    return new Date(milliseconds).toISOString();
+
+  const startTime = useSignal(null);
+  const endTime = useSignal(null);
+  const interval = useSignal(null);
+
+  const startTimer = () => {
+    if (interval.value) clearInterval(interval.value);
+    startTime.value = Date.now();
+    interval.value = setInterval(() => (endTime.value = Date.now()), 1000);
+  };
+  const stopTimer = () => {
+    clearInterval(interval.value);
+    interval.value = null;
+  };
+
+  const formatElapsedTime = (endTime, startTime) => {
+    if (!endTime || !startTime) return "00:00:00";
+
+    const elapsedTime = endTime - startTime;
+    const hours = Math.floor(elapsedTime / (1000 * 60 * 60))
+      .toString()
+      .padStart(2, "0");
+    const minutes = Math.floor((elapsedTime % (1000 * 60 * 60)) / (1000 * 60))
+      .toString()
+      .padStart(2, "0");
+    const seconds = Math.floor((elapsedTime % (1000 * 60)) / 1000)
+      .toString()
+      .padStart(2, "0");
+
+    return `${hours}:${minutes}:${seconds}`;
   };
   const currentActivity = "Dancing";
+  const isRunning = Boolean(interval.value);
   const activities = [];
-  const time = Date.now();
-  const startTimer = () => {};
-  const stopTimer = () => {};
-  const isRunning = false;
 
   return html`
     <div class="max-w-md mx-auto p-4 space-y-6">
       <header class="text-center">
         <h1 class="text-2xl font-bold text-primary">
-          KidClock Therapy Tracker
+          CareClock Therapy Tracker
         </h1>
       </header>
 
@@ -39,10 +66,13 @@ export const App = () => {
           </div>
 
           <div class="text-center">
-            <div class="text-4xl font-bold mb-2">${formatTime(time)}</div>
+            <div class="text-4xl font-mono font-bold mb-2">${formatElapsedTime(
+              endTime.value,
+              startTime.value
+            )}</div>
             <div class="space-x-2">
               <${Button}
-                onClick=${startTimer}
+                onClick=${() => startTimer()}
                 disabled=${isRunning || !patientName}
               >
                 Start

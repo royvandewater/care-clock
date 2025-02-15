@@ -5,7 +5,7 @@
   "scripts": {
     "deploy": "wrangler deploy",
     "dev": "wrangler dev",
-    "live-server": "live-server",
+    "live-server": "live-server --ignore=.git --ignore=node_modules --ignore=src",
     "start": "wrangler dev",
     "cf-typegen": "wrangler types"
   },
