@@ -7,7 +7,7 @@ import { Input } from "./components/Input.js";
 import { Label } from "./components/Label.js";
 
 export const App = () => {
-  const patientName = "Bob";
+  const camperName = useSignal("");
 
   const startTime = useSignal(null);
   const endTime = useSignal(null);
@@ -54,15 +54,14 @@ export const App = () => {
       <${Card}>
         <${CardContent} class="p-4 space-y-4">
           <div>
-            <${Label} htmlFor="patientName">Patient Name</label>
-            <${Input} 
-              id="patientName" 
-              value=${patientName} 
-              onChange=${(e) => {
-                setPatientName(e.target.value);
-              }} 
-              placeholder="Enter patient's name"
-            />
+            <${Label} >Camper
+              <${Input} 
+                id="camperName" 
+                value=${camperName} 
+                onInput=${(e) => (camperName.value = e.target.value)} 
+                placeholder="Bob"
+              />
+            </${Label}>
           </div>
 
           <div class="text-center">
@@ -73,7 +72,7 @@ export const App = () => {
             <div class="space-x-2">
               <${Button}
                 onClick=${() => startTimer()}
-                disabled=${isRunning || !patientName}
+                disabled=${isRunning || !camperName.value.length}
               >
                 Start
               </${Button}>
@@ -88,12 +87,13 @@ export const App = () => {
           </div>
 
           <div>
-            <${Label} htmlFor="activityDescription">Activity Description</label>
-            <${Input} 
-              id="activityDescription" 
-              value=${currentActivity}
-              onChange=${(e) => setCurrentActivity(e.target.value)}
-              placeholder="Describe the current activity" />
+            <${Label} >Activity Description
+              <${Input} 
+                id="activityDescription" 
+                value=${currentActivity}
+                onChange=${(e) => setCurrentActivity(e.target.value)}
+                placeholder="Describe the current activity" />
+            </${Label}>
           </div>
         </${CardContent}>
       </${Card}>
