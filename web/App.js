@@ -1,14 +1,17 @@
 import { html } from "htm/preact";
 import { useSignal } from "@preact/signals";
 
-import { formatElapsedTime } from "./formatElapsedTime.js";
 import { Card, CardContent } from "./components/Card.js";
 import { Button } from "./components/Button.js";
 import { Input } from "./components/Input.js";
 import { Label } from "./components/Label.js";
 
+import { startActivity } from "./data/startActivity.js";
+
+import { formatElapsedTime } from "./formatElapsedTime.js";
+
 export const App = () => {
-  const camperName = useSignal("");
+  const camperName = useSignal("Bob");
   const description = useSignal("");
 
   const startTime = useSignal(null);
@@ -16,10 +19,14 @@ export const App = () => {
   const interval = useSignal(null);
   const isRunning = Boolean(interval.value);
 
-  const startTimer = () => {
+  const startTimer = async () => {
     if (interval.value) clearInterval(interval.value);
-    startTime.value = Date.now();
-    interval.value = setInterval(() => (endTime.value = Date.now()), 1000);
+    const activity = await startActivity({
+      camperName: camperName.value,
+      description: description.value,
+    });
+    startTime.value = activity.startTime;
+    interval.value = setInterval(() => (endTime.value = new Date()), 1000);
   };
   const stopTimer = () => {
     clearInterval(interval.value);

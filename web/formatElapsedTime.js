@@ -1,12 +1,12 @@
 /**
- * @param {Number} endTime
- * @param {Number} startTime
+ * @param {Date | null} endTime
+ * @param {Date | null} startTime
  * @returns {String}
  */
 export const formatElapsedTime = (endTime, startTime) => {
   if (!endTime || !startTime) return "00:00:00";
 
-  const elapsedTime = endTime - startTime;
+  const elapsedTime = endTime.getTime() - startTime.getTime();
   const hours = Math.floor(elapsedTime / (1000 * 60 * 60))
     .toString()
     .padStart(2, "0");

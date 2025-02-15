@@ -1,16 +1,17 @@
 import { Bool, OpenAPIRoute } from "chanfana";
 import { z } from "zod";
-import { Task } from "../types";
+import { Activity, Task } from "../types";
+import { v4 as uuid } from "uuid";
 
-export class TaskCreate extends OpenAPIRoute {
+export class ActivityCreate extends OpenAPIRoute {
   schema = {
-    tags: ["Tasks"],
-    summary: "Create a new Task",
+    tags: ["Activities"],
+    summary: "Start a new Activity",
     request: {
       body: {
         content: {
           "application/json": {
-            schema: Task,
+            schema: Activity.omit({ id: true }),
           },
         },
       },
@@ -24,7 +25,7 @@ export class TaskCreate extends OpenAPIRoute {
               series: z.object({
                 success: Bool(),
                 result: z.object({
-                  task: Task,
+                  activity: Activity,
                 }),
               }),
             }),
@@ -39,19 +40,21 @@ export class TaskCreate extends OpenAPIRoute {
     const data = await this.getValidatedData<typeof this.schema>();
 
     // Retrieve the validated request body
-    const taskToCreate = data.body;
+    const activityToCreate = {
+      ...data.body,
+      id: uuid(),
+    };
 
     // Implement your own object insertion here
 
     // return the new task
     return {
       success: true,
-      task: {
-        name: taskToCreate.name,
-        slug: taskToCreate.slug,
-        description: taskToCreate.description,
-        completed: taskToCreate.completed,
-        due_date: taskToCreate.due_date,
+      activity: {
+        id: activityToCreate.id,
+        camperName: activityToCreate.camperName,
+        description: activityToCreate.description,
+        startTime: activityToCreate.startTime,
       },
     };
   }
