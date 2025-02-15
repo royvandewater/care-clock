@@ -7,6 +7,7 @@ import { Input } from "./components/Input.js";
 import { Label } from "./components/Label.js";
 
 import { startActivity } from "./data/startActivity.js";
+import { stopActivity } from "./data/stopActivity.js";
 
 import { formatElapsedTime } from "./formatElapsedTime.js";
 
@@ -14,6 +15,7 @@ export const App = () => {
   const camperName = useSignal("Bob");
   const description = useSignal("");
 
+  const activityId = useSignal(null);
   const startTime = useSignal(null);
   const endTime = useSignal(null);
   const interval = useSignal(null);
@@ -25,12 +27,21 @@ export const App = () => {
       camperName: camperName.value,
       description: description.value,
     });
+    activityId.value = activity.id;
     startTime.value = activity.startTime;
     interval.value = setInterval(() => (endTime.value = new Date()), 1000);
   };
-  const stopTimer = () => {
+  const stopTimer = async () => {
     clearInterval(interval.value);
     interval.value = null;
+    await stopActivity({
+      id: activityId.value,
+      description: description.value,
+      endTime: new Date(),
+    });
+    startTime.value = null;
+    endTime.value = null;
+    activityId.value = null;
   };
 
   return html`

@@ -1,9 +1,10 @@
 import { apiUrl } from "./apiUrl.js";
 import { assert } from "../assert.js";
+import { z } from "zod";
 
 /**
  * @param {{camperName: string; description: string}} props
- * @returns {Promise<void>}
+ * @returns {Promise<{startTime: Date; id: string}>}
  */
 export const startActivity = async ({ camperName, description }) => {
   const startTime = new Date();
@@ -19,6 +20,14 @@ export const startActivity = async ({ camperName, description }) => {
 
   const body = await res.text();
   assert(res.ok, `Failed to start activity: ${res.status} ${body}`);
+  const data = responseSchema.parse(JSON.parse(body));
 
-  return { startTime };
+  return { startTime, id: data.activity.id };
 };
+
+const responseSchema = z.object({
+  success: z.boolean(),
+  activity: z.object({
+    id: z.string(),
+  }),
+});

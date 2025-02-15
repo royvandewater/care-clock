@@ -20,6 +20,7 @@ openapi.use(cors());
 
 // Register OpenAPI endpoints
 openapi.post("/activities", ActivityCreate);
+openapi.put("/activities/:activityId", ActivityUpdate);
 openapi.get("/api/tasks", TaskList);
 openapi.post("/api/tasks", TaskCreate);
 openapi.get("/api/tasks/:taskSlug", TaskFetch);
