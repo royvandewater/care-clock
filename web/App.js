@@ -1,6 +1,7 @@
 import { html } from "htm/preact";
 import { useSignal } from "@preact/signals";
 
+import { formatElapsedTime } from "./formatElapsedTime.js";
 import { Card, CardContent } from "./components/Card.js";
 import { Button } from "./components/Button.js";
 import { Input } from "./components/Input.js";
@@ -8,10 +9,12 @@ import { Label } from "./components/Label.js";
 
 export const App = () => {
   const camperName = useSignal("");
+  const description = useSignal("");
 
   const startTime = useSignal(null);
   const endTime = useSignal(null);
   const interval = useSignal(null);
+  const isRunning = Boolean(interval.value);
 
   const startTimer = () => {
     if (interval.value) clearInterval(interval.value);
@@ -23,31 +26,11 @@ export const App = () => {
     interval.value = null;
   };
 
-  const formatElapsedTime = (endTime, startTime) => {
-    if (!endTime || !startTime) return "00:00:00";
-
-    const elapsedTime = endTime - startTime;
-    const hours = Math.floor(elapsedTime / (1000 * 60 * 60))
-      .toString()
-      .padStart(2, "0");
-    const minutes = Math.floor((elapsedTime % (1000 * 60 * 60)) / (1000 * 60))
-      .toString()
-      .padStart(2, "0");
-    const seconds = Math.floor((elapsedTime % (1000 * 60)) / 1000)
-      .toString()
-      .padStart(2, "0");
-
-    return `${hours}:${minutes}:${seconds}`;
-  };
-  const currentActivity = "Dancing";
-  const isRunning = Boolean(interval.value);
-  const activities = [];
-
   return html`
     <div class="max-w-md mx-auto p-4 space-y-6">
       <header class="text-center">
         <h1 class="text-2xl font-bold text-primary">
-          CareClock Therapy Tracker
+          CareClock
         </h1>
       </header>
 
@@ -89,39 +72,11 @@ export const App = () => {
           <div>
             <${Label} >Activity Description
               <${Input} 
-                id="activityDescription" 
-                value=${currentActivity}
-                onChange=${(e) => setCurrentActivity(e.target.value)}
+                value=${description}
+                onInput=${(e) => (description.value = e.target.value)}
                 placeholder="Describe the current activity" />
             </${Label}>
           </div>
-        </${CardContent}>
-      </${Card}>
-
-      <${Card}>
-        <${CardContent} class="p-4">
-          <h2 class="text-xl font-semibold mb-2">Recorded Activities</h2>
-          ${
-            activities.length === 0
-              ? html`<p class="text-muted-foreground">
-                  No activities recorded yet.
-                </p>`
-              : html`<ul class="space-y-2">
-                  ${activities.map(
-                    (activity, index) => html`
-                      <li
-                        key="{index}"
-                        class="flex justify-between items-center"
-                      >
-                        <span>{activity.description}</span>
-                        <span class="text-muted-foreground">
-                          {formatTime(activity.duration)}
-                        </span>
-                      </li>
-                    `
-                  )}
-                </ul>`
-          }
         </${CardContent}>
       </${Card}>
     </div>
