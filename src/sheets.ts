@@ -15,7 +15,7 @@ const configurationFromEnv = (env: Record<string, string>) => {
   const email = env.GOOGLE_API_CLIENT_EMAIL;
   assert(email, "GOOGLE_API_CLIENT_EMAIL is not set");
 
-  const privateKey = env.GOOGLE_API_PRIVATE_KEY;
+  const privateKey = env.GOOGLE_API_PRIVATE_KEY?.replace(/\\n/g, "\n");
   assert(privateKey, "GOOGLE_API_PRIVATE_KEY is not set");
 
   const sheetId = env.GOOGLE_SHEET_ID;
