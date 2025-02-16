@@ -11,6 +11,7 @@ import { stopActivity } from "./data/stopActivity.js";
 
 import { formatElapsedTime } from "./formatElapsedTime.js";
 import { fromISOString } from "./date.js";
+import { cn } from "./cn.js";
 
 export const App = () => {
   const therapistName = useSignal(JSON.parse(window.localStorage.getItem("therapistName")) ?? "");
@@ -21,12 +22,10 @@ export const App = () => {
   const startTime = useSignal(fromISOString(JSON.parse(window.localStorage.getItem("startTime"))));
   const endTime = useSignal(new Date());
   const interval = useSignal(null);
-  const isRunning = Boolean(interval.value);
+  const isRunning = Boolean(interval.value) && Boolean(startTime.value);
 
   useSignalEffect(() => {
-    console.log("useSignalEffect", interval.value, startTime.value);
     if (interval.value) return;
-    if (!startTime.value) return;
 
     interval.value = setInterval(() => (endTime.value = new Date()), 1000);
   });
@@ -38,7 +37,6 @@ export const App = () => {
   useSignalEffect(() => window.localStorage.setItem("startTime", JSON.stringify(startTime.value?.toISOString() ?? null)));
 
   const startTimer = async () => {
-    if (interval.value) clearInterval(interval.value);
     const activity = await startActivity({
       therapistName: therapistName.value,
       camperName: camperName.value,
@@ -49,7 +47,6 @@ export const App = () => {
   };
 
   const stopTimer = async () => {
-    clearInterval(interval.value);
     interval.value = null;
     await stopActivity({
       rowNumber: rowNumber.value,
@@ -57,7 +54,6 @@ export const App = () => {
       endTime: new Date(),
     });
     startTime.value = null;
-    endTime.value = null;
     rowNumber.value = null;
   };
 
@@ -96,7 +92,7 @@ export const App = () => {
           </div>
 
           <div class="text-center">
-            <div class="text-4xl font-mono font-bold mb-2">${formatElapsedTime(startTime.value, endTime.value)}</div>
+            <div class=${cn("text-4xl font-mono font-bold mb-2", isRunning ? "" : "opacity-50")}>${formatElapsedTime(startTime.value, endTime.value)}</div>
             <div class="space-x-2">
               <${Button}
                 onClick=${() => startTimer()}
