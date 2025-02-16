@@ -2,6 +2,7 @@ import { Bool, OpenAPIRoute } from "chanfana";
 import { z } from "zod";
 import { Activity } from "../types";
 import { getSheetFromEnv } from "sheets";
+import { fromISOString, toLocaleString } from "../date";
 
 export class ActivityCreate extends OpenAPIRoute {
   schema = {
@@ -50,7 +51,7 @@ export class ActivityCreate extends OpenAPIRoute {
       Therapist: activityToCreate.therapistName,
       Camper: activityToCreate.camperName,
       Description: activityToCreate.description,
-      Start: new Date(activityToCreate.startTime).toLocaleString(),
+      Start: toLocaleString(fromISOString(activityToCreate.startTime)),
     });
 
     // return the new task

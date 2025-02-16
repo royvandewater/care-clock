@@ -23,7 +23,7 @@ export const startActivity = async ({ therapistName, camperName, description }) 
   assert(res.ok, `Failed to start activity: ${res.status} ${body}`);
   const data = responseSchema.parse(JSON.parse(body));
 
-  return { startTime, id: data.activity.id };
+  return { startTime, rowNumber: data.activity.rowNumber };
 };
 
 const responseSchema = z.object({

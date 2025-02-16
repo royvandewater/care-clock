@@ -16,7 +16,7 @@ export const App = () => {
   const camperName = useSignal("Bob");
   const description = useSignal("");
 
-  const activityId = useSignal(null);
+  const rowNumber = useSignal(null);
   const startTime = useSignal(null);
   const endTime = useSignal(null);
   const interval = useSignal(null);
@@ -29,7 +29,7 @@ export const App = () => {
       camperName: camperName.value,
       description: description.value,
     });
-    activityId.value = activity.id;
+    rowNumber.value = activity.rowNumber;
     startTime.value = activity.startTime;
     interval.value = setInterval(() => (endTime.value = new Date()), 1000);
   };
@@ -37,13 +37,13 @@ export const App = () => {
     clearInterval(interval.value);
     interval.value = null;
     await stopActivity({
-      id: activityId.value,
+      rowNumber: rowNumber.value,
       description: description.value,
       endTime: new Date(),
     });
     startTime.value = null;
     endTime.value = null;
-    activityId.value = null;
+    rowNumber.value = null;
   };
 
   return html`
@@ -62,6 +62,7 @@ export const App = () => {
                 id="camperName" 
                 value=${camperName} 
                 onInput=${(e) => (camperName.value = e.target.value)} 
+                disabled=${isRunning}
                 placeholder="Bob"
               />
             </${Label}>
