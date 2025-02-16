@@ -17,7 +17,3 @@ This project is setup to automatically deploy on pushes to the `main` branch. To
 ```bash
 npm run deploy
 ```
-
-## TODO
-
-- [ ] Store state in local storage
