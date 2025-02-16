@@ -2,6 +2,7 @@ import { Bool, OpenAPIRoute } from "chanfana";
 import { z } from "zod";
 import { Activity, Task } from "../types";
 import { v4 as uuid } from "uuid";
+import { getClientFromEnv as getDocFromEnv } from "sheets";
 
 export class ActivityCreate extends OpenAPIRoute {
   schema = {
@@ -39,12 +40,14 @@ export class ActivityCreate extends OpenAPIRoute {
     // Get validated data
     const data = await this.getValidatedData<typeof this.schema>();
 
-    // Retrieve the validated request body
     const activityToCreate = {
       ...data.body,
       id: uuid(),
     };
 
+    const doc = await getDocFromEnv(c.env);
+    await doc.loadInfo();
+    console.log("doc.title", doc.title);
     // Implement your own object insertion here
 
     // return the new task

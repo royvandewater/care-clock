@@ -1,6 +1,5 @@
-import { Bool, OpenAPIRoute } from "chanfana";
-import { z } from "zod";
-import { Activity, Task } from "../types";
+import { OpenAPIRoute } from "chanfana";
+import { Activity } from "../types";
 import { v4 as uuid } from "uuid";
 
 export class ActivityUpdate extends OpenAPIRoute {
@@ -23,27 +22,16 @@ export class ActivityUpdate extends OpenAPIRoute {
     },
   };
 
-  async handle(c) {
+  async handle(c, env) {
     // Get validated data
     const data = await this.getValidatedData<typeof this.schema>();
 
     // Retrieve the validated request body
-    const activityToCreate = {
+    const activityToUpdate = {
       ...data.body,
       id: uuid(),
     };
 
-    // Implement your own object insertion here
-
-    // return the new task
-    return {
-      success: true,
-      activity: {
-        id: activityToCreate.id,
-        camperName: activityToCreate.camperName,
-        description: activityToCreate.description,
-        startTime: activityToCreate.startTime,
-      },
-    };
+    // Implement your own update here
   }
 }

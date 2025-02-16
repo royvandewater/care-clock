@@ -5,6 +5,7 @@
  */
 export const assert = (condition, error = new Error("Assertion failed")) => {
   if (condition) return;
+  if (typeof error === "string") throw new Error(error);
   if (error instanceof Error) throw error;
-  throw new Error(message);
+  throw new Error("Assertion failed");
 };

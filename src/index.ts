@@ -1,12 +1,14 @@
 import { fromHono } from "chanfana";
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 
 import { ActivityCreate } from "endpoints/activityCreate";
+import { ActivityUpdate } from "endpoints/activityUpdate";
+
 import { TaskCreate } from "./endpoints/taskCreate";
 import { TaskDelete } from "./endpoints/taskDelete";
 import { TaskFetch } from "./endpoints/taskFetch";
 import { TaskList } from "./endpoints/taskList";
-import { cors } from "hono/cors";
 
 // Start a Hono app
 const app = new Hono();
