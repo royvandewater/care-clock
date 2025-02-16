@@ -3,15 +3,16 @@ import { assert } from "../assert.js";
 import { z } from "zod";
 
 /**
- * @param {{camperName: string; description: string}} props
+ * @param {{therapistName: string; camperName: string; description: string}} props
  * @returns {Promise<{startTime: Date; id: string}>}
  */
-export const startActivity = async ({ camperName, description }) => {
+export const startActivity = async ({ therapistName, camperName, description }) => {
   const startTime = new Date();
   const url = new URL("/activities", apiUrl);
   const res = await fetch(url, {
     method: "POST",
     body: JSON.stringify({
+      therapistName,
       camperName,
       description,
       startTime: startTime.toISOString(),
@@ -28,6 +29,6 @@ export const startActivity = async ({ camperName, description }) => {
 const responseSchema = z.object({
   success: z.boolean(),
   activity: z.object({
-    id: z.string(),
+    rowNumber: z.number(),
   }),
 });

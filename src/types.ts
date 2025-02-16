@@ -10,7 +10,8 @@ export const Task = z.object({
 });
 
 export const Activity = z.object({
-  id: Uuid(),
+  rowNumber: z.number(),
+  therapistName: Str(),
   camperName: Str(),
   description: Str(),
   startTime: DateTime(),

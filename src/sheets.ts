@@ -3,6 +3,12 @@ import { GoogleSpreadsheet } from "google-spreadsheet";
 
 import { assert } from "./assert";
 
+export const getSheetFromEnv = async (env: Record<string, string>) => {
+  const doc = await getDoc(configurationFromEnv(env));
+  await doc.loadInfo();
+  return doc.sheetsByTitle["Activities"];
+};
+
 export const getClientFromEnv = async (env: Record<string, string>) => {
   return getDoc(configurationFromEnv(env));
 };

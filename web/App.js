@@ -12,6 +12,7 @@ import { stopActivity } from "./data/stopActivity.js";
 import { formatElapsedTime } from "./formatElapsedTime.js";
 
 export const App = () => {
+  const therapistName = useSignal("Jane");
   const camperName = useSignal("Bob");
   const description = useSignal("");
 
@@ -24,6 +25,7 @@ export const App = () => {
   const startTimer = async () => {
     if (interval.value) clearInterval(interval.value);
     const activity = await startActivity({
+      therapistName: therapistName.value,
       camperName: camperName.value,
       description: description.value,
     });
@@ -66,14 +68,11 @@ export const App = () => {
           </div>
 
           <div class="text-center">
-            <div class="text-4xl font-mono font-bold mb-2">${formatElapsedTime(
-              endTime.value,
-              startTime.value
-            )}</div>
+            <div class="text-4xl font-mono font-bold mb-2">${formatElapsedTime(endTime.value, startTime.value)}</div>
             <div class="space-x-2">
               <${Button}
                 onClick=${() => startTimer()}
-                disabled=${isRunning || !camperName.value.length}
+                disabled=${isRunning || !camperName.value.length || !therapistName.value.length}
               >
                 Start
               </${Button}>

@@ -1,8 +1,7 @@
 import { Bool, OpenAPIRoute } from "chanfana";
 import { z } from "zod";
-import { Activity, Task } from "../types";
-import { v4 as uuid } from "uuid";
-import { getClientFromEnv as getDocFromEnv } from "sheets";
+import { Activity } from "../types";
+import { getSheetFromEnv } from "sheets";
 
 export class ActivityCreate extends OpenAPIRoute {
   schema = {
@@ -12,7 +11,7 @@ export class ActivityCreate extends OpenAPIRoute {
       body: {
         content: {
           "application/json": {
-            schema: Activity.omit({ id: true }),
+            schema: Activity.omit({ rowNumber: true }),
           },
         },
       },
@@ -42,22 +41,24 @@ export class ActivityCreate extends OpenAPIRoute {
 
     const activityToCreate = {
       ...data.body,
-      id: uuid(),
     };
 
-    const doc = await getDocFromEnv(c.env);
-    await doc.loadInfo();
-    console.log("doc.title", doc.title);
-    // Implement your own object insertion here
+    const sheet = await getSheetFromEnv(c.env);
+    await sheet.loadHeaderRow();
+
+    const row = await sheet.addRow({
+      Therapist: activityToCreate.therapistName,
+      Camper: activityToCreate.camperName,
+      Description: activityToCreate.description,
+      Start: new Date(activityToCreate.startTime).toLocaleString(),
+    });
 
     // return the new task
     return {
       success: true,
       activity: {
-        id: activityToCreate.id,
-        camperName: activityToCreate.camperName,
-        description: activityToCreate.description,
-        startTime: activityToCreate.startTime,
+        rowNumber: row.rowNumber,
+        ...activityToCreate,
       },
     };
   }
