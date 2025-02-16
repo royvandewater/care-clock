@@ -12,8 +12,8 @@ import { stopActivity } from "./data/stopActivity.js";
 import { formatElapsedTime } from "./formatElapsedTime.js";
 
 export const App = () => {
-  const therapistName = useSignal("Jane");
-  const camperName = useSignal("Bob");
+  const therapistName = useSignal("");
+  const camperName = useSignal("");
   const description = useSignal("");
 
   const rowNumber = useSignal(null);
@@ -21,6 +21,11 @@ export const App = () => {
   const endTime = useSignal(null);
   const interval = useSignal(null);
   const isRunning = Boolean(interval.value);
+  const showSettings = useSignal(!Boolean(therapistName.value));
+
+  const toggleSettings = () => {
+    showSettings.value = !showSettings.value;
+  };
 
   const startTimer = async () => {
     if (interval.value) clearInterval(interval.value);
@@ -33,6 +38,7 @@ export const App = () => {
     startTime.value = activity.startTime;
     interval.value = setInterval(() => (endTime.value = new Date()), 1000);
   };
+
   const stopTimer = async () => {
     clearInterval(interval.value);
     interval.value = null;
@@ -48,7 +54,7 @@ export const App = () => {
 
   return html`
     <div class="max-w-md mx-auto p-4 space-y-6">
-      <header class="text-center">
+      <header class="text-center relative">
         <h1 class="text-2xl font-bold text-primary">
           CareClock
         </h1>
@@ -56,13 +62,25 @@ export const App = () => {
 
       <${Card}>
         <${CardContent} class="p-4 space-y-4">
-          <div>
+          <div class="flex flex-col gap-2">
+            <${Label} >Therapist
+              <${Input} 
+                id="therapistName" 
+                value=${therapistName} 
+                onInput=${(e) => (therapistName.value = e.target.value)} 
+                disabled=${isRunning}
+                autoFocus=${!Boolean(therapistName.value)}
+                placeholder="Jane"  
+              />
+            </${Label}>
+
             <${Label} >Camper
               <${Input} 
                 id="camperName" 
                 value=${camperName} 
                 onInput=${(e) => (camperName.value = e.target.value)} 
-                disabled=${isRunning}
+                disabled=${isRunning || !therapistName.value.length}
+                autoFocus=${Boolean(therapistName.value)}
                 placeholder="Bob"
               />
             </${Label}>
@@ -92,6 +110,7 @@ export const App = () => {
               <${Input} 
                 value=${description}
                 onInput=${(e) => (description.value = e.target.value)}
+                disabled=${!therapistName.value.length || !camperName.value.length}
                 placeholder="Describe the current activity" />
             </${Label}>
           </div>
