@@ -1,5 +1,5 @@
 import { html } from "htm/preact";
-import { useSignal } from "@preact/signals";
+import { useSignal, useSignalEffect } from "@preact/signals";
 
 import { Card, CardContent } from "./components/Card.js";
 import { Button } from "./components/Button.js";
@@ -10,22 +10,32 @@ import { startActivity } from "./data/startActivity.js";
 import { stopActivity } from "./data/stopActivity.js";
 
 import { formatElapsedTime } from "./formatElapsedTime.js";
+import { fromISOString } from "./date.js";
 
 export const App = () => {
-  const therapistName = useSignal("");
-  const camperName = useSignal("");
-  const description = useSignal("");
+  const therapistName = useSignal(JSON.parse(window.localStorage.getItem("therapistName")) ?? "");
+  const camperName = useSignal(JSON.parse(window.localStorage.getItem("camperName")) ?? "");
+  const description = useSignal(JSON.parse(window.localStorage.getItem("description")) ?? "");
 
-  const rowNumber = useSignal(null);
-  const startTime = useSignal(null);
-  const endTime = useSignal(null);
+  const rowNumber = useSignal(JSON.parse(window.localStorage.getItem("rowNumber")));
+  const startTime = useSignal(fromISOString(JSON.parse(window.localStorage.getItem("startTime"))));
+  const endTime = useSignal(new Date());
   const interval = useSignal(null);
   const isRunning = Boolean(interval.value);
-  const showSettings = useSignal(!Boolean(therapistName.value));
 
-  const toggleSettings = () => {
-    showSettings.value = !showSettings.value;
-  };
+  useSignalEffect(() => {
+    console.log("useSignalEffect", interval.value, startTime.value);
+    if (interval.value) return;
+    if (!startTime.value) return;
+
+    interval.value = setInterval(() => (endTime.value = new Date()), 1000);
+  });
+
+  useSignalEffect(() => window.localStorage.setItem("therapistName", JSON.stringify(therapistName.value)));
+  useSignalEffect(() => window.localStorage.setItem("camperName", JSON.stringify(camperName.value)));
+  useSignalEffect(() => window.localStorage.setItem("description", JSON.stringify(description.value)));
+  useSignalEffect(() => window.localStorage.setItem("rowNumber", JSON.stringify(rowNumber.value)));
+  useSignalEffect(() => window.localStorage.setItem("startTime", JSON.stringify(startTime.value?.toISOString() ?? null)));
 
   const startTimer = async () => {
     if (interval.value) clearInterval(interval.value);
@@ -36,7 +46,6 @@ export const App = () => {
     });
     rowNumber.value = activity.rowNumber;
     startTime.value = activity.startTime;
-    interval.value = setInterval(() => (endTime.value = new Date()), 1000);
   };
 
   const stopTimer = async () => {
@@ -87,7 +96,7 @@ export const App = () => {
           </div>
 
           <div class="text-center">
-            <div class="text-4xl font-mono font-bold mb-2">${formatElapsedTime(endTime.value, startTime.value)}</div>
+            <div class="text-4xl font-mono font-bold mb-2">${formatElapsedTime(startTime.value, endTime.value)}</div>
             <div class="space-x-2">
               <${Button}
                 onClick=${() => startTimer()}

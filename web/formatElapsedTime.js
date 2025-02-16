@@ -3,8 +3,9 @@
  * @param {Date | null} startTime
  * @returns {String}
  */
-export const formatElapsedTime = (endTime, startTime) => {
-  if (!endTime || !startTime) return "00:00:00";
+export const formatElapsedTime = (startTime, endTime) => {
+  if (!startTime || !endTime) return "00:00:00";
+  if (endTime.getTime() < startTime.getTime()) return "00:00:00";
 
   const elapsedTime = endTime.getTime() - startTime.getTime();
   const hours = Math.floor(elapsedTime / (1000 * 60 * 60))
