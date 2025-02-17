@@ -9,19 +9,60 @@
       content="Simulate how concurrently running experiments affect each other"
     />
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="web/index.css" />
     <title>Care Clock</title>
   </head>
-  <body class="h-screen">
+  <body class="h-screen bg-background text-foreground">
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="app" class="h-full"></div>
 
+    <style>
+      :root {
+        @media (prefers-color-scheme: light) {
+          --theme-background: #F8F9FA;
+          --theme-background-header: #F1F3F5;
+          --theme-foreground: #212529;
+          --theme-foreground-secondary: #6C757D;
+
+          --theme-primary: #007AFF;
+          --theme-primary-hover:  #005FCC;
+          --theme-primary-foreground: var(--color-white);
+
+          --theme-secondary:  #6C757D;
+          --theme-secondary-hover: #5A6268;
+          --theme-secondary-foreground: var(--color-white);
+
+          --theme-input-background: var(--color-white);
+          --theme-input-border: #CED4DA;
+          --theme-input-border-focus: #007AFF;
+        }
+        @media (prefers-color-scheme: dark) {
+          --theme-primary: var(--color-sky-800);
+          --theme-primary-foreground: var(--color-white);
+          --theme-destructive: var(--color-red-800);
+          --theme-destructive-foreground: var(--color-white);
+          --theme-background: var(--color-black);
+          --theme-foreground: var(--color-white);
+        }
+      }
+    </style>
     <style type="text/tailwindcss">
       @theme {
-        --color-primary: var(--color-sky-600);
-        --color-primary-foreground: var(--color-white);
-        --color-destructive: var(--color-red-600);
-        --color-destructive-foreground: var(--color-white);
+          --color-background: var(--theme-background);
+          --color-background-header: var(--theme-background-header);
+          --color-foreground: var(--theme-foreground);
+          --color-foreground-secondary: var(--theme-foreground-secondary);
+
+          --color-primary: var(--theme-primary);
+          --color-primary-hover: var(--theme-primary-hover);
+          --color-primary-foreground: var(--theme-primary-foreground);
+
+          --color-secondary: var(--theme-secondary);
+          --color-secondary-hover: var(--theme-secondary-hover);
+          --color-secondary-foreground: var(--theme-secondary-foreground);
+
+          --color-input-background: var(--theme-input-background);
+          --color-input-border: var(--theme-input-border);
+          --color-input-border-focus: var(--theme-input-border-focus);
       }
     </style>
     <script type="importmap">

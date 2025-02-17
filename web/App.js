@@ -104,7 +104,7 @@ export const App = () => {
               <${Button}
                 onClick=${stopTimer}
                 disabled=${!isRunning}
-                variant="destructive"
+                variant="secondary"
               >
                 Stop
               </${Button}>
