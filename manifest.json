@@ -7,6 +7,6 @@
       "sizes": "any"
     }
   ],
-  "start_url": "/care-clock/",
+  "start_url": "https://royvandewater.com/care-clock/",
   "display": "standalone"
 }
