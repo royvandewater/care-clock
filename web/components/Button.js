@@ -8,13 +8,10 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-        secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        default: "bg-primary text-primary-foreground hover:bg-primary-hover",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary-hover",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
       },
@@ -34,12 +31,7 @@ const buttonVariants = cva(
 
 const Button = ({ className, variant, size, asChild = false, ...props }) => {
   const Comp = asChild ? Slot : "button";
-  return html`
-    <${Comp}
-      className=${cn(buttonVariants({ variant, size, className }))}
-      ...${props}
-    />
-  `;
+  return html` <${Comp} className=${cn(buttonVariants({ variant, size, className }))} ...${props} /> `;
 };
 Button.displayName = "Button";
 
