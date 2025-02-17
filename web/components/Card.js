@@ -1,7 +1,7 @@
 import { html } from "htm/preact";
 import { cn } from "../cn.js";
 
-const Card = ({ className, ...props }) => html` <div className=${cn("rounded-lg border bg-card text-card-foreground shadow-sm", className)} ...${props} /> `;
+const Card = ({ className, ...props }) => html` <div className=${cn("rounded-lg bg-card text-card-foreground", className)} ...${props} /> `;
 Card.displayName = "Card";
 
 const CardHeader = ({ className, ...props }) => html` <div className=${cn("flex flex-col space-y-1.5 p-6", className)} ...${props} /> `;

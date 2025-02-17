@@ -5,6 +5,7 @@ import { Card, CardContent } from "./components/Card.js";
 import { Button } from "./components/Button.js";
 import { Input } from "./components/Input.js";
 import { Label } from "./components/Label.js";
+import { TextArea } from "./components/TextArea.js";
 
 import { startActivity } from "./data/startActivity.js";
 import { stopActivity } from "./data/stopActivity.js";
@@ -58,15 +59,15 @@ export const App = () => {
   };
 
   return html`
-    <div class="max-w-md mx-auto p-4 space-y-6">
+    <div class="h-full max-w-md mx-auto p-4 space-y-6 flex flex-col gap-4">
       <header class="text-center relative">
         <h1 class="text-2xl font-bold text-primary">
           CareClock
         </h1>
       </header>
 
-      <${Card}>
-        <${CardContent} class="p-4 space-y-4">
+      <${Card} class="flex-1">
+        <${CardContent} class="p-4 space-y-4 h-full flex flex-col">
           <div class="flex flex-col gap-2">
             <${Label} >Therapist
               <${Input} 
@@ -110,15 +111,14 @@ export const App = () => {
             </div>
           </div>
 
-          <div>
-            <${Label} >Activity Description
-              <${Input} 
-                value=${description}
-                onInput=${(e) => (description.value = e.target.value)}
-                disabled=${!therapistName.value.length || !camperName.value.length}
-                placeholder="Describe the current activity" />
-            </${Label}>
-          </div>
+          <${Label} class="flex-1 flex flex-col">Activity Description
+            <${TextArea} 
+              value=${description}
+              class="flex-1"
+              onInput=${(e) => (description.value = e.target.value)}
+              disabled=${!therapistName.value.length || !camperName.value.length}
+              placeholder="Describe the current activity" />
+          </${Label}>
         </${CardContent}>
       </${Card}>
     </div>
