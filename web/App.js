@@ -58,8 +58,14 @@ export const App = () => {
     rowNumber.value = null;
   };
 
+  const onSubmit = (e) => {
+    e.preventDefault();
+    if (isRunning) return stopTimer();
+    startTimer();
+  };
+
   return html`
-    <div class="h-full max-w-md mx-auto p-4 space-y-6 flex flex-col gap-4">
+    <form class="h-full max-w-md mx-auto p-4 space-y-6 flex flex-col gap-4" onSubmit=${onSubmit}>
       <header class="text-center relative">
         <h1 class="text-2xl font-bold text-primary">
           CareClock
@@ -121,6 +127,6 @@ export const App = () => {
           </${Label}>
         </${CardContent}>
       </${Card}>
-    </div>
+    </form>
   `;
 };
