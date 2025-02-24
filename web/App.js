@@ -120,7 +120,7 @@ export const App = () => {
           <${Label} class="flex-1 flex flex-col">Activity Description
             <${TextArea} 
               value=${description}
-              class="flex-1"
+              class="h-25"
               onInput=${(e) => (description.value = e.target.value)}
               disabled=${!therapistName.value.length || !camperName.value.length}
               placeholder="Describe the current activity" />
