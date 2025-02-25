@@ -20,3 +20,7 @@ self.addEventListener("fetch", (event) => {
 
   return fetch(event.request);
 });
+
+self.addEventListener("message", (event) => {
+  console.log("received message", event);
+});
