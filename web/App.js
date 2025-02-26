@@ -114,10 +114,10 @@ export const App = ({ service }) => {
           <div class="text-center">
             <div class=${cn("text-4xl font-mono font-bold mb-2", isRunning ? "" : "opacity-50")}>${formatElapsedTime(startTime.value, endTime.value)}</div>
             <div class="space-x-2">
-              <${Button} disabled=${isRunning || !camperName.value.length || !therapistName.value.length} >
+              <${Button} disabled=${isRunning || !camperName.value.length || !therapistName.value.length}>
                 Start
               </${Button}>
-              <${Button} disabled=${!isRunning} variant="secondary" >
+              <${Button} disabled=${!isRunning} variant="secondary">
                 Stop
               </${Button}>
             </div>
