@@ -1,5 +1,1 @@
-export const isLocal = () => {
-  const hostname = window.location.hostname;
-
-  return ["localhost", "127.0.0.1"].includes(hostname);
-};
+export const isLocal = () => ["localhost", "127.0.0.1"].includes(location.hostname);

@@ -1,14 +1,14 @@
-const registerServiceWorker = async () => {
+export const registerServiceWorker = async () => {
   if (!"serviceWorker" in navigator) {
-    alert("This application requires a browser that supports service workers");
+    document.getElementById("service-worker-errors").textContent = "This application requires a browser that supports service workers";
     return;
   }
 
   try {
-    await navigator.serviceWorker.register(`serviceWorker.js`);
+    const registration = await navigator.serviceWorker.register(`serviceWorker.js`, { type: "module" });
+    await navigator.serviceWorker.ready;
+    return registration.active;
   } catch (error) {
     document.getElementById("service-worker-errors").textContent = error;
   }
 };
-
-registerServiceWorker();

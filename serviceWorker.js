@@ -1,3 +1,5 @@
+import { startActivity } from "./web/data/startActivity.js";
+
 const putInCache = async (request, response) => {
   const cache = await caches.open("v1");
   await cache.put(request, response);
@@ -22,5 +24,11 @@ self.addEventListener("fetch", (event) => {
 });
 
 self.addEventListener("message", (event) => {
-  console.log("received message", event);
+  switch (event.data.action) {
+    case "startActivity":
+      return startActivity(event.data);
+    default:
+      console.warn("unknown action", event.data);
+      return;
+  }
 });

@@ -14,7 +14,10 @@ import { formatElapsedTime } from "./formatElapsedTime.js";
 import { fromISOString } from "./date.js";
 import { cn } from "./cn.js";
 
-export const App = () => {
+/**
+ * @param {{service: ServiceWorker}} props
+ */
+export const App = ({ service }) => {
   const therapistName = useSignal(JSON.parse(window.localStorage.getItem("therapistName")) ?? "");
   const camperName = useSignal(JSON.parse(window.localStorage.getItem("camperName")) ?? "");
   const description = useSignal(JSON.parse(window.localStorage.getItem("description")) ?? "");
@@ -38,13 +41,23 @@ export const App = () => {
   useSignalEffect(() => window.localStorage.setItem("startTime", JSON.stringify(startTime.value?.toISOString() ?? null)));
 
   const startTimer = async () => {
-    const activity = await startActivity({
+    startTime.value = new Date();
+
+    service.postMessage({
+      action: "startActivity",
       therapistName: therapistName.value,
       camperName: camperName.value,
       description: description.value,
+      startTime: startTime.value.toISOString(),
     });
-    rowNumber.value = activity.rowNumber;
-    startTime.value = activity.startTime;
+
+    // const activity = await startActivity(service, {
+    //   therapistName: therapistName.value,
+    //   camperName: camperName.value,
+    //   description: description.value,
+    // });
+    // rowNumber.value = activity.rowNumber;
+    // startTime.value = activity.startTime;
   };
 
   const stopTimer = async () => {
@@ -101,17 +114,10 @@ export const App = () => {
           <div class="text-center">
             <div class=${cn("text-4xl font-mono font-bold mb-2", isRunning ? "" : "opacity-50")}>${formatElapsedTime(startTime.value, endTime.value)}</div>
             <div class="space-x-2">
-              <${Button}
-                onClick=${() => startTimer()}
-                disabled=${isRunning || !camperName.value.length || !therapistName.value.length}
-              >
+              <${Button} disabled=${isRunning || !camperName.value.length || !therapistName.value.length} >
                 Start
               </${Button}>
-              <${Button}
-                onClick=${stopTimer}
-                disabled=${!isRunning}
-                variant="secondary"
-              >
+              <${Button} disabled=${!isRunning} variant="secondary" >
                 Stop
               </${Button}>
             </div>

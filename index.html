@@ -15,7 +15,7 @@
   </head>
   <body class="h-screen bg-background text-foreground">
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <pre id="service-worker-errors"></pre>
+    <pre id="service-worker-errors" class="bg-red-600 text-wrap text-white"></pre>
     <div id="app" class="h-full"></div>
 
     <style>
@@ -92,6 +92,5 @@
       }
     </script>
     <script type="module" src="./web/index.js"></script>
-    <script type="module" src="./web/registerServiceWorker.js"></script>
   </body>
 </html>
