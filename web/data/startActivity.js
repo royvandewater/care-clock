@@ -6,6 +6,7 @@ import { assert } from "../assert.js";
  * @returns {Promise<{startTime: Date; id: string}>}
  */
 export const startActivity = async ({ therapistName, camperName, description, startTime }) => {
+  const id = self.crypto.randomUUID();
   const url = new URL("/activities", apiUrl);
 
   const res = await fetch(url, {
@@ -20,6 +21,8 @@ export const startActivity = async ({ therapistName, camperName, description, st
 
   const body = await res.text();
   assert(res.ok, `Failed to start activity: ${res.status} ${body}`);
+
+  console.log("startActivity", id);
 
   /**
    * @type {{success: boolean; activity: {rowNumber: number}}}
