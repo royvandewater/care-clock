@@ -1,5 +1,6 @@
 import { html } from "htm/preact";
 import { useSignal, useSignalEffect } from "@preact/signals";
+import { useEffect } from "preact/hooks";
 
 import { Card, CardContent } from "./components/Card.js";
 import { Button } from "./components/Button.js";
@@ -22,11 +23,27 @@ export const App = ({ service }) => {
   const camperName = useSignal(JSON.parse(window.localStorage.getItem("camperName")) ?? "");
   const description = useSignal(JSON.parse(window.localStorage.getItem("description")) ?? "");
 
-  const rowNumber = useSignal(JSON.parse(window.localStorage.getItem("rowNumber")));
+  const activityId = useSignal(JSON.parse(window.localStorage.getItem("activityId")));
   const startTime = useSignal(fromISOString(JSON.parse(window.localStorage.getItem("startTime"))));
   const endTime = useSignal(new Date());
   const interval = useSignal(null);
   const isRunning = Boolean(interval.value) && Boolean(startTime.value);
+
+  useEffect(() => {
+    const listener = (event) => {
+      console.log("UI received message", event);
+      switch (event.data.action) {
+        case "setActivityId":
+          activityId.value = event.data.id;
+          break;
+        default:
+          console.warn("unknown action", event.data);
+          break;
+      }
+    };
+    service.addEventListener("message", listener);
+    return () => service.removeEventListener("message", listener);
+  }, [service]);
 
   useSignalEffect(() => {
     if (interval.value) return;
@@ -37,7 +54,7 @@ export const App = ({ service }) => {
   useSignalEffect(() => window.localStorage.setItem("therapistName", JSON.stringify(therapistName.value)));
   useSignalEffect(() => window.localStorage.setItem("camperName", JSON.stringify(camperName.value)));
   useSignalEffect(() => window.localStorage.setItem("description", JSON.stringify(description.value)));
-  useSignalEffect(() => window.localStorage.setItem("rowNumber", JSON.stringify(rowNumber.value)));
+  useSignalEffect(() => window.localStorage.setItem("activityId", JSON.stringify(activityId.value)));
   useSignalEffect(() => window.localStorage.setItem("startTime", JSON.stringify(startTime.value?.toISOString() ?? null)));
 
   const startTimer = async () => {
@@ -63,12 +80,12 @@ export const App = ({ service }) => {
   const stopTimer = async () => {
     interval.value = null;
     await stopActivity({
-      rowNumber: rowNumber.value,
+      rowNumber: activityId.value,
       description: description.value,
       endTime: new Date(),
     });
     startTime.value = null;
-    rowNumber.value = null;
+    activityId.value = null;
   };
 
   const onSubmit = (e) => {

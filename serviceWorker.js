@@ -1,5 +1,40 @@
 import { startActivity } from "./web/data/startActivity.js";
 
+let database;
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    new Promise(async (resolve) => {
+      await self.clients.claim();
+      const request = self.indexedDB.open("care-clock", 1);
+      request.onerror = (event) => console.error("indexedDB error", event);
+      request.onsuccess = (event) => console.log("indexedDB success", event);
+      request.onupgradeneeded = (event) => {
+        const db = event.target.result;
+
+        if (db.objectStoreNames.contains("activities")) {
+          console.log("activities object store already exists", db);
+          database = db;
+          resolve();
+          return;
+        }
+
+        const objectStore = db.createObjectStore("activities", { keyPath: "id" });
+        objectStore.transaction.oncomplete = (event) => {
+          console.log("transaction completed", event);
+          database = db;
+          resolve();
+        };
+      };
+      request.onsuccess = (event) => {
+        console.log("request success", event);
+        database = event.target.result;
+        resolve();
+      };
+    })
+  );
+});
+
 const putInCache = async (request, response) => {
   const cache = await caches.open("v1");
   await cache.put(request, response);
@@ -26,7 +61,7 @@ self.addEventListener("fetch", (event) => {
 self.addEventListener("message", (event) => {
   switch (event.data.action) {
     case "startActivity":
-      return startActivity(event.data);
+      return startActivity(database, event.data);
     default:
       console.warn("unknown action", event.data);
       return;
