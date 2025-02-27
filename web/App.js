@@ -26,17 +26,22 @@ export const App = ({ service }) => {
   const activityId = useSignal(JSON.parse(window.localStorage.getItem("activityId")));
   const startTime = useSignal(fromISOString(JSON.parse(window.localStorage.getItem("startTime"))));
   const endTime = useSignal(new Date());
-  const interval = useSignal(null);
-  const isRunning = Boolean(interval.value) && Boolean(startTime.value);
+  const isRunning = Boolean(startTime.value);
 
   useEffect(() => {
     const broadcastChannel = new BroadcastChannel("sw-broadcast");
 
     broadcastChannel.onmessage = (event) => {
-      console.log("UI received message", event);
       switch (event.data.action) {
-        case "setActivityId":
+        case "activity.setId":
           activityId.value = event.data.data.id;
+          break;
+        case "activity.new":
+          activityId.value = null;
+          startTime.value = null;
+          break;
+        default:
+          console.warn("unknown action", event.data);
           break;
       }
     };
@@ -44,11 +49,11 @@ export const App = ({ service }) => {
     return () => broadcastChannel.close();
   }, [service]);
 
-  useSignalEffect(() => {
-    if (interval.value) return;
+  useEffect(() => {
+    const interval = setInterval(() => (endTime.value = new Date()), 1000);
 
-    interval.value = setInterval(() => (endTime.value = new Date()), 1000);
-  });
+    return () => clearInterval(interval);
+  }, []);
 
   useSignalEffect(() => window.localStorage.setItem("therapistName", JSON.stringify(therapistName.value)));
   useSignalEffect(() => window.localStorage.setItem("camperName", JSON.stringify(camperName.value)));
@@ -60,31 +65,32 @@ export const App = ({ service }) => {
     startTime.value = new Date();
 
     service.postMessage({
-      action: "startActivity",
+      action: "activity.start",
       therapistName: therapistName.value,
       camperName: camperName.value,
       description: description.value,
       startTime: startTime.value.toISOString(),
     });
-
-    // const activity = await startActivity(service, {
-    //   therapistName: therapistName.value,
-    //   camperName: camperName.value,
-    //   description: description.value,
-    // });
-    // rowNumber.value = activity.rowNumber;
-    // startTime.value = activity.startTime;
   };
 
   const stopTimer = async () => {
-    interval.value = null;
-    await stopActivity({
-      rowNumber: activityId.value,
+    service.postMessage({
+      action: "activity.stop",
+      id: activityId.value,
+      therapistName: therapistName.value,
+      camperName: camperName.value,
       description: description.value,
-      endTime: new Date(),
+      startTime: startTime.value.toISOString(),
+      endTime: endTime.value.toISOString(),
     });
-    startTime.value = null;
-    activityId.value = null;
+
+    // await stopActivity({
+    //   rowNumber: activityId.value,
+    //   description: description.value,
+    //   endTime: new Date(),
+    // });
+    // startTime.value = null;
+    // activityId.value = null;
   };
 
   const onSubmit = (e) => {

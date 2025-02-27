@@ -1,4 +1,5 @@
 import { startActivity } from "./web/data/startActivity.js";
+import { stopActivity } from "./web/data/stopActivity.js";
 
 /** @type {BroadcastChannel} */
 let channel;
@@ -66,8 +67,10 @@ self.addEventListener("fetch", (event) => {
 
 self.addEventListener("message", (event) => {
   switch (event.data.action) {
-    case "startActivity":
+    case "activity.start":
       return startActivity({ database, channel }, event.data);
+    case "activity.stop":
+      return stopActivity({ database, channel }, event.data);
     default:
       console.warn("unknown action", event.data);
       return;
