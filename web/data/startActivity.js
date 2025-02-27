@@ -2,11 +2,11 @@ import { apiUrl } from "./apiUrl.js";
 import { assert } from "../assert.js";
 
 /**
- * @param {IDBDatabase} database
+ * @param {{database: IDBDatabase; channel: BroadcastChannel}} dependencies
  * @param {{therapistName: string; camperName: string; description: string}} props
  * @returns {Promise<{startTime: Date; id: string}>}
  */
-export const startActivity = async (database, { therapistName, camperName, description, startTime }) => {
+export const startActivity = async ({ database, channel }, { therapistName, camperName, description, startTime }) => {
   const activity = {
     id: self.crypto.randomUUID(),
     therapistName,
@@ -17,11 +17,7 @@ export const startActivity = async (database, { therapistName, camperName, descr
 
   await createActivityInIndexedDB(database, activity);
 
-  const clients = await self.clients.matchAll();
-  console.log("sending message to", clients.length, "clients");
-  clients.forEach((client) => {
-    client.postMessage({ action: "setActivityId", data: { id: activity.id } });
-  });
+  channel.postMessage({ action: "setActivityId", data: { id: activity.id } });
 
   const res = await fetch(new URL("/activities", apiUrl), {
     method: "POST",

@@ -30,19 +30,18 @@ export const App = ({ service }) => {
   const isRunning = Boolean(interval.value) && Boolean(startTime.value);
 
   useEffect(() => {
-    const listener = (event) => {
+    const broadcastChannel = new BroadcastChannel("sw-broadcast");
+
+    broadcastChannel.onmessage = (event) => {
       console.log("UI received message", event);
       switch (event.data.action) {
         case "setActivityId":
-          activityId.value = event.data.id;
-          break;
-        default:
-          console.warn("unknown action", event.data);
+          activityId.value = event.data.data.id;
           break;
       }
     };
-    service.addEventListener("message", listener);
-    return () => service.removeEventListener("message", listener);
+
+    return () => broadcastChannel.close();
   }, [service]);
 
   useSignalEffect(() => {

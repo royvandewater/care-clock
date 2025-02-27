@@ -1,8 +1,14 @@
 import { startActivity } from "./web/data/startActivity.js";
 
+/** @type {BroadcastChannel} */
+let channel;
+
+/** @type {IDBDatabase} */
 let database;
 
 self.addEventListener("activate", (event) => {
+  channel = new BroadcastChannel("sw-broadcast");
+
   event.waitUntil(
     new Promise(async (resolve) => {
       await self.clients.claim();
@@ -61,7 +67,7 @@ self.addEventListener("fetch", (event) => {
 self.addEventListener("message", (event) => {
   switch (event.data.action) {
     case "startActivity":
-      return startActivity(database, event.data);
+      return startActivity({ database, channel }, event.data);
     default:
       console.warn("unknown action", event.data);
       return;
