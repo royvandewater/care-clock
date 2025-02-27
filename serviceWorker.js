@@ -11,16 +11,14 @@ self.addEventListener("activate", (event) => {
   channel = new BroadcastChannel("sw-broadcast");
 
   event.waitUntil(
-    new Promise(async (resolve) => {
+    new Promise(async (resolve, reject) => {
       await self.clients.claim();
       const request = self.indexedDB.open("care-clock", 1);
-      request.onerror = (event) => console.error("indexedDB error", event);
-      request.onsuccess = (event) => console.log("indexedDB success", event);
+      request.onerror = (event) => reject(event);
       request.onupgradeneeded = (event) => {
         const db = event.target.result;
 
         if (db.objectStoreNames.contains("activities")) {
-          console.log("activities object store already exists", db);
           database = db;
           resolve();
           return;
@@ -28,13 +26,11 @@ self.addEventListener("activate", (event) => {
 
         const objectStore = db.createObjectStore("activities", { keyPath: "id" });
         objectStore.transaction.oncomplete = (event) => {
-          console.log("transaction completed", event);
           database = db;
           resolve();
         };
       };
       request.onsuccess = (event) => {
-        console.log("request success", event);
         database = event.target.result;
         resolve();
       };
