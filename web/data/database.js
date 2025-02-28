@@ -35,20 +35,7 @@ export const connectToDatabase = async () => {
  * @param {IDBDatabase} database
  * @param {Activity} activity
  */
-export const createActivityInIndexedDB = async (database, activity) => {
-  return new Promise((resolve, reject) => {
-    const activitiesStore = database.transaction("activities", "readwrite").objectStore("activities");
-    const request = activitiesStore.add(activity);
-    request.onsuccess = () => resolve();
-    request.onerror = () => reject(request.error);
-  });
-};
-
-/**
- * @param {IDBDatabase} database
- * @param {Activity} activity
- */
-export const updateActivityInIndexedDB = async (database, activity) => {
+export const upsertActivityInIndexedDB = async (database, activity) => {
   return new Promise((resolve, reject) => {
     const activitiesStore = database.transaction("activities", "readwrite").objectStore("activities");
     const request = activitiesStore.put(activity);

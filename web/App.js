@@ -11,7 +11,7 @@ import { NotificationsIndicator } from "./components/NotificationsIndicator.js";
 import { NotificationsModal } from "./components/NotificationsModal.js";
 
 import { startActivity } from "./data/startActivity.js";
-import { stopActivity } from "./data/stopActivity.js";
+import { upsertActivity } from "./data/upsertActivity.js";
 import { hasUnsynchronizedActivities } from "./data/hasUnsynchronizedActivities.js";
 
 import { formatElapsedTime } from "./formatElapsedTime.js";
@@ -48,17 +48,17 @@ export const App = ({ database }) => {
 
   const startTimer = async () => {
     startTime.value = new Date();
+    activityId.value = self.crypto.randomUUID();
 
     const activity = {
+      id: activityId.value,
       therapistName: therapistName.value,
       camperName: camperName.value,
       description: description.value,
       startTime: startTime.value.toISOString(),
     };
 
-    const { id } = await startActivity({ database }, activity);
-
-    activityId.value = id;
+    await startActivity({ database }, activity);
   };
 
   const stopTimer = async () => {
@@ -71,7 +71,7 @@ export const App = ({ database }) => {
       endTime: endTime.value.toISOString(),
     };
 
-    await stopActivity({ database }, activity);
+    await upsertActivity({ database }, activity);
 
     batch(() => {
       startTime.value = null;

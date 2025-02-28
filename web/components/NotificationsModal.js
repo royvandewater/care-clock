@@ -2,6 +2,7 @@ import { html } from "htm/preact";
 import { useEffect } from "preact/hooks";
 import { useSignal } from "@preact/signals";
 
+import { upsertActivity } from "../data/upsertActivity.js";
 import { getActivitesThatAreNotSynced } from "../data/database.js";
 import { Close } from "./icons/Close.js";
 import { Syncing } from "./icons/Syncing.js";
@@ -20,6 +21,12 @@ export const NotificationsModal = ({ database, onClose }) => {
     return () => clearInterval(interval);
   }, []);
 
+  const onSyncAll = () => {
+    activities.value.forEach((activity) => {
+      upsertActivity({ database }, activity);
+    });
+  };
+
   return html`<div class="fixed top-0 left-0 w-full h-full z-10 backdrop-blur-sm p-4" onClick=${onClose}>
     <div class="mx-auto max-w-md w-full h-full shadow-lg bg-background p-4 rounded-lg flex flex-col gap-4" onClick=${(e) => e.stopPropagation()}>
       <header class="text-center relative">
@@ -31,7 +38,7 @@ export const NotificationsModal = ({ database, onClose }) => {
       <ul class="divide-solid divide-y-1 divide-background-secondary p-4">
         ${activities.value.map((activity) => html`<${Activity} activity=${activity} />`)}
       </ul>
-      <button class="bg-primary text-primary-foreground p-2 rounded-lg">Sync All</button>
+      <button class="bg-primary text-primary-foreground p-2 rounded-lg" type="button" onClick=${onSyncAll}>Sync All</button>
     </div>
   </div>`;
 };

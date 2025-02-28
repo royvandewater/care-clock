@@ -1,16 +1,16 @@
 import { apiUrl } from "./apiUrl.js";
 import { assert } from "../assert.js";
-import { createActivityInIndexedDB, updateActivityInIndexedDB } from "./database.js";
+import { upsertActivityInIndexedDB } from "./database.js";
 
 /**
  * @param {{database: IDBDatabase}} dependencies
- * @param {{therapistName: string; camperName: string; description: string; startTime: string}} activity
- * @returns {Promise<{id: string}>}
+ * @param {{id: string; therapistName: string; camperName: string; description: string; startTime: string}} activity
+ * @returns {Promise<void>}
  */
 export const startActivity = async ({ database }, activity) => {
-  activity = structuredClone({ ...activity, id: self.crypto.randomUUID(), syncState: "syncing" });
+  activity = structuredClone({ ...activity, syncState: "syncing" });
 
-  await createActivityInIndexedDB(database, activity);
+  await upsertActivityInIndexedDB(database, activity);
 
   // intentionally not awaited so that the function is not blocked on the network request
   postActivity({ database }, activity);
@@ -34,9 +34,9 @@ const postActivity = async ({ database }, activity) => {
 
     /** @type {{success: boolean; activity: {rowNumber: number}}} */
     const data = JSON.parse(body);
-    await updateActivityInIndexedDB(database, { ...activity, rowNumber: data.activity.rowNumber, syncState: "synced" });
+    await upsertActivityInIndexedDB(database, { ...activity, rowNumber: data.activity.rowNumber, syncState: "synced" });
   } catch (error) {
     console.error("Failed to create remote activity", error.message);
-    await updateActivityInIndexedDB(database, { ...activity, syncState: "unsynced" });
+    await upsertActivityInIndexedDB(database, { ...activity, syncState: "unsynced" });
   }
 };
