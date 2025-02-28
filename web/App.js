@@ -8,6 +8,7 @@ import { Input } from "./components/Input.js";
 import { Label } from "./components/Label.js";
 import { TextArea } from "./components/TextArea.js";
 import { NotificationsIndicator } from "./components/NotificationsIndicator.js";
+import { NotificationsModal } from "./components/NotificationsModal.js";
 
 import { startActivity } from "./data/startActivity.js";
 import { stopActivity } from "./data/stopActivity.js";
@@ -29,6 +30,7 @@ export const App = ({ database }) => {
   const startTime = useSignal(fromISOString(JSON.parse(window.localStorage.getItem("startTime"))));
   const endTime = useSignal(new Date());
   const isRunning = Boolean(startTime.value);
+  const showNotificationsModal = useSignal(false);
 
   const hasNotifications = useSignal(false);
 
@@ -80,7 +82,6 @@ export const App = ({ database }) => {
   useSignalEffect(async () => {
     endTime.value; // read this to trigger the effect
     hasNotifications.value = await hasUnsynchronizedActivities({ database });
-    // console.log("hasNotifications", hasNotifications.value);
   });
 
   const onSubmit = (e) => {
@@ -90,13 +91,13 @@ export const App = ({ database }) => {
   };
 
   return html`
-    <form class="h-full max-w-md mx-auto p-4 space-y-6 flex flex-col gap-4" onSubmit=${onSubmit}>
+    <form class="h-full max-w-md mx-auto p-4 space-y-6 flex flex-col gap-4 z-0" onSubmit=${onSubmit}>
       <header class="text-center relative">
-        <h1 class="text-2xl font-bold text-primary">
-          Care Clock
-        </h1>
-        <${NotificationsIndicator} class="absolute top-0 right-4" hasNotifications=${hasNotifications} />
+        <h1 class="text-2xl font-bold text-primary">Care Clock</h1>
+        <${NotificationsIndicator} class="absolute top-0 right-4" hasNotifications=${hasNotifications} onClick=${() => (showNotificationsModal.value = true)}/>
       </header>
+
+      ${showNotificationsModal.value && html`<${NotificationsModal} database=${database} onClose=${() => (showNotificationsModal.value = false)} />`}
 
       <${Card} class="flex-1">
         <${CardContent} class="p-4 space-y-4 h-full flex flex-col">

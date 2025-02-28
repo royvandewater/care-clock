@@ -83,3 +83,18 @@ export const getUnsynchronizedActivities = async (database) => {
     request.onerror = () => reject(request.error);
   });
 };
+
+/**
+ * Returns all activities that are not synced. This includes both unsynced and syncing activities.
+ * @param {IDBDatabase} database
+ * @returns {Promise<Activity[]>}
+ */
+export const getActivitesThatAreNotSynced = async (database) => {
+  return new Promise((resolve, reject) => {
+    const activitiesStore = database.transaction("activities", "readonly").objectStore("activities");
+    // This bound call only works because "synced" is before "syncing" lexicographically
+    const request = activitiesStore.index("syncState").getAll(IDBKeyRange.bound("syncing", "unsynced"));
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+};
