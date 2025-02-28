@@ -7,7 +7,7 @@ import { createActivityInIndexedDB, updateActivityInIndexedDB } from "./database
  * @returns {Promise<{id: string}>}
  */
 export const startActivity = async ({ database }, activity) => {
-  activity = structuredClone({ ...activity, id: self.crypto.randomUUID() });
+  activity = structuredClone({ ...activity, id: self.crypto.randomUUID(), synchronized: false });
 
   await createActivityInIndexedDB(database, activity);
 
@@ -35,5 +35,5 @@ const postActivity = async ({ database }, activity) => {
 
   /** @type {{success: boolean; activity: {rowNumber: number}}} */
   const data = JSON.parse(body);
-  await updateActivityInIndexedDB(database, { ...activity, rowNumber: data.activity.rowNumber });
+  await updateActivityInIndexedDB(database, { ...activity, rowNumber: data.activity.rowNumber, synchronized: true });
 };
