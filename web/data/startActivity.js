@@ -1,4 +1,5 @@
 import { apiUrl } from "./apiUrl.js";
+import { assert } from "../assert.js";
 import { createActivityInIndexedDB, updateActivityInIndexedDB } from "./database.js";
 
 /**
@@ -7,7 +8,7 @@ import { createActivityInIndexedDB, updateActivityInIndexedDB } from "./database
  * @returns {Promise<{id: string}>}
  */
 export const startActivity = async ({ database }, activity) => {
-  activity = structuredClone({ ...activity, id: self.crypto.randomUUID(), synchronized: false });
+  activity = structuredClone({ ...activity, id: self.crypto.randomUUID(), syncState: "syncing" });
 
   await createActivityInIndexedDB(database, activity);
 
@@ -22,18 +23,20 @@ export const startActivity = async ({ database }, activity) => {
  * @param {{id: string; therapistName: string; camperName: string; description: string; startTime: string}} activity
  */
 const postActivity = async ({ database }, activity) => {
-  const res = await fetch(apiUrl("/activities"), {
-    method: "POST",
-    body: JSON.stringify(activity),
-  });
+  try {
+    const res = await fetch(apiUrl("/activities"), {
+      method: "POST",
+      body: JSON.stringify(activity),
+    });
 
-  const body = await res.text();
-  if (!res.ok) {
-    console.warn(`Failed to POST activity: ${res.status} ${body}`);
-    return;
+    const body = await res.text();
+    assert(res.ok, `Received non-2xx response from POST activity: ${res.status} ${body}`);
+
+    /** @type {{success: boolean; activity: {rowNumber: number}}} */
+    const data = JSON.parse(body);
+    await updateActivityInIndexedDB(database, { ...activity, rowNumber: data.activity.rowNumber, syncState: "synced" });
+  } catch (error) {
+    console.error("Failed to create remote activity", error.message);
+    await updateActivityInIndexedDB(database, { ...activity, syncState: "unsynced" });
   }
-
-  /** @type {{success: boolean; activity: {rowNumber: number}}} */
-  const data = JSON.parse(body);
-  await updateActivityInIndexedDB(database, { ...activity, rowNumber: data.activity.rowNumber, synchronized: true });
 };

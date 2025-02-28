@@ -1,5 +1,5 @@
 import { html } from "htm/preact";
-import { useSignal, useSignalEffect } from "@preact/signals";
+import { useSignal, useSignalEffect, batch } from "@preact/signals";
 import { useEffect } from "preact/hooks";
 
 import { Card, CardContent } from "./components/Card.js";
@@ -7,9 +7,11 @@ import { Button } from "./components/Button.js";
 import { Input } from "./components/Input.js";
 import { Label } from "./components/Label.js";
 import { TextArea } from "./components/TextArea.js";
+import { NotificationsIndicator } from "./components/NotificationsIndicator.js";
 
 import { startActivity } from "./data/startActivity.js";
 import { stopActivity } from "./data/stopActivity.js";
+import { hasUnsynchronizedActivities } from "./data/hasUnsynchronizedActivities.js";
 
 import { formatElapsedTime } from "./formatElapsedTime.js";
 import { fromISOString } from "./date.js";
@@ -27,6 +29,8 @@ export const App = ({ database }) => {
   const startTime = useSignal(fromISOString(JSON.parse(window.localStorage.getItem("startTime"))));
   const endTime = useSignal(new Date());
   const isRunning = Boolean(startTime.value);
+
+  const hasNotifications = useSignal(false);
 
   useSignalEffect(() => window.localStorage.setItem("therapistName", JSON.stringify(therapistName.value)));
   useSignalEffect(() => window.localStorage.setItem("camperName", JSON.stringify(camperName.value)));
@@ -67,9 +71,17 @@ export const App = ({ database }) => {
 
     await stopActivity({ database }, activity);
 
-    startTime.value = null;
-    activityId.value = null;
+    batch(() => {
+      startTime.value = null;
+      activityId.value = null;
+    });
   };
+
+  useSignalEffect(async () => {
+    endTime.value; // read this to trigger the effect
+    hasNotifications.value = await hasUnsynchronizedActivities({ database });
+    // console.log("hasNotifications", hasNotifications.value);
+  });
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -83,6 +95,7 @@ export const App = ({ database }) => {
         <h1 class="text-2xl font-bold text-primary">
           Care Clock
         </h1>
+        <${NotificationsIndicator} class="absolute top-0 right-4" hasNotifications=${hasNotifications} />
       </header>
 
       <${Card} class="flex-1">

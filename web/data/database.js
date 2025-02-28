@@ -12,7 +12,8 @@ export const connectToDatabase = async () => {
         return;
       }
 
-      db.createObjectStore("activities", { keyPath: "id" });
+      const objectStore = db.createObjectStore("activities", { keyPath: "id" });
+      objectStore.createIndex("syncState", "syncState", { unique: false });
     };
   });
 };
@@ -26,7 +27,7 @@ export const connectToDatabase = async () => {
  *   startTime: string;
  *   endTime?: string;
  *   rowNumber?: number;
- *   synchronized: boolean;
+ *   syncState: "unsynced" | "syncing" | "synced";
  * }} Activity
  */
 
@@ -65,6 +66,19 @@ export const getActivityFromIndexedDB = async (database, id) => {
   return new Promise((resolve, reject) => {
     const activitiesStore = database.transaction("activities", "readonly").objectStore("activities");
     const request = activitiesStore.get(id);
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+};
+
+/**
+ * @param {IDBDatabase} database
+ * @returns {Promise<Activity[]>}
+ */
+export const getUnsynchronizedActivities = async (database) => {
+  return new Promise((resolve, reject) => {
+    const activitiesStore = database.transaction("activities", "readonly").objectStore("activities");
+    const request = activitiesStore.index("syncState").getAll("unsynced");
     request.onsuccess = () => resolve(request.result);
     request.onerror = () => reject(request.error);
   });
