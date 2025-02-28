@@ -16,9 +16,9 @@ import { fromISOString } from "./date.js";
 import { cn } from "./cn.js";
 
 /**
- * @param {{service: ServiceWorker}} props
+ * @param {{database: IDBDatabase}} props
  */
-export const App = ({ service }) => {
+export const App = ({ database }) => {
   const therapistName = useSignal(JSON.parse(window.localStorage.getItem("therapistName")) ?? "");
   const camperName = useSignal(JSON.parse(window.localStorage.getItem("camperName")) ?? "");
   const description = useSignal(JSON.parse(window.localStorage.getItem("description")) ?? "");
@@ -28,26 +28,11 @@ export const App = ({ service }) => {
   const endTime = useSignal(new Date());
   const isRunning = Boolean(startTime.value);
 
-  useEffect(() => {
-    const broadcastChannel = new BroadcastChannel("sw-broadcast");
-
-    broadcastChannel.onmessage = (event) => {
-      switch (event.data.action) {
-        case "activity.setId":
-          activityId.value = event.data.data.id;
-          break;
-        case "activity.new":
-          activityId.value = null;
-          startTime.value = null;
-          break;
-        default:
-          console.warn("unknown action", event.data);
-          break;
-      }
-    };
-
-    return () => broadcastChannel.close();
-  }, [service]);
+  useSignalEffect(() => window.localStorage.setItem("therapistName", JSON.stringify(therapistName.value)));
+  useSignalEffect(() => window.localStorage.setItem("camperName", JSON.stringify(camperName.value)));
+  useSignalEffect(() => window.localStorage.setItem("description", JSON.stringify(description.value)));
+  useSignalEffect(() => window.localStorage.setItem("activityId", JSON.stringify(activityId.value)));
+  useSignalEffect(() => window.localStorage.setItem("startTime", JSON.stringify(startTime.value?.toISOString() ?? null)));
 
   useEffect(() => {
     const interval = setInterval(() => (endTime.value = new Date()), 1000);
@@ -55,42 +40,35 @@ export const App = ({ service }) => {
     return () => clearInterval(interval);
   }, []);
 
-  useSignalEffect(() => window.localStorage.setItem("therapistName", JSON.stringify(therapistName.value)));
-  useSignalEffect(() => window.localStorage.setItem("camperName", JSON.stringify(camperName.value)));
-  useSignalEffect(() => window.localStorage.setItem("description", JSON.stringify(description.value)));
-  useSignalEffect(() => window.localStorage.setItem("activityId", JSON.stringify(activityId.value)));
-  useSignalEffect(() => window.localStorage.setItem("startTime", JSON.stringify(startTime.value?.toISOString() ?? null)));
-
   const startTimer = async () => {
     startTime.value = new Date();
 
-    service.postMessage({
-      action: "activity.start",
+    const activity = {
       therapistName: therapistName.value,
       camperName: camperName.value,
       description: description.value,
       startTime: startTime.value.toISOString(),
-    });
+    };
+
+    const { id } = await startActivity({ database }, activity);
+
+    activityId.value = id;
   };
 
   const stopTimer = async () => {
-    service.postMessage({
-      action: "activity.stop",
+    const activity = {
       id: activityId.value,
       therapistName: therapistName.value,
       camperName: camperName.value,
       description: description.value,
       startTime: startTime.value.toISOString(),
       endTime: endTime.value.toISOString(),
-    });
+    };
 
-    // await stopActivity({
-    //   rowNumber: activityId.value,
-    //   description: description.value,
-    //   endTime: new Date(),
-    // });
-    // startTime.value = null;
-    // activityId.value = null;
+    await stopActivity({ database }, activity);
+
+    startTime.value = null;
+    activityId.value = null;
   };
 
   const onSubmit = (e) => {

@@ -3,16 +3,15 @@ import { assert } from "../assert.js";
 import { getActivityFromIndexedDB, updateActivityInIndexedDB } from "./database.js";
 
 /**
- * @param {{database: IDBDatabase; channel: BroadcastChannel}} dependencies
+ * @param {{database: IDBDatabase}} dependencies
  * @param {{id: string; therapistName: string; camperName: string; description: string; startTime: string; endTime: string}} activity
  */
-export const stopActivity = async ({ database, channel }, activity) => {
+export const stopActivity = async ({ database }, activity) => {
   const storedActivity = await getActivityFromIndexedDB(database, activity.id);
   assert(storedActivity, `Activity not found: ${activity.id}`);
 
   const updatedActivity = { ...storedActivity, ...activity };
   await updateActivityInIndexedDB(database, updatedActivity);
-  channel.postMessage({ action: "activity.new" });
 
   const { rowNumber } = updatedActivity;
   if (!rowNumber) {
@@ -20,12 +19,17 @@ export const stopActivity = async ({ database, channel }, activity) => {
     return;
   }
 
-  const url = new URL(`/activities/${rowNumber}`, apiUrl);
-  const res = await fetch(url, {
+  // intentionally not awaited so that the function is not blocked on the network request
+  putActivity(updatedActivity);
+};
+
+const putActivity = async (activity) => {
+  const res = await fetch(apiUrl(`/activities/${activity.rowNumber}`), {
     method: "PUT",
-    body: JSON.stringify(updatedActivity),
+    body: JSON.stringify(activity),
   });
 
   const body = await res.text();
-  assert(res.ok, `Failed to stop activity: ${res.status} ${body}`);
+  if (res.ok) return;
+  console.warn(`Failed to PUT activity: ${res.status} ${body}`);
 };

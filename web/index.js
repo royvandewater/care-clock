@@ -1,10 +1,11 @@
 import { render } from "preact";
 import { html } from "htm/preact";
-import { assert } from "./assert.js";
 import { registerServiceWorker } from "./registerServiceWorker.js";
 import { App } from "./App.js";
+import { connectToDatabase } from "./data/database.js";
 
-const service = await registerServiceWorker();
-assert(service, "Service worker not found");
+const database = await connectToDatabase();
 
-render(html`<${App} service=${service} />`, document.getElementById("app"));
+render(html`<${App} database=${database} />`, document.getElementById("app"));
+
+registerServiceWorker();

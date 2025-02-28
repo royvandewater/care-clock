@@ -1,3 +1,22 @@
+/** @returns {Promise<IDBDatabase>} */
+export const connectToDatabase = async () => {
+  return new Promise(async (resolve, reject) => {
+    const request = self.indexedDB.open("care-clock", 1);
+    request.onerror = (event) => reject(event);
+    request.onsuccess = (event) => resolve(event.target.result);
+    // is only called if the version has changed
+    request.onupgradeneeded = (event) => {
+      const db = event.target.result;
+
+      if (db.objectStoreNames.contains("activities")) {
+        return;
+      }
+
+      db.createObjectStore("activities", { keyPath: "id" });
+    };
+  });
+};
+
 /**
  * @typedef {{
  *   id: string;
