@@ -1,0 +1,21 @@
+{
+  "name": "care-clock-web",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "description": "",
+  "dependencies": {
+    "@preact/signals": "^2.0.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "htm": "^3.1.1",
+    "preact": "^10.26.4",
+    "remeda": "^2.21.1",
+    "tailwind-merge": "^3.0.2",
+    "zod": "^3.24.2"
+  }
+}
