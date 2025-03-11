@@ -45,7 +45,7 @@ export const NotificationsModal = ({ database, onClose }) => {
         onClick=${onSyncAll}
         disabled=${activities.value.length === 0}
       >
-        Sync All
+        Upload All
       </button>
     </div>
   </div>`;
