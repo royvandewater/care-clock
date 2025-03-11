@@ -37,8 +37,16 @@ export const NotificationsModal = ({ database, onClose }) => {
       </header>
       <ul class="divide-solid divide-y-1 divide-background-secondary p-4">
         ${activities.value.map((activity) => html`<${Activity} activity=${activity} />`)}
+        ${activities.value.length === 0 && html`<li class="text-foreground-secondary text-center">All activities are uploaded.</li>`}
       </ul>
-      <button class="bg-primary text-primary-foreground p-2 rounded-lg" type="button" onClick=${onSyncAll}>Sync All</button>
+      <button
+        class="bg-primary text-primary-foreground p-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+        type="button"
+        onClick=${onSyncAll}
+        disabled=${activities.value.length === 0}
+      >
+        Sync All
+      </button>
     </div>
   </div>`;
 };
