@@ -2,7 +2,7 @@ import { Bool, OpenAPIRoute } from "chanfana";
 import { z } from "zod";
 import { Activity } from "../types";
 import { getSheetFromEnv } from "sheets";
-import { fromISOString, toLocaleString } from "../date";
+import { fromISOString, toDurationString, toLocaleString } from "../date";
 
 export class ActivityCreate extends OpenAPIRoute {
   schema = {
@@ -52,6 +52,8 @@ export class ActivityCreate extends OpenAPIRoute {
       Camper: activityToCreate.camperName,
       Description: activityToCreate.description,
       Start: toLocaleString(fromISOString(activityToCreate.startTime)),
+      End: activityToCreate.endTime ? toLocaleString(fromISOString(activityToCreate.endTime)) : null,
+      Duration: getDuration(activityToCreate.startTime, activityToCreate.endTime),
     });
 
     // return the new task
@@ -64,3 +66,12 @@ export class ActivityCreate extends OpenAPIRoute {
     };
   }
 }
+
+const getDuration = (startTime: string, endTime?: string) => {
+  if (!endTime) return null;
+
+  const startTimeDate = fromISOString(startTime);
+  const endTimeDate = fromISOString(endTime);
+  const duration = endTimeDate.getTime() - startTimeDate.getTime();
+  return toDurationString(duration);
+};
