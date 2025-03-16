@@ -99,7 +99,7 @@ export const App = ({ database }) => {
               <div class="flex justify-between items-center font-medium">
                 ${activity.value.camperName ?? ""}
                 <${Button} type="button" onClick=${() => (showCamperModal.value = true)} variant="outline" size="sm">
-                  Change
+                  ${activity.value.camperName ? "Change" : "Select"}
                 </${Button}>
               </div>
             </${LabelLike}>
