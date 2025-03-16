@@ -54,6 +54,7 @@ export class ActivityCreate extends OpenAPIRoute {
       Start: toLocaleString(fromISOString(activityToCreate.startTime)),
       End: activityToCreate.endTime ? toLocaleString(fromISOString(activityToCreate.endTime)) : null,
       Duration: getDuration(activityToCreate.startTime, activityToCreate.endTime),
+      Id: activityToCreate.id,
     });
 
     // return the new task

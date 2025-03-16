@@ -17,7 +17,7 @@ openapi.use(cors());
 
 // Register OpenAPI endpoints
 openapi.post("/activities", ActivityCreate);
-openapi.put("/activities/:rowNumber", ActivityUpdate);
+openapi.put("/activities/:id", ActivityUpdate);
 
 // Export the Hono app
 export default app;

@@ -1,4 +1,4 @@
-import { OpenAPIRoute } from "chanfana";
+import { OpenAPIRoute, Uuid } from "chanfana";
 import { Activity } from "../types";
 import { z } from "zod";
 import { getSheetFromEnv } from "sheets";
@@ -10,7 +10,7 @@ export class ActivityUpdate extends OpenAPIRoute {
     summary: "Update an Activity, usually to stop it",
     request: {
       params: z.object({
-        rowNumber: z.number(),
+        id: Uuid(),
       }),
       body: {
         content: {
@@ -42,14 +42,14 @@ export class ActivityUpdate extends OpenAPIRoute {
     // Get validated data
     const data = await this.getValidatedData<typeof this.schema>();
 
-    const rowNumber = data.params.rowNumber; // -2 because the first row is the header and sheets are 1-indexed
+    const id = data.params.id;
     const activityToUpdate = data.body;
 
     const sheet = await getSheetFromEnv(c.env);
     await sheet.loadHeaderRow();
 
     const rows = await sheet.getRows();
-    const row = rows.find((r) => r.rowNumber === rowNumber);
+    const row = rows.find((r) => r.get("Id") === id);
     if (!row) {
       return Response.json(
         {

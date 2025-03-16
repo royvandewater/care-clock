@@ -32,7 +32,7 @@ export const upsertActivity = async ({ database }, activity) => {
  */
 const putActivity = async ({ database }, activity) => {
   try {
-    const res = await fetch(apiUrl(`/activities/${activity.rowNumber}`), {
+    const res = await fetch(apiUrl(`/activities/${activity.id}`), {
       method: "PUT",
       body: JSON.stringify(activity),
     });
