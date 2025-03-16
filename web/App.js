@@ -5,10 +5,11 @@ import { useEffect } from "preact/hooks";
 import { Card, CardContent } from "./components/Card.js";
 import { Button } from "./components/Button.js";
 import { Input } from "./components/Input.js";
-import { Label } from "./components/Label.js";
+import { Label, LabelLike } from "./components/Label.js";
 import { TextArea } from "./components/TextArea.js";
 import { NotificationsIndicator } from "./components/NotificationsIndicator.js";
 import { NotificationsModal } from "./components/NotificationsModal.js";
+import { CamperModal } from "./components/CampersModal.js";
 
 import { startActivity } from "./data/startActivity.js";
 import { upsertActivity } from "./data/upsertActivity.js";
@@ -24,6 +25,7 @@ export const App = ({ database }) => {
   const activity = useSignal(parseLocalStorageActivity(window.localStorage.getItem("activity")));
   const isRunning = Boolean(activity.value.startTime);
 
+  const showCamperModal = useSignal(false);
   const showNotificationsModal = useSignal(false);
   const hasNotifications = useSignal(false);
 
@@ -68,10 +70,20 @@ export const App = ({ database }) => {
       </header>
 
       ${showNotificationsModal.value && html`<${NotificationsModal} database=${database} onClose=${() => (showNotificationsModal.value = false)} />`}
+      ${
+        showCamperModal.value &&
+        html`<${CamperModal}
+          database=${database}
+          onClose=${() => (showCamperModal.value = false)}
+          onSelect=${(camper) => {
+            activity.value = { ...activity.value, camperName: camper };
+          }}
+        />`
+      }
 
       <${Card} class="flex-1">
         <${CardContent} class="p-4 space-y-4 h-full flex flex-col">
-          <div class="flex flex-col gap-2">
+          <div class="flex flex-col gap-4">
             <${Label} >Therapist
               <${Input} 
                 id="therapistName" 
@@ -83,16 +95,14 @@ export const App = ({ database }) => {
               />
             </${Label}>
 
-            <${Label} >Camper
-              <${Input} 
-                id="camperName" 
-                value=${activity.value.camperName} 
-                onInput=${(e) => (activity.value = { ...activity.value, camperName: e.target.value })} 
-                disabled=${isRunning || !activity.value.therapistName.length}
-                autoFocus=${Boolean(activity.value.therapistName)}
-                placeholder="Bob"
-              />
-            </${Label}>
+            <${LabelLike} >Camper
+              <div class="flex justify-between items-center font-medium">
+                ${activity.value.camperName ?? ""}
+                <${Button} type="button" onClick=${() => (showCamperModal.value = true)} variant="outline" size="sm">
+                  Change
+                </${Button}>
+              </div>
+            </${LabelLike}>
           </div>
 
           <div class="text-center">

@@ -2,7 +2,7 @@ import { html } from "htm/preact";
 
 export const Unsynced = () => {
   return html`
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-danger-foreground">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-danger">
       <path
         stroke-linecap="round"
         stroke-linejoin="round"
