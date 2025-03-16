@@ -2,8 +2,7 @@ import { fromHono } from "chanfana";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 
-import { ActivityCreate } from "endpoints/activityCreate";
-import { ActivityUpdate } from "endpoints/activityUpdate";
+import { ActivityUpsert } from "endpoints/activityUpsert";
 
 // Start a Hono app
 const app = new Hono();
@@ -16,8 +15,7 @@ const openapi = fromHono(app, {
 openapi.use(cors());
 
 // Register OpenAPI endpoints
-openapi.post("/activities", ActivityCreate);
-openapi.put("/activities/:id", ActivityUpdate);
+openapi.put("/activities/:id", ActivityUpsert);
 
 // Export the Hono app
 export default app;
