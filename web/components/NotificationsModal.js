@@ -28,7 +28,7 @@ export const NotificationsModal = ({ database, onClose }) => {
     });
   };
 
-  return html`<${Modal} title="Unsynchronized" onClose=${onClose}>
+  return html`<${Modal} title=${html`<h1 class="text-2xl font-bold">Unsynchronized</h1>`} onClose=${onClose}>
     <ul class="divide-solid divide-y-1 divide-background-secondary p-4">
       ${activities.value.map((activity) => html`<${Activity} activity=${activity} />`)}
       ${activities.value.length === 0 && html`<li class="text-foreground-secondary text-center">All activities are uploaded.</li>`}

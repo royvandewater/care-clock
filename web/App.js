@@ -25,7 +25,7 @@ export const App = ({ database }) => {
   const activity = useSignal(parseLocalStorageActivity(window.localStorage.getItem("activity")));
   const isRunning = Boolean(activity.value.startTime);
 
-  const showCamperModal = useSignal(false);
+  const showCamperModal = useSignal(true);
   const showNotificationsModal = useSignal(false);
   const hasNotifications = useSignal(false);
 
