@@ -7,6 +7,7 @@ import { getActivitesThatAreNotSynced } from "../data/database.js";
 import { Close } from "./icons/Close.js";
 import { Syncing } from "./icons/Syncing.js";
 import { Unsynced } from "./icons/Unsynced.js";
+import { Modal } from "./Modal.js";
 
 /**
  * @param {{database: IDBDatabase, onClose: () => void}} props
@@ -26,6 +27,21 @@ export const NotificationsModal = ({ database, onClose }) => {
       upsertActivity({ database }, activity);
     });
   };
+
+  return html`<${Modal} title="Unsynchronized" onClose=${onClose}>
+    <ul class="divide-solid divide-y-1 divide-background-secondary p-4">
+      ${activities.value.map((activity) => html`<${Activity} activity=${activity} />`)}
+      ${activities.value.length === 0 && html`<li class="text-foreground-secondary text-center">All activities are uploaded.</li>`}
+    </ul>
+    <button
+      class="bg-primary text-primary-foreground p-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+      type="button"
+      onClick=${onSyncAll}
+      disabled=${activities.value.length === 0}
+    >
+      Upload All
+    </button>
+  </${Modal}>`;
 
   return html`<div class="fixed top-0 left-0 w-full h-full z-10 backdrop-blur-sm p-4" onClick=${onClose}>
     <div class="mx-auto max-w-md w-full h-full shadow-lg bg-background p-4 rounded-lg flex flex-col gap-4" onClick=${(e) => e.stopPropagation()}>
