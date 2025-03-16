@@ -21,3 +21,14 @@ This project is setup to automatically deploy on pushes to the `main` branch. To
 ```bash
 npm run deploy
 ```
+
+## TODO
+
+1. [ ] Store previous campers and suggest in camper input
+2. [ ] Fix duplicate records (unique ID?)
+3. [ ] Add optional group name
+4. [ ] Type of session (enum)
+5. [ ] Manually modify a record
+6. [ ] Multiple campers at a time
+7. [ ] Pre-curated groups
+8. [ ] Have it show up as a widget on lock screen
