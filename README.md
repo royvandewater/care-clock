@@ -29,7 +29,7 @@ Icons are from https://heroicons.com/
 ## TODO
 
 1. [x] Fix duplicate records (unique ID?)
-2. [ ] Store previous campers and suggest in camper input
+2. [x] Store previous campers and suggest in camper input
 3. [ ] Add optional group name
 4. [ ] Type of session (enum)
 5. [ ] Manually modify a record
