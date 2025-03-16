@@ -95,15 +95,23 @@ export const App = ({ database }) => {
               />
             </${Label}>
 
-            <${LabelLike} >Camper
+            <${LabelLike} onClick=${() => (showCamperModal.value = true)}>Camper
               <div class="flex justify-between items-center font-medium">
                 ${activity.value.camperName ?? ""}
-                <${Button} type="button" onClick=${() => (showCamperModal.value = true)} variant="outline" size="sm">
+                <${Button} type="button" variant="outline" size="sm">
                   ${activity.value.camperName ? "Change" : "Select"}
                 </${Button}>
               </div>
             </${LabelLike}>
           </div>
+
+          <${Label} class="flex flex-col">Activity Description
+            <${TextArea} 
+              value=${activity.value.description}
+              class="h-25"
+              onInput=${(e) => (activity.value = { ...activity.value, description: e.target.value })}
+              placeholder="Describe the current activity" />
+          </${Label}>
 
           <div class="text-center">
             <div class=${cn("text-4xl font-mono font-bold mb-2", isRunning ? "" : "opacity-50")}>${formatElapsedTime(activity.value.startTime, activity.value.endTime)}</div>
@@ -115,15 +123,11 @@ export const App = ({ database }) => {
                 Stop
               </${Button}>
             </div>
+            <div class="pt-4">
+              ${!activity.value.therapistName && html`<div class="text-center text-secondary">Cannot start timer without a therapist name</div>`}
+              ${!activity.value.camperName && html`<div class="text-center text-secondary">Cannot start timer without a camper</div>`}
+            </div>
           </div>
-
-          <${Label} class="flex-1 flex flex-col">Activity Description
-            <${TextArea} 
-              value=${activity.value.description}
-              class="h-25"
-              onInput=${(e) => (activity.value = { ...activity.value, description: e.target.value })}
-              placeholder="Describe the current activity" />
-          </${Label}>
         </${CardContent}>
       </${Card}>
     </form>
