@@ -18,5 +18,5 @@ self.addEventListener("fetch", (event) => {
     return event.respondWith(cacheFirst(event.request, event));
   }
 
-  return fetch(event.request);
+  // return fetch(event.request);
 });

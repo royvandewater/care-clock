@@ -1,3 +1,5 @@
+import { parseActivity } from "./serialization.js";
+
 /** @returns {Promise<IDBDatabase>} */
 export const connectToDatabase = async () => {
   return new Promise(async (resolve, reject) => {
@@ -81,7 +83,7 @@ export const getActivitesThatAreNotSynced = async (database) => {
     const activitiesStore = database.transaction("activities", "readonly").objectStore("activities");
     // This bound call only works because "synced" is before "syncing" lexicographically
     const request = activitiesStore.index("syncState").getAll(IDBKeyRange.bound("syncing", "unsynced"));
-    request.onsuccess = () => resolve(request.result);
+    request.onsuccess = () => resolve(request.result.map(parseActivity));
     request.onerror = () => reject(request.error);
   });
 };

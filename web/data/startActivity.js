@@ -1,28 +1,35 @@
 import { apiUrl } from "./apiUrl.js";
 import { assert } from "../assert.js";
 import { upsertActivityInIndexedDB } from "./database.js";
+import { formatActivity, parseActivity } from "./serialization.js";
 
 /**
  * @param {{database: IDBDatabase}} dependencies
- * @param {{id: string; therapistName: string; camperName: string; description: string; startTime: string}} activity
+ * @param {{therapistName: string; camperName: string; description: string}} activity
  * @returns {Promise<void>}
  */
 export const startActivity = async ({ database }, activity) => {
-  activity = structuredClone({ ...activity, syncState: "syncing" });
+  activity = formatActivity({
+    ...activity,
+    id: self.crypto.randomUUID(),
+    startTime: new Date(),
+    endTime: null,
+    syncState: "syncing",
+  });
 
   await upsertActivityInIndexedDB(database, activity);
 
   // intentionally not awaited so that the function is not blocked on the network request
   postActivity({ database }, activity);
 
-  return { id: activity.id };
+  return parseActivity(activity);
 };
 
 /**
  * @param {{database: IDBDatabase}} dependencies
  * @param {{id: string; therapistName: string; camperName: string; description: string; startTime: string}} activity
  */
-const postActivity = async ({ database }, activity) => {
+export const postActivity = async ({ database }, activity) => {
   try {
     const res = await fetch(apiUrl("/activities"), {
       method: "POST",

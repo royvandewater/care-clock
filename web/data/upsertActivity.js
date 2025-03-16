@@ -1,23 +1,24 @@
 import { apiUrl } from "./apiUrl.js";
 import { assert } from "../assert.js";
 import { getActivityFromIndexedDB, upsertActivityInIndexedDB } from "./database.js";
-import { startActivity } from "./startActivity.js";
+import { postActivity } from "./startActivity.js";
+import { formatActivity, parseActivity } from "./serialization.js";
 
 /**
  * @param {{database: IDBDatabase}} dependencies
- * @param {{id: string; therapistName: string; camperName: string; description: string; startTime: string; endTime: string}} activity
+ * @param {{id: string; therapistName: string; camperName: string; description: string; startTime: Date; endTime: Date | null}} activity
  */
 export const upsertActivity = async ({ database }, activity) => {
-  const storedActivity = await getActivityFromIndexedDB(database, activity.id);
-  assert(storedActivity, `Activity not found: ${activity.id}`);
+  const { id, rowNumber } = await getActivityFromIndexedDB(database, activity.id);
+  assert(id, `Activity not found: ${activity.id}`);
 
-  const updatedActivity = { ...storedActivity, ...activity, syncState: "syncing" };
+  const updatedActivity = { ...formatActivity(activity), rowNumber, syncState: "syncing" };
   await upsertActivityInIndexedDB(database, updatedActivity);
 
-  const { rowNumber } = updatedActivity;
-  if (!rowNumber) {
+  if (!Number.isInteger(rowNumber)) {
     console.warn("activity doesn't have a row number, using create", activity);
-    await startActivity({ database }, updatedActivity);
+    // intentionally not awaited so that the function is not blocked on the network request
+    postActivity({ database }, updatedActivity);
     return;
   }
 

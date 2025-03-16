@@ -1,5 +1,5 @@
 import { html } from "htm/preact";
-import { useSignal, useSignalEffect, batch } from "@preact/signals";
+import { useSignal, useSignalEffect, batch, useComputed } from "@preact/signals";
 import { useEffect } from "preact/hooks";
 
 import { Card, CardContent } from "./components/Card.js";
@@ -15,72 +15,42 @@ import { upsertActivity } from "./data/upsertActivity.js";
 import { hasUnsynchronizedActivities } from "./data/hasUnsynchronizedActivities.js";
 
 import { formatElapsedTime } from "./formatElapsedTime.js";
-import { fromISOString } from "./date.js";
 import { cn } from "./cn.js";
 
 /**
  * @param {{database: IDBDatabase}} props
  */
 export const App = ({ database }) => {
-  const therapistName = useSignal(JSON.parse(window.localStorage.getItem("therapistName")) ?? "");
-  const camperName = useSignal(JSON.parse(window.localStorage.getItem("camperName")) ?? "");
-  const description = useSignal(JSON.parse(window.localStorage.getItem("description")) ?? "");
+  const activity = useSignal(parseLocalStorageActivity(window.localStorage.getItem("activity")));
+  const isRunning = Boolean(activity.value.startTime);
 
-  const activityId = useSignal(JSON.parse(window.localStorage.getItem("activityId")));
-  const startTime = useSignal(fromISOString(JSON.parse(window.localStorage.getItem("startTime"))));
-  const endTime = useSignal(new Date());
-  const isRunning = Boolean(startTime.value);
   const showNotificationsModal = useSignal(false);
-
   const hasNotifications = useSignal(false);
 
-  useSignalEffect(() => window.localStorage.setItem("therapistName", JSON.stringify(therapistName.value)));
-  useSignalEffect(() => window.localStorage.setItem("camperName", JSON.stringify(camperName.value)));
-  useSignalEffect(() => window.localStorage.setItem("description", JSON.stringify(description.value)));
-  useSignalEffect(() => window.localStorage.setItem("activityId", JSON.stringify(activityId.value)));
-  useSignalEffect(() => window.localStorage.setItem("startTime", JSON.stringify(startTime.value?.toISOString() ?? null)));
+  useSignalEffect(() => window.localStorage.setItem("activity", formatActivityForLocalStorage(activity.value)));
 
   useEffect(() => {
-    const interval = setInterval(() => (endTime.value = new Date()), 1000);
+    const interval = setInterval(() => (activity.value = { ...activity.value, endTime: new Date() }), 1000);
 
     return () => clearInterval(interval);
   }, []);
 
   const startTimer = async () => {
-    startTime.value = new Date();
-    activityId.value = self.crypto.randomUUID();
-
-    const activity = {
-      id: activityId.value,
-      therapistName: therapistName.value,
-      camperName: camperName.value,
-      description: description.value,
-      startTime: startTime.value.toISOString(),
-    };
-
-    await startActivity({ database }, activity);
+    activity.value = await startActivity({ database }, activity.value);
   };
 
   const stopTimer = async () => {
-    const activity = {
-      id: activityId.value,
-      therapistName: therapistName.value,
-      camperName: camperName.value,
-      description: description.value,
-      startTime: startTime.value.toISOString(),
-      endTime: endTime.value.toISOString(),
+    await upsertActivity({ database }, activity.value);
+
+    activity.value = {
+      ...activity.value,
+      id: null,
+      startTime: null,
     };
-
-    await upsertActivity({ database }, activity);
-
-    batch(() => {
-      startTime.value = null;
-      activityId.value = null;
-    });
   };
 
   useSignalEffect(async () => {
-    endTime.value; // read this to trigger the effect
+    activity.value; // read this to trigger the effect
     hasNotifications.value = await hasUnsynchronizedActivities({ database });
   });
 
@@ -105,10 +75,10 @@ export const App = ({ database }) => {
             <${Label} >Therapist
               <${Input} 
                 id="therapistName" 
-                value=${therapistName} 
-                onInput=${(e) => (therapistName.value = e.target.value)} 
+                value=${activity.value.therapistName} 
+                onInput=${(e) => (activity.value = { ...activity.value, therapistName: e.target.value })} 
                 disabled=${isRunning}
-                autoFocus=${!Boolean(therapistName.value)}
+                autoFocus=${!Boolean(activity.value.therapistName)}
                 placeholder="Jane"  
               />
             </${Label}>
@@ -116,19 +86,19 @@ export const App = ({ database }) => {
             <${Label} >Camper
               <${Input} 
                 id="camperName" 
-                value=${camperName} 
-                onInput=${(e) => (camperName.value = e.target.value)} 
-                disabled=${isRunning || !therapistName.value.length}
-                autoFocus=${Boolean(therapistName.value)}
+                value=${activity.value.camperName} 
+                onInput=${(e) => (activity.value = { ...activity.value, camperName: e.target.value })} 
+                disabled=${isRunning || !activity.value.therapistName.length}
+                autoFocus=${Boolean(activity.value.therapistName)}
                 placeholder="Bob"
               />
             </${Label}>
           </div>
 
           <div class="text-center">
-            <div class=${cn("text-4xl font-mono font-bold mb-2", isRunning ? "" : "opacity-50")}>${formatElapsedTime(startTime.value, endTime.value)}</div>
+            <div class=${cn("text-4xl font-mono font-bold mb-2", isRunning ? "" : "opacity-50")}>${formatElapsedTime(activity.value.startTime, activity.value.endTime)}</div>
             <div class="space-x-2">
-              <${Button} disabled=${isRunning || !camperName.value.length || !therapistName.value.length}>
+              <${Button} disabled=${isRunning || !activity.value.camperName || !activity.value.therapistName}>
                 Start
               </${Button}>
               <${Button} disabled=${!isRunning} variant="secondary">
@@ -139,14 +109,56 @@ export const App = ({ database }) => {
 
           <${Label} class="flex-1 flex flex-col">Activity Description
             <${TextArea} 
-              value=${description}
+              value=${activity.value.description}
               class="h-25"
-              onInput=${(e) => (description.value = e.target.value)}
-              disabled=${!therapistName.value.length || !camperName.value.length}
+              onInput=${(e) => (activity.value = { ...activity.value, description: e.target.value })}
               placeholder="Describe the current activity" />
           </${Label}>
         </${CardContent}>
       </${Card}>
     </form>
   `;
+};
+
+/**
+ * @param {string | null} activityJSON
+ * @returns {{id: string, therapistName: string, camperName: string, description: string, startTime: Date | null, endTime: Date | null}}
+ */
+const parseLocalStorageActivity = (activityJSON) => {
+  if (!activityJSON) {
+    return {
+      id: null,
+      therapistName: "",
+      camperName: "",
+      description: "",
+      startTime: null,
+      endTime: null,
+    };
+  }
+
+  const activity = JSON.parse(activityJSON);
+
+  return {
+    id: activity.id,
+    therapistName: activity.therapistName,
+    camperName: activity.camperName,
+    description: activity.description,
+    startTime: activity.startTime ? new Date(activity.startTime) : null,
+    endTime: activity.endTime ? new Date(activity.endTime) : null,
+  };
+};
+
+/**
+ * @param {{id: string, therapistName: string, camperName: string, description: string, startTime: Date | null, endTime: Date | null}} activity
+ * @returns {string}
+ */
+const formatActivityForLocalStorage = (activity) => {
+  return JSON.stringify({
+    id: activity.id,
+    therapistName: activity.therapistName,
+    camperName: activity.camperName,
+    description: activity.description,
+    startTime: activity.startTime?.toISOString() ?? null,
+    endTime: activity.endTime?.toISOString() ?? null,
+  });
 };

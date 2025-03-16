@@ -15,5 +15,5 @@ export const Activity = z.object({
   camperName: Str(),
   description: Str(),
   startTime: DateTime(),
-  endTime: DateTime().optional(),
+  endTime: DateTime().nullish(),
 });
