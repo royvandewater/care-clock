@@ -31,8 +31,9 @@ Icons are from https://heroicons.com/
 1. [x] Fix duplicate records (unique ID?)
 2. [x] Store previous campers and suggest in camper input
 3. [x] Add optional group name
-4. [ ] Type of session (enum)
-5. [ ] Manually modify a record
-6. [ ] Multiple campers at a time
-7. [ ] Pre-curated groups
-8. [ ] Have it show up as a widget on lock screen
+4. [x] Type of session (enum)
+5. [ ] Add app screenshots to manifest
+6. [ ] Manually modify a record
+7. [ ] Multiple campers at a time
+8. [ ] Pre-curated groups
+9. [ ] Have it show up as a widget on lock screen
