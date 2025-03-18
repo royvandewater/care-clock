@@ -37,3 +37,4 @@ Icons are from https://heroicons.com/
 7. [ ] Multiple campers at a time
 8. [ ] Pre-curated groups
 9. [ ] Have it show up as a widget on lock screen
+10. [ ] [Create maskable icon](https://web.dev/articles/maskable-icon)
