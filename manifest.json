@@ -8,5 +8,40 @@
     }
   ],
   "start_url": "https://royvandewater.com/care-clock/",
-  "display": "standalone"
+  "display": "standalone",
+  "screenshots": [
+    {
+      "src": "https://royvandewater.com/care-clock/web/screenshots/app.png",
+      "type": "image/png",
+      "sizes": "1082x2402"
+    },
+    {
+      "src": "https://royvandewater.com/care-clock/web/screenshots/offline.png",
+      "type": "image/png",
+      "sizes": "1082x2402"
+    },
+    {
+      "src": "https://royvandewater.com/care-clock/web/screenshots/app-dark.png",
+      "type": "image/png",
+      "sizes": "1082x2402"
+    },
+    {
+      "src": "https://royvandewater.com/care-clock/web/screenshots/wide-app.png",
+      "type": "image/png",
+      "sizes": "880x710",
+      "form_factor": "wide"
+    },
+    {
+      "src": "https://royvandewater.com/care-clock/web/screenshots/wide-offline.png",
+      "type": "image/png",
+      "sizes": "880x710",
+      "form_factor": "wide"
+    },
+    {
+      "src": "https://royvandewater.com/care-clock/web/screenshots/wide-app-dark.png",
+      "type": "image/png",
+      "sizes": "880x710",
+      "form_factor": "wide"
+    }
+  ]
 }
