@@ -9,7 +9,7 @@ import { assert } from "../assert.js";
  * server returns a 204, the activity is marked as synced.
  *
  * @param {{database: IDBDatabase}} dependencies
- * @param {{id: string; therapistName: string; camperName: string; description: string; startTime: Date; endTime: Date | null}} activity
+ * @param {{id: string; therapistName: string; camperName: string; groupName: string; description: string; startTime: Date; endTime: Date | null}} activity
  */
 export const upsertActivity = async ({ database }, activity) => {
   const updatedActivity = { ...formatActivity(activity), syncState: "syncing" };
@@ -22,7 +22,7 @@ export const upsertActivity = async ({ database }, activity) => {
 /**
  *
  * @param {{database: IDBDatabase}} dependencies
- * @param {{id: string; therapistName: string; camperName: string; description: string; startTime: string; endTime: string}} activity
+ * @param {{id: string; therapistName: string; camperName: string; groupName: string; description: string; startTime: string; endTime: string}} activity
  */
 const putActivity = async ({ database }, activity) => {
   try {

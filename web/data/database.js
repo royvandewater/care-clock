@@ -25,6 +25,7 @@ export const connectToDatabase = async () => {
  *   id: string;
  *   therapistName: string;
  *   camperName: string;
+ *   groupName: string;
  *   description: string;
  *   startTime: string;
  *   endTime?: string;

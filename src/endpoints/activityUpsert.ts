@@ -15,7 +15,7 @@ export class ActivityUpsert extends OpenAPIRoute {
       body: {
         content: {
           "application/json": {
-            schema: Activity.omit({ id: true, rowNumber: true }),
+            schema: Activity.omit({ id: true }),
           },
         },
       },
@@ -54,6 +54,7 @@ export class ActivityUpsert extends OpenAPIRoute {
       await sheet.addRow({
         Therapist: activity.therapistName,
         Camper: activity.camperName,
+        Group: activity.groupName || null,
         Description: activity.description,
         Start: toLocaleString(fromISOString(activity.startTime)),
         End: activity.endTime ? toLocaleString(fromISOString(activity.endTime)) : null,
@@ -65,6 +66,7 @@ export class ActivityUpsert extends OpenAPIRoute {
 
     row.set("Therapist", activity.therapistName);
     row.set("Camper", activity.camperName);
+    row.set("Group", activity.groupName || null);
     row.set("Description", activity.description);
     row.set("Start", toLocaleString(fromISOString(activity.startTime)));
     row.set("End", activity.endTime ? toLocaleString(fromISOString(activity.endTime)) : null);

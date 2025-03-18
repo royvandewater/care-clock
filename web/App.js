@@ -105,6 +105,15 @@ export const App = ({ database }) => {
             </${LabelLike}>
           </div>
 
+          <${Label} >Group
+            <${Input} 
+              id="groupName" 
+              value=${activity.value.groupName} 
+              onInput=${(e) => (activity.value = { ...activity.value, groupName: e.target.value })} 
+              placeholder="Triathlon"  
+            />
+          </${Label}>
+
           <${Label} class="flex flex-col">Activity Description
             <${TextArea} 
               value=${activity.value.description}
@@ -144,6 +153,7 @@ const parseLocalStorageActivity = (activityJSON) => {
       id: null,
       therapistName: "",
       camperName: "",
+      groupName: "",
       description: "",
       startTime: null,
       endTime: null,
@@ -155,6 +165,7 @@ const parseLocalStorageActivity = (activityJSON) => {
   return {
     id: activity.id,
     therapistName: activity.therapistName,
+    groupName: activity.groupName,
     camperName: activity.camperName,
     description: activity.description,
     startTime: activity.startTime ? new Date(activity.startTime) : null,
@@ -163,13 +174,14 @@ const parseLocalStorageActivity = (activityJSON) => {
 };
 
 /**
- * @param {{id: string, therapistName: string, camperName: string, description: string, startTime: Date | null, endTime: Date | null}} activity
+ * @param {{id: string, therapistName: string, groupName: string, camperName: string, description: string, startTime: Date | null, endTime: Date | null}} activity
  * @returns {string}
  */
 const formatActivityForLocalStorage = (activity) => {
   return JSON.stringify({
     id: activity.id,
     therapistName: activity.therapistName,
+    groupName: activity.groupName,
     camperName: activity.camperName,
     description: activity.description,
     startTime: activity.startTime?.toISOString() ?? null,
