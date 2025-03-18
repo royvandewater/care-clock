@@ -10,7 +10,9 @@ import { TextArea } from "./components/TextArea.js";
 import { NotificationsIndicator } from "./components/NotificationsIndicator.js";
 import { NotificationsModal } from "./components/NotificationsModal.js";
 import { CamperModal } from "./components/CampersModal.js";
+import { SessionTypeModal } from "./components/SessionTypeModal.js";
 
+import { sessionTypes, parseSessionType } from "./data/sessionTypes.js";
 import { startActivity } from "./data/startActivity.js";
 import { upsertActivity } from "./data/upsertActivity.js";
 import { hasUnsynchronizedActivities } from "./data/hasUnsynchronizedActivities.js";
@@ -26,6 +28,7 @@ export const App = ({ database }) => {
   const isRunning = Boolean(activity.value.startTime);
 
   const showCamperModal = useSignal(false);
+  const showSessionTypeModal = useSignal(false);
   const showNotificationsModal = useSignal(false);
   const hasNotifications = useSignal(false);
 
@@ -73,10 +76,19 @@ export const App = ({ database }) => {
       ${
         showCamperModal.value &&
         html`<${CamperModal}
-          database=${database}
           onClose=${() => (showCamperModal.value = false)}
           onSelect=${(camper) => {
             activity.value = { ...activity.value, camperName: camper };
+          }}
+        />`
+      }
+
+      ${
+        showSessionTypeModal.value &&
+        html`<${SessionTypeModal}
+          onClose=${() => (showSessionTypeModal.value = false)}
+          onSelect=${(sessionType) => {
+            activity.value = { ...activity.value, sessionType };
           }}
         />`
       }
@@ -100,6 +112,15 @@ export const App = ({ database }) => {
                 ${activity.value.camperName ?? ""}
                 <${Button} type="button" variant="outline" size="sm">
                   ${activity.value.camperName ? "Change" : "Select"}
+                </${Button}>
+              </div>
+            </${LabelLike}>
+
+            <${LabelLike} onClick=${() => (showSessionTypeModal.value = true)}>Session Type
+              <div class="flex justify-between items-center font-medium">
+                ${activity.value.sessionType}
+                <${Button} type="button" variant="outline" size="sm">
+                  Change
                 </${Button}>
               </div>
             </${LabelLike}>
@@ -154,6 +175,7 @@ const parseLocalStorageActivity = (activityJSON) => {
       therapistName: "",
       camperName: "",
       groupName: "",
+      sessionType: sessionTypes[0],
       description: "",
       startTime: null,
       endTime: null,
@@ -166,6 +188,7 @@ const parseLocalStorageActivity = (activityJSON) => {
     id: activity.id,
     therapistName: activity.therapistName,
     groupName: activity.groupName,
+    sessionType: parseSessionType(activity.sessionType),
     camperName: activity.camperName,
     description: activity.description,
     startTime: activity.startTime ? new Date(activity.startTime) : null,
@@ -182,6 +205,7 @@ const formatActivityForLocalStorage = (activity) => {
     id: activity.id,
     therapistName: activity.therapistName,
     groupName: activity.groupName,
+    sessionType: activity.sessionType,
     camperName: activity.camperName,
     description: activity.description,
     startTime: activity.startTime?.toISOString() ?? null,

@@ -54,6 +54,7 @@ export class ActivityUpsert extends OpenAPIRoute {
       await sheet.addRow({
         Therapist: activity.therapistName,
         Camper: activity.camperName,
+        Type: activity.sessionType,
         Group: activity.groupName || null,
         Description: activity.description,
         Start: toLocaleString(fromISOString(activity.startTime)),
@@ -66,6 +67,7 @@ export class ActivityUpsert extends OpenAPIRoute {
 
     row.set("Therapist", activity.therapistName);
     row.set("Camper", activity.camperName);
+    row.set("Type", activity.sessionType);
     row.set("Group", activity.groupName || null);
     row.set("Description", activity.description);
     row.set("Start", toLocaleString(fromISOString(activity.startTime)));
