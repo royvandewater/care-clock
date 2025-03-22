@@ -92,9 +92,67 @@ export const EditActivityModal = ({ database, activityId, onClose }) => {
           placeholder="Describe the current activity" />
       </${Label}>
 
+      <div class="flex gap-4">
+        <${Label} class="flex-1">Start Date
+          <${Input} 
+            id="startDate" 
+            type="date"
+            value=${activity.value.startTime.toISOString().slice(0, 10)} 
+            onInput=${(e) => {
+              const time = activity.value.startTime.toISOString().slice(11);
+              return (activity.value = { ...activity.value, startTime: combineDateAndTime(e.target.value, time) });
+            }} 
+          />
+        </${Label}>
+
+        <${Label} class="flex-1">Start Time
+          <${Input} 
+            id="startTime" 
+            type="time"
+            value=${activity.value.startTime.toTimeString().slice(0, 8)} 
+            step="1"
+            onInput=${(e) => {
+              const date = activity.value.startTime.toISOString().slice(0, 10);
+              return (activity.value = { ...activity.value, startTime: combineDateAndTime(date, e.target.value) });
+            }} 
+          />
+        </${Label}>
+      </div>
+
+      <div class="flex gap-4">
+        <${Label} class="flex-1">End Date
+          <${Input} 
+            id="endDate" 
+            type="date"
+            value=${activity.value.endTime?.toISOString().slice(0, 10)} 
+            onInput=${(e) => {
+              const time = activity.value.endTime?.toISOString().slice(11) ?? "00:00";
+              return (activity.value = { ...activity.value, endTime: combineDateAndTime(e.target.value, time) });
+            }} 
+          />
+        </${Label}>
+
+        <${Label} class="flex-1">End Time
+          <${Input} 
+            id="endTime" 
+            type="time"
+            value=${activity.value.endTime?.toTimeString().slice(0, 8)} 
+            step="1"
+            onInput=${(e) => {
+              const date = (activity.value.endTime ?? new Date()).toISOString().slice(0, 10);
+              return (activity.value = { ...activity.value, endTime: combineDateAndTime(date, e.target.value) });
+            }} 
+          />
+        </${Label}>
+      </div>
+
       <${Button} tyep="submit" disabled=${!activity.value.camperName || !activity.value.therapistName}>
         Save
       </${Button}>
     </form>
   </${Modal}>`;
+};
+
+const combineDateAndTime = (date, time) => {
+  return new Date(`${date}T${time}`);
 };

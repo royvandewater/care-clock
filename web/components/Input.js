@@ -1,7 +1,7 @@
 import { html } from "htm/preact";
 import { cn } from "../cn.js";
 
-const Input = ({ type, ...props }) => html`
+const Input = ({ ...props }) => html`
   <input
     ...${props}
     className=${cn(
