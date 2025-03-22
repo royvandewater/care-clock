@@ -7,6 +7,7 @@ import { Label, LabelLike } from "./Label.js";
 import { Input } from "./Input.js";
 import { Button } from "./Button.js";
 import { CamperModal } from "./CampersModal.js";
+import { upsertActivity } from "../data/upsertActivity.js";
 
 export const EditActivityModal = ({ database, activityId, onClose }) => {
   const activity = useSignal(null);
@@ -21,6 +22,12 @@ export const EditActivityModal = ({ database, activityId, onClose }) => {
     return () => database.removeEventListener("activities:changed", refreshActivity);
   }, [activityId]);
 
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    await upsertActivity({ database }, activity.value);
+    onClose();
+  };
+
   const header = html`<h1 class="text-2xl font-bold">Edit Activity</h1>`;
 
   if (!activity.value) return html`<${Modal} title=${header} onClose=${onClose} class="gap-y-10" />`;
@@ -30,27 +37,29 @@ export const EditActivityModal = ({ database, activityId, onClose }) => {
   }
 
   return html`<${Modal} title=${header} onClose=${onClose} class="gap-y-10" >
-    <form>
-      <div class="flex flex-col gap-4">
-        <${Label} >Therapist
-          <${Input} 
-            id="therapistName" 
-            value=${activity.value.therapistName} 
-            onInput=${(e) => (activity.value = { ...activity.value, therapistName: e.target.value })} 
-            autoFocus=${!Boolean(activity.value.therapistName)}
-            placeholder="Jane"  
-          />
-        </${Label}>
+    <form onSubmit=${onSubmit} class="flex flex-col gap-4">
+      <${Label} >Therapist
+        <${Input} 
+          id="therapistName" 
+          value=${activity.value.therapistName} 
+          onInput=${(e) => (activity.value = { ...activity.value, therapistName: e.target.value })} 
+          autoFocus=${!Boolean(activity.value.therapistName)}
+          placeholder="Jane"  
+        />
+      </${Label}>
 
-        <${LabelLike} onClick=${() => (showCamperModal.value = true)}>Camper
-          <div class="flex justify-between items-center font-medium">
-            ${activity.value.camperName ?? ""}
-            <${Button} type="button" variant="outline" size="sm">
-              ${activity.value.camperName ? "Change" : "Select"}
-            </${Button}>
-          </div>
-        </${LabelLike}>
-      </div>
+      <${LabelLike} onClick=${() => (showCamperModal.value = true)}>Camper
+        <div class="flex justify-between items-center font-medium">
+          ${activity.value.camperName ?? ""}
+          <${Button} type="button" variant="outline" size="sm">
+            ${activity.value.camperName ? "Change" : "Select"}
+          </${Button}>
+        </div>
+      </${LabelLike}>
+
+      <${Button} tyep="submit" disabled=${!activity.value.camperName || !activity.value.therapistName}>
+        Save
+      </${Button}>
     </form>
   </${Modal}>`;
 };
