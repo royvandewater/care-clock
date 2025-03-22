@@ -27,18 +27,21 @@ export const UnsyncedActivities = ({ database }) => {
   };
 
   return html`
-    <ul class="divide-solid divide-y-1 divide-background-secondary p-4">
-      ${unSyncedActivities.value.map((activity) => html`<${Activity} activity=${activity} />`)}
-      ${unSyncedActivities.value.length === 0 && html`<li class="text-foreground-secondary text-center">All activities are uploaded.</li>`}
-    </ul>
-    <button
-      class="bg-primary text-primary-foreground p-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
-      type="button"
-      onClick=${onSyncAll}
-      disabled=${unSyncedActivities.value.length === 0}
-    >
-      Upload All
-    </button>
+    <div class="flex flex-col gap-y-4">
+      <h2 class="text-center text-lg font-bold">Unsynced Activities</h2>
+      <ul class="divide-solid divide-y-1 divide-input-border">
+        ${unSyncedActivities.value.map((activity) => html`<${Activity} activity=${activity} />`)}
+        ${unSyncedActivities.value.length === 0 && html`<li class="text-foreground-secondary text-center">All activities are uploaded.</li>`}
+      </ul>
+      <button
+        class="bg-primary text-primary-foreground p-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+        type="button"
+        onClick=${onSyncAll}
+        disabled=${unSyncedActivities.value.length === 0}
+      >
+        Upload All Unsynced Activities
+      </button>
+    </div>
   `;
 };
 

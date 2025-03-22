@@ -29,7 +29,7 @@ export const App = ({ database }) => {
 
   const showCamperModal = useSignal(false);
   const showSessionTypeModal = useSignal(false);
-  const showHistoryModal = useSignal(true);
+  const showHistoryModal = useSignal(false);
   const hasNotifications = useSignal(false);
 
   useSignalEffect(() => window.localStorage.setItem("activity", formatActivityForLocalStorage(activity.value)));

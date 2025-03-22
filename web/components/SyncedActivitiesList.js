@@ -19,9 +19,12 @@ export const SyncedActivitiesList = ({ database }) => {
     return () => database.removeEventListener("activities:changed", updateActivities);
   }, [database]);
 
-  return html`<ul>
-    ${activities.value.map((activity) => html`<${Activity} activity=${activity} />`)}
-  </ul>`;
+  return html` <div class="flex flex-col gap-y-4">
+    <h2 class="text-center text-lg font-bold">Past Activities</h2>
+    <ul class="divide-solid divide-y-1 divide-input-border">
+      ${activities.value.map((activity) => html`<${Activity} activity=${activity} />`)}
+    </ul>
+  </div>`;
 };
 
 const Activity = ({ activity }) => {
