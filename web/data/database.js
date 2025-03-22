@@ -5,7 +5,10 @@ export const connectToDatabase = async () => {
   return new Promise(async (resolve, reject) => {
     const request = self.indexedDB.open("care-clock", 1);
     request.onerror = (event) => reject(event);
-    request.onsuccess = (event) => resolve(event.target.result);
+    request.onsuccess = (event) => {
+      window.db = event.target.result;
+      return resolve(event.target.result);
+    };
     // is only called if the version has changed
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
@@ -42,7 +45,10 @@ export const upsertActivityInIndexedDB = async (database, activity) => {
   return new Promise((resolve, reject) => {
     const activitiesStore = database.transaction("activities", "readwrite").objectStore("activities");
     const request = activitiesStore.put(activity);
-    request.onsuccess = () => resolve();
+    request.onsuccess = () => {
+      database.dispatchEvent(new Event("activities:changed"));
+      return resolve();
+    };
     request.onerror = () => reject(request.error);
   });
 };

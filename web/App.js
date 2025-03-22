@@ -29,7 +29,7 @@ export const App = ({ database }) => {
 
   const showCamperModal = useSignal(false);
   const showSessionTypeModal = useSignal(false);
-  const showHistoryModal = useSignal(false);
+  const showHistoryModal = useSignal(true);
   const hasNotifications = useSignal(false);
 
   useSignalEffect(() => window.localStorage.setItem("activity", formatActivityForLocalStorage(activity.value)));
@@ -54,10 +54,15 @@ export const App = ({ database }) => {
     };
   };
 
-  useSignalEffect(async () => {
-    activity.value; // read this to trigger the effect
-    hasNotifications.value = await hasUnsynchronizedActivities({ database });
-  });
+  useEffect(async () => {
+    const updateHasNotifications = async () => {
+      hasNotifications.value = await hasUnsynchronizedActivities({ database });
+    };
+    updateHasNotifications();
+
+    database.addEventListener("activities:changed", updateHasNotifications);
+    return () => database.removeEventListener("activities:changed", updateHasNotifications);
+  }, [database]);
 
   const onSubmit = (e) => {
     e.preventDefault();

@@ -1,7 +1,6 @@
 import { html } from "htm/preact";
 import { Modal } from "./Modal.js";
 import { UnsyncedActivities } from "./UnsyncedActivities.js";
-
 /**
  * @param {{database: IDBDatabase, onClose: () => void}} props
  */

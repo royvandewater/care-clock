@@ -11,10 +11,13 @@ export const UnsyncedActivities = ({ database }) => {
   const unSyncedActivities = useSignal([]);
 
   useEffect(() => {
-    getActivitesThatAreNotSynced(database).then((a) => (unSyncedActivities.value = a));
-    const interval = setInterval(async () => (unSyncedActivities.value = await getActivitesThatAreNotSynced(database)), 1000);
+    const updateUnsyncedActivities = async () => {
+      unSyncedActivities.value = await getActivitesThatAreNotSynced(database);
+    };
+    updateUnsyncedActivities();
 
-    return () => clearInterval(interval);
+    database.addEventListener("activities:changed", updateUnsyncedActivities);
+    return () => database.removeEventListener("activities:changed", updateUnsyncedActivities);
   }, []);
 
   const onSyncAll = () => {
