@@ -1,17 +1,21 @@
 import { html } from "htm/preact";
-import { Modal } from "./Modal.js";
 import { useSignal } from "@preact/signals";
 import { useEffect } from "preact/hooks";
+
 import { getActivityFromIndexedDB } from "../data/database.js";
+import { upsertActivity } from "../data/upsertActivity.js";
+
+import { Modal } from "./Modal.js";
 import { Label, LabelLike } from "./Label.js";
 import { Input } from "./Input.js";
 import { Button } from "./Button.js";
 import { CamperModal } from "./CampersModal.js";
-import { upsertActivity } from "../data/upsertActivity.js";
+import { SessionTypeModal } from "./SessionTypeModal.js";
 
 export const EditActivityModal = ({ database, activityId, onClose }) => {
   const activity = useSignal(null);
   const showCamperModal = useSignal(false);
+  const showSessionTypeModal = useSignal(false);
 
   useEffect(() => {
     const refreshActivity = async () => {
@@ -36,6 +40,10 @@ export const EditActivityModal = ({ database, activityId, onClose }) => {
     return html`<${CamperModal} onClose=${() => (showCamperModal.value = false)} onSelect=${(camper) => (activity.value = { ...activity.value, camperName: camper })} />`;
   }
 
+  if (showSessionTypeModal.value) {
+    return html`<${SessionTypeModal} onClose=${() => (showSessionTypeModal.value = false)} onSelect=${(sessionType) => (activity.value = { ...activity.value, sessionType })} />`;
+  }
+
   return html`<${Modal} title=${header} onClose=${onClose} class="gap-y-10" >
     <form onSubmit=${onSubmit} class="flex flex-col gap-4">
       <${Label} >Therapist
@@ -53,6 +61,15 @@ export const EditActivityModal = ({ database, activityId, onClose }) => {
           ${activity.value.camperName ?? ""}
           <${Button} type="button" variant="outline" size="sm">
             ${activity.value.camperName ? "Change" : "Select"}
+          </${Button}>
+        </div>
+      </${LabelLike}>
+
+      <${LabelLike} onClick=${() => (showSessionTypeModal.value = true)}>Session Type
+        <div class="flex justify-between items-center font-medium">
+          ${activity.value.sessionType}
+          <${Button} type="button" variant="outline" size="sm">
+            Change
           </${Button}>
         </div>
       </${LabelLike}>
