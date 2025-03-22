@@ -62,7 +62,7 @@ export const getActivityFromIndexedDB = async (database, id) => {
   return new Promise((resolve, reject) => {
     const activitiesStore = database.transaction("activities", "readonly").objectStore("activities");
     const request = activitiesStore.get(id);
-    request.onsuccess = () => resolve(request.result);
+    request.onsuccess = () => resolve(parseActivity(request.result));
     request.onerror = () => reject(request.error);
   });
 };

@@ -1,0 +1,56 @@
+import { html } from "htm/preact";
+import { Modal } from "./Modal.js";
+import { useSignal } from "@preact/signals";
+import { useEffect } from "preact/hooks";
+import { getActivityFromIndexedDB } from "../data/database.js";
+import { Label, LabelLike } from "./Label.js";
+import { Input } from "./Input.js";
+import { Button } from "./Button.js";
+import { CamperModal } from "./CampersModal.js";
+
+export const EditActivityModal = ({ database, activityId, onClose }) => {
+  const activity = useSignal(null);
+  const showCamperModal = useSignal(false);
+
+  useEffect(() => {
+    const refreshActivity = async () => {
+      activity.value = await getActivityFromIndexedDB(database, activityId);
+    };
+    refreshActivity();
+    database.addEventListener("activities:changed", refreshActivity);
+    return () => database.removeEventListener("activities:changed", refreshActivity);
+  }, [activityId]);
+
+  const header = html`<h1 class="text-2xl font-bold">Edit Activity</h1>`;
+
+  if (!activity.value) return html`<${Modal} title=${header} onClose=${onClose} class="gap-y-10" />`;
+
+  if (showCamperModal.value) {
+    return html`<${CamperModal} onClose=${() => (showCamperModal.value = false)} onSelect=${(camper) => (activity.value = { ...activity.value, camperName: camper })} />`;
+  }
+
+  return html`<${Modal} title=${header} onClose=${onClose} class="gap-y-10" >
+    <form>
+      <div class="flex flex-col gap-4">
+        <${Label} >Therapist
+          <${Input} 
+            id="therapistName" 
+            value=${activity.value.therapistName} 
+            onInput=${(e) => (activity.value = { ...activity.value, therapistName: e.target.value })} 
+            autoFocus=${!Boolean(activity.value.therapistName)}
+            placeholder="Jane"  
+          />
+        </${Label}>
+
+        <${LabelLike} onClick=${() => (showCamperModal.value = true)}>Camper
+          <div class="flex justify-between items-center font-medium">
+            ${activity.value.camperName ?? ""}
+            <${Button} type="button" variant="outline" size="sm">
+              ${activity.value.camperName ? "Change" : "Select"}
+            </${Button}>
+          </div>
+        </${LabelLike}>
+      </div>
+    </form>
+  </${Modal}>`;
+};

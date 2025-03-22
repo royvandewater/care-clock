@@ -8,6 +8,9 @@ import { Button } from "./Button.js";
 import { Trash } from "./icons/Trash.js";
 import { Edit } from "./icons/Edit.js";
 
+/**
+ * @param {{onClose: () => void, onSelect: (camper: string) => void}} props
+ */
 export const CamperModal = ({ onClose, onSelect }) => {
   const campers = useSignal(JSON.parse(localStorage.getItem("campers") ?? "[]"));
   useSignalEffect(() => localStorage.setItem("campers", JSON.stringify(campers.value)));
