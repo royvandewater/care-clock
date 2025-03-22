@@ -29,7 +29,7 @@ export const App = ({ database }) => {
 
   const showCamperModal = useSignal(false);
   const showSessionTypeModal = useSignal(false);
-  const showNotificationsModal = useSignal(false);
+  const showHistoryModal = useSignal(false);
   const hasNotifications = useSignal(false);
 
   useSignalEffect(() => window.localStorage.setItem("activity", formatActivityForLocalStorage(activity.value)));
@@ -69,10 +69,10 @@ export const App = ({ database }) => {
     <form class="h-full max-w-md mx-auto p-4 space-y-6 flex flex-col gap-4 z-0" onSubmit=${onSubmit}>
       <header class="text-center relative">
         <h1 class="text-2xl font-bold text-primary">Care Clock</h1>
-        <${HistoryButton} class="absolute top-0 right-4" hasNotifications=${hasNotifications} onClick=${() => (showNotificationsModal.value = true)}/>
+        <${HistoryButton} class="absolute top-0 right-4" hasNotifications=${hasNotifications} onClick=${() => (showHistoryModal.value = true)}/>
       </header>
 
-      ${showNotificationsModal.value && html`<${HistoryModal} database=${database} onClose=${() => (showNotificationsModal.value = false)} />`}
+      ${showHistoryModal.value && html`<${HistoryModal} database=${database} onClose=${() => (showHistoryModal.value = false)} />`}
       ${
         showCamperModal.value &&
         html`<${CamperModal}
