@@ -106,7 +106,6 @@ export const App = ({ database }) => {
                 id="therapistName" 
                 value=${activity.value.therapistName} 
                 onInput=${(e) => (activity.value = { ...activity.value, therapistName: e.target.value })} 
-                disabled=${isRunning}
                 autoFocus=${!Boolean(activity.value.therapistName)}
                 placeholder="Jane"  
               />
