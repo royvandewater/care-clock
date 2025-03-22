@@ -4,7 +4,6 @@ import { useSignal } from "@preact/signals";
 
 import { upsertActivity } from "../data/upsertActivity.js";
 import { getActivitesThatAreNotSynced } from "../data/database.js";
-import { Close } from "./icons/Close.js";
 import { Syncing } from "./icons/Syncing.js";
 import { Unsynced } from "./icons/Unsynced.js";
 import { Modal } from "./Modal.js";
@@ -12,7 +11,7 @@ import { Modal } from "./Modal.js";
 /**
  * @param {{database: IDBDatabase, onClose: () => void}} props
  */
-export const NotificationsModal = ({ database, onClose }) => {
+export const HistoryModal = ({ database, onClose }) => {
   const activities = useSignal([]);
 
   useEffect(() => {
@@ -28,7 +27,7 @@ export const NotificationsModal = ({ database, onClose }) => {
     });
   };
 
-  return html`<${Modal} title=${html`<h1 class="text-2xl font-bold">Unsynchronized</h1>`} onClose=${onClose}>
+  return html`<${Modal} title=${html`<h1 class="text-2xl font-bold">History</h1>`} onClose=${onClose}>
     <ul class="divide-solid divide-y-1 divide-background-secondary p-4">
       ${activities.value.map((activity) => html`<${Activity} activity=${activity} />`)}
       ${activities.value.length === 0 && html`<li class="text-foreground-secondary text-center">All activities are uploaded.</li>`}

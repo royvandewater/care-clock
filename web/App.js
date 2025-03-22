@@ -7,8 +7,8 @@ import { Button } from "./components/Button.js";
 import { Input } from "./components/Input.js";
 import { Label, LabelLike } from "./components/Label.js";
 import { TextArea } from "./components/TextArea.js";
-import { NotificationsIndicator } from "./components/NotificationsIndicator.js";
-import { NotificationsModal } from "./components/NotificationsModal.js";
+import { HistoryButton } from "./components/HistoryButton.js";
+import { HistoryModal } from "./components/HistoryModal.js";
 import { CamperModal } from "./components/CampersModal.js";
 import { SessionTypeModal } from "./components/SessionTypeModal.js";
 
@@ -69,10 +69,10 @@ export const App = ({ database }) => {
     <form class="h-full max-w-md mx-auto p-4 space-y-6 flex flex-col gap-4 z-0" onSubmit=${onSubmit}>
       <header class="text-center relative">
         <h1 class="text-2xl font-bold text-primary">Care Clock</h1>
-        <${NotificationsIndicator} class="absolute top-0 right-4" hasNotifications=${hasNotifications} onClick=${() => (showNotificationsModal.value = true)}/>
+        <${HistoryButton} class="absolute top-0 right-4" hasNotifications=${hasNotifications} onClick=${() => (showNotificationsModal.value = true)}/>
       </header>
 
-      ${showNotificationsModal.value && html`<${NotificationsModal} database=${database} onClose=${() => (showNotificationsModal.value = false)} />`}
+      ${showNotificationsModal.value && html`<${HistoryModal} database=${database} onClose=${() => (showNotificationsModal.value = false)} />`}
       ${
         showCamperModal.value &&
         html`<${CamperModal}
