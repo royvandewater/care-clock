@@ -27,10 +27,7 @@ export const SessionTypeModal = ({ onClose, onSelect }) => {
 };
 
 const Header = ({ onClickEdit }) => {
-  return html`<button type="button" class="size-8 flex items-center justify-center hover:bg-tertiary-hover rounded-xl absolute top-0 left-0" onClick=${onClickEdit}>
-      <${Edit} />
-    </button>
-    <h1 class="text-2xl font-bold">Campers</h1> `;
+  return html` <h1 class="text-2xl font-bold">Session Type</h1> `;
 };
 
 const SelectButton = ({ onClick }) => {

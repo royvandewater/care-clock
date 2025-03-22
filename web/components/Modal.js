@@ -1,7 +1,7 @@
 import { html } from "htm/preact";
 
 import { cn } from "../cn.js";
-import { Close } from "./icons/Close.js";
+import { Back } from "./icons/Back.js";
 
 /**
  * @typedef {import("preact").ComponentChildren} ComponentChildren
@@ -15,8 +15,8 @@ export const Modal = ({ title, children, onClose, ...props }) => {
     <div class="mx-auto max-w-md w-full h-full shadow-lg bg-background rounded-lg flex flex-col" onClick=${(e) => e.stopPropagation()}>
       <header class="text-center relative p-4">
         ${title}
-        <button class="size-8 flex items-center justify-center hover:bg-tertiary-hover rounded-xl absolute top-4 right-4" onClick=${onClose}>
-          <${Close} />
+        <button class="size-8 flex items-center justify-center hover:bg-tertiary-hover rounded-xl absolute top-4 left-4" onClick=${onClose}>
+          <${Back} />
         </button>
       </header>
       <div class=${cn("flex-1 overflow-y-auto p-4 flex flex-col", props.class)}>${children}</div>
