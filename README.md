@@ -32,7 +32,7 @@ Icons are from https://heroicons.com/
 2. [x] Store previous campers and suggest in camper input
 3. [x] Add optional group name
 4. [x] Type of session (enum)
-5. [ ] Add app screenshots to manifest
+5. [x] Add app screenshots to manifest
 6. [ ] Manually modify a record
 7. [ ] Multiple campers at a time
 8. [ ] Pre-curated groups
