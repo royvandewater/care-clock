@@ -68,14 +68,29 @@ export const getActivityFromIndexedDB = async (database, id) => {
 };
 
 /**
+ * Returns all activities that are synced.
  * @param {IDBDatabase} database
  * @returns {Promise<Activity[]>}
  */
-export const getUnsynchronizedActivities = async (database) => {
+export const getSyncedActivities = async (database) => {
+  return new Promise((resolve, reject) => {
+    const activitiesStore = database.transaction("activities", "readonly").objectStore("activities");
+    const request = activitiesStore.index("syncState").getAll("synced");
+    request.onsuccess = () => resolve(request.result.map(parseActivity).sort(startTimesDesc));
+    request.onerror = () => reject(request.error);
+  });
+};
+
+/**
+ * Returns all activities that are unsynced. This does not include activities that are syncing.
+ * @param {IDBDatabase} database
+ * @returns {Promise<Activity[]>}
+ */
+export const getUnsyncedActivities = async (database) => {
   return new Promise((resolve, reject) => {
     const activitiesStore = database.transaction("activities", "readonly").objectStore("activities");
     const request = activitiesStore.index("syncState").getAll("unsynced");
-    request.onsuccess = () => resolve(request.result);
+    request.onsuccess = () => resolve(request.result.map(parseActivity).sort(startTimesDesc));
     request.onerror = () => reject(request.error);
   });
 };
@@ -88,9 +103,13 @@ export const getUnsynchronizedActivities = async (database) => {
 export const getActivitesThatAreNotSynced = async (database) => {
   return new Promise((resolve, reject) => {
     const activitiesStore = database.transaction("activities", "readonly").objectStore("activities");
-    // This bound call only works because "synced" is before "syncing" lexicographically
+    // This bound() call only works because "synced" is before "syncing" lexicographically and is therefore
+    // outside the range of "syncing" -> "unsynced"
     const request = activitiesStore.index("syncState").getAll(IDBKeyRange.bound("syncing", "unsynced"));
-    request.onsuccess = () => resolve(request.result.map(parseActivity));
+    request.onsuccess = () => resolve(request.result.map(parseActivity).sort(startTimesDesc));
     request.onerror = () => reject(request.error);
   });
 };
+
+// const startTimesAsc = (a, b) => a.startTime - b.startTime;
+const startTimesDesc = (a, b) => b.startTime - a.startTime;
