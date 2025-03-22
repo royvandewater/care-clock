@@ -11,6 +11,7 @@ import { Input } from "./Input.js";
 import { Button } from "./Button.js";
 import { CamperModal } from "./CampersModal.js";
 import { SessionTypeModal } from "./SessionTypeModal.js";
+import { TextArea } from "./TextArea.js";
 
 export const EditActivityModal = ({ database, activityId, onClose }) => {
   const activity = useSignal(null);
@@ -73,6 +74,23 @@ export const EditActivityModal = ({ database, activityId, onClose }) => {
           </${Button}>
         </div>
       </${LabelLike}>
+
+      <${Label} >Group
+        <${Input} 
+          id="groupName" 
+          value=${activity.value.groupName} 
+          onInput=${(e) => (activity.value = { ...activity.value, groupName: e.target.value })} 
+          placeholder="Triathlon"  
+        />
+      </${Label}>
+
+      <${Label} class="flex flex-col">Activity Description
+        <${TextArea} 
+          value=${activity.value.description}
+          class="h-25"
+          onInput=${(e) => (activity.value = { ...activity.value, description: e.target.value })}
+          placeholder="Describe the current activity" />
+      </${Label}>
 
       <${Button} tyep="submit" disabled=${!activity.value.camperName || !activity.value.therapistName}>
         Save
