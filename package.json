@@ -10,7 +10,7 @@
     "cf-typegen": "wrangler types"
   },
   "dependencies": {
-    "chanfana": "^2.7.1",
+    "chanfana": "^2.7.2",
     "date-fns": "^4.1.0",
     "google-auth-library": "^9.15.1",
     "google-spreadsheet": "^4.1.4",
