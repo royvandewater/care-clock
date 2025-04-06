@@ -16,7 +16,7 @@ export const HistoryModal = ({ database, onClose }) => {
   }
 
   return html`<${Modal} title=${html`<h1 class="text-2xl font-bold">History</h1>`} onClose=${onClose} class="gap-y-10">
-    <${UnsyncedActivities} database=${database} />
+    <${UnsyncedActivities} database=${database} onEditActivity=${(id) => (editActivityId.value = id)} />
     <${SyncedActivitiesList} database=${database} onEditActivity=${(id) => (editActivityId.value = id)} />
   </${Modal}>`;
 };

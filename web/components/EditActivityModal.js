@@ -29,7 +29,13 @@ export const EditActivityModal = ({ database, activityId, onClose }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    await upsertActivity({ database }, activity.value);
+    await upsertActivity(
+      { database },
+      {
+        ...activity.value,
+        campers: [{ name: activity.value.camperName, id: activity.value.id }],
+      }
+    );
     onClose();
   };
 

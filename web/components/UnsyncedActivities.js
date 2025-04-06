@@ -7,7 +7,8 @@ import { getActivitesThatAreNotSynced } from "../data/database.js";
 import { Syncing } from "./icons/Syncing.js";
 import { Unsynced } from "./icons/Unsynced.js";
 
-export const UnsyncedActivities = ({ database }) => {
+export const UnsyncedActivities = ({ database, onEditActivity }) => {
+  /** @type {Awaited<ReturnType<typeof getActivitesThatAreNotSynced>>} */
   const unSyncedActivities = useSignal([]);
 
   useEffect(() => {
@@ -22,7 +23,13 @@ export const UnsyncedActivities = ({ database }) => {
 
   const onSyncAll = () => {
     unSyncedActivities.value.forEach((activity) => {
-      upsertActivity({ database }, activity);
+      upsertActivity(
+        { database },
+        {
+          ...activity,
+          campers: [{ name: activity.camperName, id: activity.id }],
+        }
+      );
     });
   };
 
@@ -30,7 +37,7 @@ export const UnsyncedActivities = ({ database }) => {
     <div class="flex flex-col gap-y-4">
       <h2 class="text-center text-lg font-bold">Unsynced Activities</h2>
       <ul class="divide-solid divide-y-1 divide-input-border">
-        ${unSyncedActivities.value.map((activity) => html`<${Activity} activity=${activity} />`)}
+        ${unSyncedActivities.value.map((activity) => html`<${Activity} activity=${activity} onEditActivity=${onEditActivity} />`)}
         ${unSyncedActivities.value.length === 0 && html`<li class="text-foreground-secondary text-center">All activities are uploaded.</li>`}
       </ul>
       <button
@@ -45,8 +52,8 @@ export const UnsyncedActivities = ({ database }) => {
   `;
 };
 
-const Activity = ({ activity }) => {
-  return html`<li>
+const Activity = ({ activity, onEditActivity }) => {
+  return html`<li onClick=${() => onEditActivity(activity.id)}>
     <div class="flex justify-between items-center py-2">
       <div>
         <h2 class="text-sm">${activity.camperName}</h3>
