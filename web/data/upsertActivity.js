@@ -16,8 +16,6 @@ import { assert } from "../assert.js";
  * @param {{id: string; therapistName: string; campers: {name: string, id: string}[]; sessionType: SessionType; groupName: string; description: string; startTime: Date; endTime: Date | null}} activity
  */
 export const upsertActivity = async ({ database }, activity) => {
-  console.log("upsertActivity", activity);
-
   const camperActivities = activity.campers.map((camper) => ({
     ...activity,
     camperName: camper.name,
