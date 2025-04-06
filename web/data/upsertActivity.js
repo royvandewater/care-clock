@@ -13,14 +13,31 @@ import { assert } from "../assert.js";
  * server returns a 204, the activity is marked as synced.
  *
  * @param {{database: IDBDatabase}} dependencies
- * @param {{id: string; therapistName: string; camperName: string; sessionType: SessionType; groupName: string; description: string; startTime: Date; endTime: Date | null}} activity
+ * @param {{id: string; therapistName: string; campers: {name: string, id: string}[]; sessionType: SessionType; groupName: string; description: string; startTime: Date; endTime: Date | null}} activity
  */
 export const upsertActivity = async ({ database }, activity) => {
-  const updatedActivity = { ...formatActivity(activity), syncState: "syncing" };
-  await upsertActivityInIndexedDB(database, updatedActivity);
+  console.log("upsertActivity", activity);
 
-  // intentionally not awaited so that the function is not blocked on the network request
-  putActivity({ database }, updatedActivity);
+  const camperActivities = activity.campers.map((camper) => ({
+    ...activity,
+    camperName: camper.name,
+    id: camper.id ?? self.crypto.randomUUID(),
+  }));
+
+  await Promise.all(
+    camperActivities.map(async (camperActivity) => {
+      const updatedActivity = { ...formatActivity(camperActivity), syncState: "syncing" };
+      await upsertActivityInIndexedDB(database, updatedActivity);
+
+      // intentionally not awaited so that the function is not blocked on the network request
+      putActivity({ database }, updatedActivity);
+    })
+  );
+
+  return {
+    ...activity,
+    campers: camperActivities.map((camperActivity) => ({ name: camperActivity.camperName, id: camperActivity.id })),
+  };
 };
 
 /**

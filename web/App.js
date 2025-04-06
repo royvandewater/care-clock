@@ -49,7 +49,7 @@ export const App = ({ database }) => {
 
     activity.value = {
       ...activity.value,
-      id: null,
+      campers: activity.value.campers.map((camper) => ({ ...camper, id: null })),
       startTime: null,
     };
   };
@@ -66,6 +66,7 @@ export const App = ({ database }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     if (isRunning) return stopTimer();
     startTimer();
   };
@@ -81,10 +82,18 @@ export const App = ({ database }) => {
       ${
         showCamperModal.value &&
         html`<${CamperModal}
-          selectedCampers=${activity.value.campers}
+          selectedCampers=${activity.value.campers.map((camper) => camper.name)}
           onClose=${() => (showCamperModal.value = false)}
           onSelectCampers=${(campers) => {
-            activity.value = { ...activity.value, campers };
+            activity.value = {
+              ...activity.value,
+              campers: campers.sort().map((camper) => {
+                // TODO: There's a problem here where if a camper is removed while a timer is running, that camper's session will never
+                // be stopped. Maybe we should flag that on the history modal?
+                const existingCamper = activity.value.campers.find((c) => c.name === camper);
+                return { name: camper, id: existingCamper?.id ?? null };
+              }),
+            };
           }}
         />`
       }
@@ -114,7 +123,7 @@ export const App = ({ database }) => {
 
             <${LabelLike} onClick=${() => (showCamperModal.value = true)}>Campers
               <div class="flex justify-between items-center font-medium">
-                <span class="text-sm font-medium text-foreground px-3">${activity.value.campers.join(", ") || "No campers selected"}</span>
+                <span class="text-sm font-medium text-foreground px-3">${activity.value.campers.map((camper) => camper.name).join(", ") || "No campers selected"}</span>
                 <${Button} type="button" variant="outline" size="sm">
                   Select
                 </${Button}>
@@ -171,12 +180,11 @@ export const App = ({ database }) => {
 
 /**
  * @param {string | null} activityJSON
- * @returns {{id: string, therapistName: string, campers: string[], description: string, startTime: Date | null, endTime: Date | null}}
+ * @returns {{therapistName: string, campers: {name: string, id: string | null}[], description: string, startTime: Date | null, endTime: Date | null}}
  */
 const parseLocalStorageActivity = (activityJSON) => {
   if (!activityJSON) {
     return {
-      id: null,
       therapistName: "",
       campers: [],
       groupName: "",
@@ -190,7 +198,6 @@ const parseLocalStorageActivity = (activityJSON) => {
   const activity = JSON.parse(activityJSON);
 
   return {
-    id: activity.id,
     therapistName: activity.therapistName,
     groupName: activity.groupName,
     sessionType: parseSessionType(activity.sessionType),
@@ -202,12 +209,11 @@ const parseLocalStorageActivity = (activityJSON) => {
 };
 
 /**
- * @param {{id: string, therapistName: string, groupName: string, campers: string[], description: string, startTime: Date | null, endTime: Date | null}} activity
+ * @param {{therapistName: string, groupName: string, campers: {name: string, id: string | null}[], description: string, startTime: Date | null, endTime: Date | null}} activity
  * @returns {string}
  */
 const formatActivityForLocalStorage = (activity) => {
   return JSON.stringify({
-    id: activity.id,
     therapistName: activity.therapistName,
     groupName: activity.groupName,
     sessionType: activity.sessionType,
