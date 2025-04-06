@@ -33,8 +33,10 @@ Icons are from https://heroicons.com/
 3. [x] Add optional group name
 4. [x] Type of session (enum)
 5. [x] Add app screenshots to manifest
-6. [ ] Manually modify a record
-7. [ ] Multiple campers at a time
-8. [ ] Pre-curated groups
-9. [ ] Have it show up as a widget on lock screen
-10. [ ] [Create maskable icon](https://web.dev/articles/maskable-icon)
+6. [x] Manually modify a record
+7. [x] Multiple campers at a time
+8. [ ] Move Therapist Name input into settings panel
+9. [ ] Toggle dark mode in settings panel
+10. [ ] Pre-curated groups
+11. [ ] Have it show up as a widget on lock screen
+12. [ ] [Create maskable icon](https://web.dev/articles/maskable-icon)
