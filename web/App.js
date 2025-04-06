@@ -81,9 +81,10 @@ export const App = ({ database }) => {
       ${
         showCamperModal.value &&
         html`<${CamperModal}
+          selectedCampers=${activity.value.campers}
           onClose=${() => (showCamperModal.value = false)}
-          onSelect=${(camper) => {
-            activity.value = { ...activity.value, camperName: camper };
+          onSelectCampers=${(campers) => {
+            activity.value = { ...activity.value, campers };
           }}
         />`
       }
@@ -111,11 +112,11 @@ export const App = ({ database }) => {
               />
             </${Label}>
 
-            <${LabelLike} onClick=${() => (showCamperModal.value = true)}>Camper
+            <${LabelLike} onClick=${() => (showCamperModal.value = true)}>Campers
               <div class="flex justify-between items-center font-medium">
-                <span class="text-sm font-medium text-foreground px-3">${activity.value.camperName || html`<span />`}</span>
+                <span class="text-sm font-medium text-foreground px-3">${activity.value.campers.join(", ") || "No campers selected"}</span>
                 <${Button} type="button" variant="outline" size="sm">
-                  ${activity.value.camperName ? "Change" : "Select"}
+                  Select
                 </${Button}>
               </div>
             </${LabelLike}>
@@ -124,7 +125,7 @@ export const App = ({ database }) => {
               <div class="flex justify-between items-center font-medium">
                 <span class="text-sm font-medium text-foreground px-3">${activity.value.sessionType}</span>
                 <${Button} type="button" variant="outline" size="sm">
-                  Change
+                  Select
                 </${Button}>
               </div>
             </${LabelLike}>
@@ -150,7 +151,7 @@ export const App = ({ database }) => {
           <div class="text-center">
             <div class=${cn("text-4xl font-mono font-bold mb-2", isRunning ? "" : "opacity-50")}>${formatElapsedTime(activity.value.startTime, activity.value.endTime)}</div>
             <div class="space-x-2">
-              <${Button} disabled=${isRunning || !activity.value.camperName || !activity.value.therapistName}>
+              <${Button} disabled=${isRunning || !activity.value.campers.length || !activity.value.therapistName}>
                 Start
               </${Button}>
               <${Button} disabled=${!isRunning} variant="secondary">
@@ -159,7 +160,7 @@ export const App = ({ database }) => {
             </div>
             <div class="pt-4">
               ${!activity.value.therapistName && html`<div class="text-center text-secondary">Cannot start timer without a therapist name</div>`}
-              ${!activity.value.camperName && html`<div class="text-center text-secondary">Cannot start timer without a camper</div>`}
+              ${!activity.value.campers.length && html`<div class="text-center text-secondary">Cannot start timer without campers</div>`}
             </div>
           </div>
         </${CardContent}>
@@ -170,14 +171,14 @@ export const App = ({ database }) => {
 
 /**
  * @param {string | null} activityJSON
- * @returns {{id: string, therapistName: string, camperName: string, description: string, startTime: Date | null, endTime: Date | null}}
+ * @returns {{id: string, therapistName: string, campers: string[], description: string, startTime: Date | null, endTime: Date | null}}
  */
 const parseLocalStorageActivity = (activityJSON) => {
   if (!activityJSON) {
     return {
       id: null,
       therapistName: "",
-      camperName: "",
+      campers: [],
       groupName: "",
       sessionType: sessionTypes[0],
       description: "",
@@ -193,7 +194,7 @@ const parseLocalStorageActivity = (activityJSON) => {
     therapistName: activity.therapistName,
     groupName: activity.groupName,
     sessionType: parseSessionType(activity.sessionType),
-    camperName: activity.camperName,
+    campers: activity.campers ?? [],
     description: activity.description,
     startTime: activity.startTime ? new Date(activity.startTime) : null,
     endTime: activity.endTime ? new Date(activity.endTime) : null,
@@ -201,7 +202,7 @@ const parseLocalStorageActivity = (activityJSON) => {
 };
 
 /**
- * @param {{id: string, therapistName: string, groupName: string, camperName: string, description: string, startTime: Date | null, endTime: Date | null}} activity
+ * @param {{id: string, therapistName: string, groupName: string, campers: string[], description: string, startTime: Date | null, endTime: Date | null}} activity
  * @returns {string}
  */
 const formatActivityForLocalStorage = (activity) => {
@@ -210,7 +211,7 @@ const formatActivityForLocalStorage = (activity) => {
     therapistName: activity.therapistName,
     groupName: activity.groupName,
     sessionType: activity.sessionType,
-    camperName: activity.camperName,
+    campers: activity.campers,
     description: activity.description,
     startTime: activity.startTime?.toISOString() ?? null,
     endTime: activity.endTime?.toISOString() ?? null,

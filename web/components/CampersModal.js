@@ -9,9 +9,9 @@ import { Trash } from "./icons/Trash.js";
 import { Edit } from "./icons/Edit.js";
 
 /**
- * @param {{onClose: () => void, onSelect: (camper: string) => void}} props
+ * @param {{onClose: () => void, selectedCampers: string[], onSelectCampers: (campers: string[]) => void}} props
  */
-export const CamperModal = ({ onClose, onSelect }) => {
+export const CamperModal = ({ onClose, selectedCampers, onSelectCampers }) => {
   const campers = useSignal(JSON.parse(localStorage.getItem("campers") ?? "[]"));
   useSignalEffect(() => localStorage.setItem("campers", JSON.stringify(campers.value)));
 
@@ -34,9 +34,13 @@ export const CamperModal = ({ onClose, onSelect }) => {
         return html`<${Camper}
           camper=${camper}
           editMode=${editMode}
-          onSelect=${() => {
-            onSelect(camper);
-            onClose();
+          selected=${selectedCampers.includes(camper)}
+          onSelect=${(selected) => {
+            if (selected) {
+              onSelectCampers([...selectedCampers, camper]);
+            } else {
+              onSelectCampers(selectedCampers.filter((c) => c !== camper));
+            }
           }}
           onRemove=${() => (campers.value = campers.value.toSpliced(i, 1))}
         />`;
@@ -52,23 +56,36 @@ const Header = ({ onClickEdit }) => {
     <h1 class="text-2xl font-bold">Campers</h1> `;
 };
 
-const Camper = ({ camper, editMode, onRemove, onSelect }) => {
+const Camper = ({ camper, editMode, selected, onRemove, onSelect }) => {
   const onClickRemove = (e) => {
     e.stopPropagation();
     onRemove();
   };
 
   const onClickSelect = (e) => {
-    if (editMode.value) return;
     e.stopPropagation();
-    onSelect();
+    onSelect(e.target.checked);
   };
 
+  if (editMode.value) {
+    return html`<li>
+      <div class="flex justify-between items-center p-2">
+        <span>${camper}</span>
+        <div class="flex gap-2"><${RemoveButton} onClick=${onClickRemove} /></div>
+      </div>
+    </li>`;
+  }
+
   return html`<li>
-    <div class="flex justify-between items-center p-2" onClick=${onClickSelect}>
+    <label class="flex justify-between items-center p-2">
       <span>${camper}</span>
-      <div class="flex gap-2">${editMode.value ? html`<${RemoveButton} onClick=${onClickRemove} />` : html`<${SelectButton} />`}</div>
-    </div>
+      <input
+        type="checkbox"
+        class="size-4 rounded-md border border-input-border bg-input-background px-3 py-2 text-sm ring-offset-background text-foreground font-medium file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus:ring-input-border-focus disabled:cursor-not-allowed disabled:opacity-50 disabled:border-gray-200"
+        checked=${selected}
+        onChange=${onClickSelect}
+      />
+    </label>
   </li>`;
 };
 
@@ -76,10 +93,6 @@ const RemoveButton = ({ onClick }) => {
   return html`<${Button} type="button" onClick=${onClick} variant="danger" size="xs">
     <${Trash} class="size-4" />
   </${Button}>`;
-};
-
-const SelectButton = ({ onClick }) => {
-  return html`<${Button} type="button" onClick=${onClick} size="xs">Select</${Button}>`;
 };
 
 const NewCamperForm = ({ onAdd }) => {
