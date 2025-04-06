@@ -113,7 +113,7 @@ export const App = ({ database }) => {
 
             <${LabelLike} onClick=${() => (showCamperModal.value = true)}>Camper
               <div class="flex justify-between items-center font-medium">
-                <span class="text-sm font-medium text-foreground">${activity.value.camperName || html`<span />`}</span>
+                <span class="text-sm font-medium text-foreground px-3">${activity.value.camperName || html`<span />`}</span>
                 <${Button} type="button" variant="outline" size="sm">
                   ${activity.value.camperName ? "Change" : "Select"}
                 </${Button}>
@@ -122,7 +122,7 @@ export const App = ({ database }) => {
 
             <${LabelLike} onClick=${() => (showSessionTypeModal.value = true)}>Session Type
               <div class="flex justify-between items-center font-medium">
-                <span class="text-sm font-medium text-foreground">${activity.value.sessionType}</span>
+                <span class="text-sm font-medium text-foreground px-3">${activity.value.sessionType}</span>
                 <${Button} type="button" variant="outline" size="sm">
                   Change
                 </${Button}>
