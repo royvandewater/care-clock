@@ -3,7 +3,7 @@ import { cva } from "class-variance-authority";
 
 import { cn } from "../cn.js";
 
-const labelVariants = cva("text-sm font-semibold leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex flex-col gap-y-2");
+const labelVariants = cva("text-xs text-foreground-secondary leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex flex-col gap-y-2");
 
 const Label = (props) => html` <label ...${props} class=${cn(labelVariants(), props.class)} /> `;
 
