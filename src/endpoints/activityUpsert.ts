@@ -7,7 +7,7 @@ import { fromISOString, toDurationString, toLocaleString } from "../date";
 export class ActivityUpsert extends OpenAPIRoute {
   schema = {
     tags: ["Activities"],
-    summary: "Update an Activity, usually to stop it",
+    summary: "Update an Activity, usually to start or stop it",
     request: {
       params: z.object({
         id: Uuid(),
