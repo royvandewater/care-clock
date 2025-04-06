@@ -16,8 +16,16 @@ export const CamperModal = ({ onClose, onSelect }) => {
   useSignalEffect(() => localStorage.setItem("campers", JSON.stringify(campers.value)));
 
   const editMode = useSignal(false);
+  const onClickClose = () => {
+    if (editMode.value) {
+      editMode.value = false;
+      return;
+    }
 
-  return html`<${Modal} title=${html`<${Header} onClickEdit=${() => (editMode.value = !editMode.value)} />`} onClose=${onClose}>
+    onClose();
+  };
+
+  return html`<${Modal} title=${html`<${Header} onClickEdit=${() => (editMode.value = !editMode.value)} />`} onClose=${onClickClose}>
     ${editMode.value && html`<${NewCamperForm} onAdd=${(name) => (campers.value = [...campers.value, name].sort())} />`}
 
     <ul class="flex flex-col divide-y-1 divide-secondary/40">
