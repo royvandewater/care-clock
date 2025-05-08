@@ -18,7 +18,7 @@ export const SessionTypeModal = ({ onClose, onSelect }) => {
         (sessionType) => html`<li>
           <div class="flex justify-between items-center p-2" onClick=${() => onSelectSessionType(sessionType)}>
             <span>${sessionType}</span>
-            <${SelectButton} />
+            <${SelectButton} sessionType=${sessionType} />
           </div>
         </li>`
       )}
@@ -30,6 +30,6 @@ const Header = ({ onClickEdit }) => {
   return html` <h1 class="text-2xl font-bold">Session Type</h1> `;
 };
 
-const SelectButton = ({ onClick }) => {
-  return html`<${Button} type="button" onClick=${onClick} size="xs">Select</${Button}>`;
+const SelectButton = ({ onClick, sessionType }) => {
+  return html`<${Button} type="button" onClick=${onClick} size="xs" aria-label=${`Select ${sessionType}`}>Select</${Button}>`;
 };

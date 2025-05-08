@@ -124,7 +124,7 @@ export const App = ({ database }) => {
             <${LabelLike} onClick=${() => (showCamperModal.value = true)}>Campers
               <div class="flex justify-between items-center font-medium">
                 <span class="text-sm font-medium text-foreground px-3">${activity.value.campers.map((camper) => camper.name).join(", ") || "No campers selected"}</span>
-                <${Button} type="button" variant="outline" size="sm">
+                <${Button} type="button" variant="outline" size="sm" aria-label="Select Campers">
                   Select
                 </${Button}>
               </div>
@@ -133,7 +133,7 @@ export const App = ({ database }) => {
             <${LabelLike} onClick=${() => (showSessionTypeModal.value = true)}>Session Type
               <div class="flex justify-between items-center font-medium">
                 <span class="text-sm font-medium text-foreground px-3">${activity.value.sessionType}</span>
-                <${Button} type="button" variant="outline" size="sm">
+                <${Button} type="button" variant="outline" size="sm" aria-label="Select Session Type">
                   Select
                 </${Button}>
               </div>
@@ -160,10 +160,10 @@ export const App = ({ database }) => {
           <div class="text-center">
             <div class=${cn("text-4xl font-mono font-bold mb-2", isRunning ? "" : "opacity-50")}>${formatElapsedTime(activity.value.startTime, activity.value.endTime)}</div>
             <div class="space-x-2">
-              <${Button} disabled=${isRunning || !activity.value.campers.length || !activity.value.therapistName}>
+              <${Button} disabled=${isRunning || !activity.value.campers.length || !activity.value.therapistName} aria-label="Start Timer">
                 Start
               </${Button}>
-              <${Button} disabled=${!isRunning} variant="secondary">
+              <${Button} disabled=${!isRunning} variant="secondary" aria-label="Stop Timer">
                 Stop
               </${Button}>
             </div>

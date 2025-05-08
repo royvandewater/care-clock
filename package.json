@@ -5,9 +5,10 @@
   "scripts": {
     "deploy": "wrangler deploy",
     "dev": "wrangler dev",
-    "live-server": "live-server --ignore=.git --ignore=node_modules --ignore=src --ignore=.wrangler",
+    "live-server": "live-server --ignore=.git --ignore=node_modules --ignore=src --ignore=.wrangler --ignore=test-results --ignore=.playwright --no-browser",
     "start": "concurrently --names \"live-server,wrangler\" --prefix-colors \"blue.bold,green.bold\" \"npm run live-server\" \"npm run dev\"",
-    "cf-typegen": "wrangler types"
+    "cf-typegen": "wrangler types",
+    "test": "playwright test"
   },
   "dependencies": {
     "chanfana": "^2.8.0",
