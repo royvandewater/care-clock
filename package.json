@@ -5,9 +5,10 @@
   "scripts": {
     "deploy": "wrangler deploy",
     "dev": "wrangler dev",
-    "live-server": "live-server --ignore=.git --ignore=node_modules --ignore=src --ignore=.wrangler",
+    "live-server": "live-server --ignore=.git --ignore=node_modules --ignore=src --ignore=.wrangler --ignore=test-results --ignore=.playwright --no-browser",
     "start": "concurrently --names \"live-server,wrangler\" --prefix-colors \"blue.bold,green.bold\" \"npm run live-server\" \"npm run dev\"",
-    "cf-typegen": "wrangler types"
+    "cf-typegen": "wrangler types",
+    "test": "playwright test"
   },
   "dependencies": {
     "chanfana": "^2.8.0",
@@ -19,8 +20,9 @@
     "zod": "^3.24.4"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250506.0",
-    "@types/node": "22.15.12",
+    "@cloudflare/workers-types": "^4.20250509.0",
+    "@playwright/test": "^1.52.0",
+    "@types/node": "22.15.17",
     "@types/service-worker-mock": "^2.0.1",
     "concurrently": "^9.1.2",
     "live-server": "^1.2.2",
