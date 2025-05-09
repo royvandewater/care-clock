@@ -35,8 +35,9 @@ Icons are from https://heroicons.com/
 5. [x] Add app screenshots to manifest
 6. [x] Manually modify a record
 7. [x] Multiple campers at a time
-8. [ ] Move Therapist Name input into settings panel
-9. [ ] Toggle dark mode in settings panel
-10. [ ] Pre-curated groups
-11. [ ] Have it show up as a widget on lock screen
-12. [ ] [Create maskable icon](https://web.dev/articles/maskable-icon)
+8. [ ] Deal with multiple tabs being open better (starting an activity in one tab and switching to another overwrites teh running activity)
+9. [ ] Move Therapist Name input into settings panel
+10. [ ] Toggle dark mode in settings panel
+11. [ ] Pre-curated groups
+12. [ ] Have it show up as a widget on lock screen
+13. [ ] [Create maskable icon](https://web.dev/articles/maskable-icon)

@@ -50,7 +50,12 @@ export const CamperModal = ({ onClose, selectedCampers, onSelectCampers }) => {
 };
 
 const Header = ({ onClickEdit }) => {
-  return html`<button type="button" class="size-8 flex items-center justify-center hover:bg-tertiary-hover rounded-xl absolute top-4 right-6" onClick=${onClickEdit}>
+  return html`<button
+      type="button"
+      aria-label="Edit Campers"
+      class="size-8 flex items-center justify-center hover:bg-tertiary-hover rounded-xl absolute top-4 right-6"
+      onClick=${onClickEdit}
+    >
       <${Edit} />
     </button>
     <h1 class="text-2xl font-bold">Campers</h1> `;
