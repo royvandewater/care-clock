@@ -35,9 +35,12 @@ Icons are from https://heroicons.com/
 5. [x] Add app screenshots to manifest
 6. [x] Manually modify a record
 7. [x] Multiple campers at a time
-8. [ ] Deal with multiple tabs being open better (starting an activity in one tab and switching to another overwrites teh running activity)
-9. [ ] Move Therapist Name input into settings panel
-10. [ ] Toggle dark mode in settings panel
-11. [ ] Pre-curated groups
-12. [ ] Have it show up as a widget on lock screen
-13. [ ] [Create maskable icon](https://web.dev/articles/maskable-icon)
+8. [x] Instead of group , co treat, who is your student? Call it "with who"
+9. [ ] Check what the description character limit is
+10. [ ] Add edit icon to unsynced activities
+11. [ ] Deal with multiple tabs being open better (starting an activity in one tab and switching to another overwrites teh running activity)
+12. [ ] Move Therapist Name input into settings panel
+13. [ ] Toggle dark mode in settings panel
+14. [ ] Pre-curated groups
+15. [ ] Have it show up as a widget on lock screen
+16. [ ] [Create maskable icon](https://web.dev/articles/maskable-icon)
