@@ -57,7 +57,7 @@ test("Filling out the form for an individual session", async ({ page }) => {
 
   // select a camper
   await page.getByLabel("Select Campers").click();
-  await page.getByLabel("Edit Campers").click();
+  await page.getByRole("button", { name: "Edit Campers" }).click();
   await page.getByLabel("Camper Name").fill("Alice");
   await page.getByRole("button", { name: "Add" }).click();
   await page.getByRole("button", { name: "Back" }).click(); // back to campers modal
