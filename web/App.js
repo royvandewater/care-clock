@@ -103,6 +103,13 @@ export const App = ({ database }) => {
         html`<${SessionTypeModal}
           onClose=${() => (showSessionTypeModal.value = false)}
           onSelect=${(sessionType) => {
+            if (shouldClearGroup(activity.value.sessionType, sessionType)) {
+              activity.value = { ...activity.value, groupName: "" };
+            }
+            if (shouldClearWithWho(activity.value.sessionType, sessionType)) {
+              activity.value = { ...activity.value, withWho: "" };
+            }
+
             activity.value = { ...activity.value, sessionType };
           }}
         />`
@@ -175,6 +182,18 @@ export const App = ({ database }) => {
       </${Card}>
     </form>
   `;
+};
+
+const shouldClearGroup = (oldSessionType, newSessionType) => {
+  if (oldSessionType === newSessionType) return false;
+  return oldSessionType === "Group";
+};
+
+const shouldClearWithWho = (oldSessionType, newSessionType) => {
+  if (oldSessionType === newSessionType) return false;
+  if (newSessionType === "Individual") return true;
+  if (newSessionType === "Group") return true;
+  return false;
 };
 
 /**

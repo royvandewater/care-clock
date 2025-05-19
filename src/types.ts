@@ -7,6 +7,7 @@ export const Activity = z.object({
   camperName: Str(),
   sessionType: Enumeration({ values: ["Individual", "Co-Treat", "Group", "Consult", "Training"] }),
   groupName: Str().nullish(),
+  withWho: Str().nullish(),
   description: Str(),
   startTime: DateTime(),
   endTime: DateTime().nullish(),

@@ -56,6 +56,7 @@ export class ActivityUpsert extends OpenAPIRoute {
         Camper: activity.camperName,
         Type: activity.sessionType,
         Group: activity.groupName || null,
+        "With Who": activity.withWho || null,
         Description: activity.description,
         Start: toLocaleString(fromISOString(activity.startTime)),
         End: activity.endTime ? toLocaleString(fromISOString(activity.endTime)) : null,
@@ -69,6 +70,7 @@ export class ActivityUpsert extends OpenAPIRoute {
     row.set("Camper", activity.camperName);
     row.set("Type", activity.sessionType);
     row.set("Group", activity.groupName || null);
+    row.set("With Who", activity.withWho || null);
     row.set("Description", activity.description);
     row.set("Start", toLocaleString(fromISOString(activity.startTime)));
     row.set("End", activity.endTime ? toLocaleString(fromISOString(activity.endTime)) : null);
