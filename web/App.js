@@ -140,14 +140,13 @@ export const App = ({ database }) => {
             </${LabelLike}>
           </div>
 
-          <${Label} >Group
-            <${Input} 
-              id="groupName" 
-              value=${activity.value.groupName} 
-              onInput=${(e) => (activity.value = { ...activity.value, groupName: e.target.value })} 
-              placeholder="Triathlon"  
-            />
-          </${Label}>
+          <${AdditionalSessionInfo}
+            sessionType=${activity.value.sessionType}
+            groupName=${activity.value.groupName}
+            onChangeGroupName=${(e) => (activity.value = { ...activity.value, groupName: e.target.value })}
+            withWho=${activity.value.withWho}
+            onChangeWithWho=${(e) => (activity.value = { ...activity.value, withWho: e.target.value })}
+          />
 
           <${Label} class="flex flex-col">Activity Description
             <${TextArea} 
@@ -179,8 +178,55 @@ export const App = ({ database }) => {
 };
 
 /**
+ * @param {{
+ *   sessionType: string,
+ *   groupName: string,
+ *   onChangeGroupName: (e: Event) => void,
+ *   withWho: string,
+ *   onChangeWithWho: (e: Event) => void,
+ * }} props
+ */
+const AdditionalSessionInfo = ({ sessionType, groupName, onChangeGroupName, withWho, onChangeWithWho }) => {
+  if (sessionType === "Individual") {
+    return null;
+  }
+
+  if (sessionType === "Group") {
+    return html`
+      <${Label} >Group
+        <${Input} 
+          id="groupName" 
+          value=${groupName} 
+          onInput=${onChangeGroupName} 
+          placeholder="Triathlon"  
+        />
+      </${Label}>
+    `;
+  }
+
+  return html`
+    <${Label} >With Who
+      <${Input} 
+        id="withWho" 
+        value=${withWho} 
+        onInput=${onChangeWithWho} 
+        placeholder="Mr. John"  
+      />
+    </${Label}>
+  `;
+};
+
+/**
  * @param {string | null} activityJSON
- * @returns {{therapistName: string, campers: {name: string, id: string | null}[], description: string, startTime: Date | null, endTime: Date | null}}
+ * @returns {{
+ *   therapistName: string,
+ *   campers: {name: string, id: string | null}[],
+ *   groupName: string,
+ *   withWho: string,
+ *   description: string,
+ *   startTime: Date | null,
+ *   endTime: Date | null,
+ * }}
  */
 const parseLocalStorageActivity = (activityJSON) => {
   if (!activityJSON) {
@@ -188,6 +234,7 @@ const parseLocalStorageActivity = (activityJSON) => {
       therapistName: "",
       campers: [],
       groupName: "",
+      withWho: "",
       sessionType: sessionTypes[0],
       description: "",
       startTime: null,
@@ -199,9 +246,10 @@ const parseLocalStorageActivity = (activityJSON) => {
 
   return {
     therapistName: activity.therapistName,
-    groupName: activity.groupName,
-    sessionType: parseSessionType(activity.sessionType),
     campers: activity.campers ?? [],
+    sessionType: parseSessionType(activity.sessionType),
+    groupName: activity.groupName,
+    withWho: activity.withWho,
     description: activity.description,
     startTime: activity.startTime ? new Date(activity.startTime) : null,
     endTime: activity.endTime ? new Date(activity.endTime) : null,
@@ -209,15 +257,24 @@ const parseLocalStorageActivity = (activityJSON) => {
 };
 
 /**
- * @param {{therapistName: string, groupName: string, campers: {name: string, id: string | null}[], description: string, startTime: Date | null, endTime: Date | null}} activity
- * @returns {string}
+ * @param {{
+ *   therapistName: string,
+ *   campers: {name: string, id: string | null}[],
+ *   sessionType: string,
+ *   groupName: string,
+ *   withWho: string,
+ *   description: string,
+ *   startTime: Date | null,
+ *   endTime: Date | null,
+ * }} activity
  */
 const formatActivityForLocalStorage = (activity) => {
   return JSON.stringify({
     therapistName: activity.therapistName,
-    groupName: activity.groupName,
-    sessionType: activity.sessionType,
     campers: activity.campers,
+    sessionType: activity.sessionType,
+    groupName: activity.groupName,
+    withWho: activity.withWho,
     description: activity.description,
     startTime: activity.startTime?.toISOString() ?? null,
     endTime: activity.endTime?.toISOString() ?? null,

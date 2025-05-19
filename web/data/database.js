@@ -32,7 +32,6 @@ export const connectToDatabase = async () => {
  *   description: string;
  *   startTime: string;
  *   endTime?: string;
- *   rowNumber?: number;
  *   syncState: "unsynced" | "syncing" | "synced";
  * }} Activity
  */

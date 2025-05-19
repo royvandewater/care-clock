@@ -5,8 +5,28 @@ import { parseSessionType } from "./sessionTypes.js";
  */
 
 /**
- * @param {{id: string; therapistName: string; camperName: string; sessionType: SessionType; groupName: string; description: string; startTime: Date | null; endTime: Date | null; syncState: string; rowNumber: number}} activity
- * @returns {{id: string; therapistName: string; camperName: string; sessionType: string; groupName: string; description: string; startTime: string | null; endTime: string | null; syncState: string; rowNumber: number}}
+ * @param {{
+ *   id: string,
+ *   therapistName: string,
+ *   camperName: string,
+ *   sessionType: SessionType,
+ *   groupName: string,
+ *   description: string,
+ *   startTime: Date | null,
+ *   endTime: Date | null,
+ *   syncState: string,
+ * }} activity
+ * @returns {{
+ *   id: string,
+ *   therapistName: string,
+ *   camperName: string,
+ *   sessionType: string,
+ *   groupName: string,
+ *   description: string,
+ *   startTime: string | null,
+ *   endTime: string | null,
+ *   syncState: string,
+ * }}
  */
 export const formatActivity = (activity) => {
   return {
@@ -19,13 +39,34 @@ export const formatActivity = (activity) => {
     startTime: activity.startTime?.toISOString() ?? null,
     endTime: activity.endTime?.toISOString() ?? null,
     syncState: activity.syncState,
-    rowNumber: activity.rowNumber,
   };
 };
 
 /**
- * @param {{id: string; therapistName: string; camperName: string; sessionType: string; groupName: string; description: string; startTime: string | null; endTime: string | null; syncState: string; rowNumber: number}} activity
- * @returns {{id: string; therapistName: string; camperName: string; sessionType: SessionType; groupName: string; description: string; startTime: Date | null; endTime: Date | null; syncState: string; rowNumber: number}}
+ * @param {{
+ *   id: string,
+ *   therapistName: string,
+ *   camperName: string,
+ *   sessionType: string,
+ *   groupName: string,
+ *   withWho: string,
+ *   description: string,
+ *   startTime: string | null,
+ *   endTime: string | null,
+ *   syncState: string,
+ * }} activity
+ * @returns {{
+ *   id: string,
+ *   therapistName: string,
+ *   camperName: string,
+ *   sessionType: SessionType,
+ *   groupName: string,
+ *   withWho: string,
+ *   description: string,
+ *   startTime: Date | null,
+ *   endTime: Date | null,
+ *   syncState: string,
+ * }}
  */
 export const parseActivity = (activity) => {
   return {
@@ -34,10 +75,10 @@ export const parseActivity = (activity) => {
     camperName: activity.camperName,
     sessionType: parseSessionType(activity.sessionType),
     groupName: activity.groupName,
+    withWho: activity.withWho,
     description: activity.description,
     startTime: activity.startTime ? new Date(activity.startTime) : null,
     endTime: activity.endTime ? new Date(activity.endTime) : null,
     syncState: activity.syncState,
-    rowNumber: activity.rowNumber,
   };
 };

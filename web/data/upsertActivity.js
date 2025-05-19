@@ -13,7 +13,16 @@ import { assert } from "../assert.js";
  * server returns a 204, the activity is marked as synced.
  *
  * @param {{database: IDBDatabase}} dependencies
- * @param {{therapistName: string; campers: {name: string, id: string}[]; sessionType: SessionType; groupName: string; description: string; startTime: Date; endTime: Date | null}} activity
+ * @param {{
+ *   therapistName: string,
+ *   campers: {name: string, id: string}[],
+ *   sessionType: SessionType,
+ *   groupName: string,
+ *   withWho: string,
+ *   description: string,
+ *   startTime: Date,
+ *   endTime: Date,
+ * }} activity
  */
 export const upsertActivity = async ({ database }, activity) => {
   const camperActivities = activity.campers.map((camper) => ({
@@ -41,7 +50,17 @@ export const upsertActivity = async ({ database }, activity) => {
 /**
  *
  * @param {{database: IDBDatabase}} dependencies
- * @param {{id: string; therapistName: string; camperName: string; sessionType: SessionType; groupName: string; description: string; startTime: string; endTime: string}} activity
+ * @param {{
+ *   id: string,
+ *   camperName: string,
+ *   therapistName: string,
+ *   sessionType: SessionType,
+ *   groupName: string,
+ *   withWho: string,
+ *   description: string,
+ *   startTime: string,
+ *   endTime: string
+ * }} activity
  */
 const putActivity = async ({ database }, activity) => {
   try {
