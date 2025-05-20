@@ -105,6 +105,8 @@ const NewCamperForm = ({ onAdd }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    e.stopPropagation();
+
     onAdd(name.value);
     name.value = "";
   };

@@ -71,17 +71,18 @@ export const App = ({ database }) => {
     startTimer();
   };
 
-  return html`
-    <form class="h-full max-w-md mx-auto p-4 space-y-6 flex flex-col gap-4 z-0" onSubmit=${onSubmit}>
-      <header class="text-center relative">
-        <h1 class="text-2xl font-bold text-primary">Care Clock</h1>
-        <${HistoryButton} class="absolute top-0 right-4" hasNotifications=${hasNotifications} onClick=${() => (showHistoryModal.value = true)}/>
-      </header>
+  if (showHistoryModal.value) {
+    return html`
+      <div class="h-full max-w-md mx-auto p-4 space-y-6 flex flex-col gap-4 z-0">
+        <${HistoryModal} database=${database} onClose=${() => (showHistoryModal.value = false)} />
+      </div>
+    `;
+  }
 
-      ${showHistoryModal.value && html`<${HistoryModal} database=${database} onClose=${() => (showHistoryModal.value = false)} />`}
-      ${
-        showCamperModal.value &&
-        html`<${CamperModal}
+  if (showCamperModal.value) {
+    return html`
+      <div class="h-full max-w-md mx-auto p-4 space-y-6 flex flex-col gap-4 z-0">
+        <${CamperModal}
           selectedCampers=${activity.value.campers.map((camper) => camper.name)}
           onClose=${() => (showCamperModal.value = false)}
           onSelectCampers=${(campers) => {
@@ -95,12 +96,15 @@ export const App = ({ database }) => {
               }),
             };
           }}
-        />`
-      }
+        />
+      </div>
+    `;
+  }
 
-      ${
-        showSessionTypeModal.value &&
-        html`<${SessionTypeModal}
+  if (showSessionTypeModal.value) {
+    return html`
+      <div class="h-full max-w-md mx-auto p-4 space-y-6 flex flex-col gap-4 z-0">
+        <${SessionTypeModal}
           onClose=${() => (showSessionTypeModal.value = false)}
           onSelect=${(sessionType) => {
             if (shouldClearGroup(activity.value.sessionType, sessionType)) {
@@ -112,8 +116,17 @@ export const App = ({ database }) => {
 
             activity.value = { ...activity.value, sessionType };
           }}
-        />`
-      }
+        />
+      </div>
+    `;
+  }
+
+  return html`
+    <form class="h-full max-w-md mx-auto p-4 space-y-6 flex flex-col gap-4 z-0" onSubmit=${onSubmit}>
+      <header class="text-center relative">
+        <h1 class="text-2xl font-bold text-primary">Care Clock</h1>
+        <${HistoryButton} class="absolute top-0 right-4" hasNotifications=${hasNotifications} onClick=${() => (showHistoryModal.value = true)}/>
+      </header>
 
       <${Card} class="flex-1">
         <${CardContent} class="p-4 space-y-4 h-full flex flex-col">
