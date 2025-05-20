@@ -5,6 +5,8 @@ import { useSignal } from "@preact/signals";
 import { upsertActivity } from "../data/upsertActivity.js";
 import { getActivitesThatAreNotSynced } from "../data/database.js";
 import { Syncing } from "./icons/Syncing.js";
+import { Edit } from "./icons/Edit.js";
+import { Button } from "./Button.js";
 import { Unsynced } from "./icons/Unsynced.js";
 
 export const UnsyncedActivities = ({ database, onEditActivity }) => {
@@ -59,7 +61,10 @@ const Activity = ({ activity, onEditActivity }) => {
         <h2 class="text-sm">${activity.camperName}</h3>
         <h3 class="text-xs text-foreground-secondary">${new Date(activity.startTime).toLocaleString()}</h2>
       </div>
-      <${SyncState} syncState=${activity.syncState} />
+      <span class="flex gap-x-2 items-center">
+        <${SyncState} syncState=${activity.syncState} />
+        <${Button} variant="tertiary" size="xs" type="button"><${Edit} /></${Button}>
+      </span>
     </div>
   </li>`;
 };
