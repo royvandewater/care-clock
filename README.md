@@ -36,7 +36,7 @@ Icons are from https://heroicons.com/
 6. [x] Manually modify a record
 7. [x] Multiple campers at a time
 8. [x] Instead of group , co treat, who is your student? Call it "with who"
-9. [ ] Check what the description character limit is
+9. [x] Check what the description character limit is (It's 50k characters)
 10. [x] Add edit icon to unsynced activities
 11. [ ] Deal with multiple tabs being open better (starting an activity in one tab and switching to another overwrites teh running activity)
 12. [ ] Move Therapist Name input into settings panel
