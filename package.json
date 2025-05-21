@@ -20,7 +20,7 @@
     "zod": "^3.24.4"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250509.0",
+    "@cloudflare/workers-types": "^4.20250521.0",
     "@playwright/test": "^1.52.0",
     "@types/node": "22.15.17",
     "@types/service-worker-mock": "^2.0.1",
