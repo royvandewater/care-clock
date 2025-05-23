@@ -15,7 +15,7 @@
     "date-fns": "^4.1.0",
     "google-auth-library": "^9.15.1",
     "google-spreadsheet": "^4.1.4",
-    "hono": "^4.7.9",
+    "hono": "^4.7.10",
     "uuid": "^11.0.5",
     "zod": "^3.25.23"
   },
