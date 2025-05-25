@@ -11,7 +11,11 @@ import { Input } from "./Input.js";
 export const SettingsModal = ({ onClose, activity, theme }) => {
   return html`
     <${Modal} title="Settings" onClose=${onClose}>
-      <div class="px-4 flex flex-col gap-4">
+      <form class="px-4 flex flex-col gap-4" onSubmit=${(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onClose();
+      }}>
         <${Label} >Therapist
           <${Input} 
             id="therapistName" 
@@ -25,20 +29,23 @@ export const SettingsModal = ({ onClose, activity, theme }) => {
         <${Label}>Interface Theme
           <div class="flex">
             <${Button} 
+              type="button"
               variant=${theme.value === "light" ? "default" : "outline"} 
               onClick=${() => (theme.value = "light")} 
               className="border-r-0 rounded-r-none">Light</${Button}>
             <${Button} 
+              type="button"
               variant=${theme.value === "dark" ? "default" : "outline"} 
               onClick=${() => (theme.value = "dark")} 
               className="rounded-none">Dark</${Button}>
             <${Button} 
+              type="button"
               variant=${theme.value === "system" ? "default" : "outline"} 
               onClick=${() => (theme.value = "system")} 
               className="border-l-0 rounded-l-none">System</${Button}>
           </div>
         </${Label}>
-      </div>
+      </form>
     </${Modal}>
   `;
 };
