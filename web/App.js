@@ -12,6 +12,7 @@ import { HistoryButton } from "./components/HistoryButton.js";
 import { HistoryModal } from "./components/HistoryModal.js";
 import { CamperModal } from "./components/CampersModal.js";
 import { SessionTypeModal } from "./components/SessionTypeModal.js";
+import { SettingsModal } from "./components/SettingsModal.js";
 
 import { startActivity } from "./data/startActivity.js";
 import { upsertActivity } from "./data/upsertActivity.js";
@@ -70,6 +71,14 @@ export const App = ({ database }) => {
     if (isRunning) return stopTimer();
     startTimer();
   };
+
+  if (showSettingsModal.value) {
+    return html`
+      <div class="h-full max-w-md mx-auto p-4 space-y-6 flex flex-col gap-4 z-0">
+        <${SettingsModal} onClose=${() => (showSettingsModal.value = false)} />
+      </div>
+    `;
+  }
 
   if (showHistoryModal.value) {
     return html`
