@@ -40,7 +40,7 @@ Icons are from https://heroicons.com/
 10. [x] Add edit icon to unsynced activities
 11. [x] Deal with multiple tabs being open better (starting an activity in one tab and switching to another overwrites the running activity)
 12. [x] Move Therapist Name input into settings panel
-13. [ ] Toggle dark mode in settings panel
+13. [x] Toggle dark mode in settings panel
 14. [ ] Pre-curated groups
 15. [ ] ~Have it show up as a widget on lock screen~ I looked into it and it doesn't look like it's possible without a native app
 16. [ ] [Create maskable icon](https://web.dev/articles/maskable-icon)

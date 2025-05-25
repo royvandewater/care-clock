@@ -31,7 +31,7 @@ export const App = ({ database }) => {
   const theme = useTheme();
   const isRunning = Boolean(activity.value.startTime);
 
-  const showSettingsModal = useSignal(true);
+  const showSettingsModal = useSignal(false);
   const showCamperModal = useSignal(false);
   const showSessionTypeModal = useSignal(false);
   const showHistoryModal = useSignal(false);
