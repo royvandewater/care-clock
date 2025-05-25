@@ -51,7 +51,9 @@ export const CamperModal = ({ onClose, selectedCampers, onSelectCampers }) => {
 };
 
 const Header = ({ onClickEdit }) => {
-  return html`<button
+  return html`
+    <h1 class="text-2xl font-bold">Campers</h1>
+    <button
       type="button"
       aria-label="Edit Campers"
       class="size-8 flex items-center justify-center hover:bg-tertiary-hover rounded-xl absolute top-4 right-6"
@@ -59,7 +61,7 @@ const Header = ({ onClickEdit }) => {
     >
       <${Edit} />
     </button>
-    <h1 class="text-2xl font-bold">Campers</h1> `;
+  `;
 };
 
 const Camper = ({ camper, editMode, selected, onRemove, onSelect }) => {
@@ -83,7 +85,7 @@ const Camper = ({ camper, editMode, selected, onRemove, onSelect }) => {
   }
 
   return html`<li>
-    <label class="flex justify-between items-center p-2">
+    <label class="flex justify-between items-center py-2 px-4">
       <span>${camper}</span>
       <input
         type="checkbox"

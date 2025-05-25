@@ -7,6 +7,7 @@ import { Button } from "./components/Button.js";
 import { Input } from "./components/Input.js";
 import { Label, LabelLike } from "./components/Label.js";
 import { TextArea } from "./components/TextArea.js";
+import { Settings } from "./components/icons/Settings.js";
 import { HistoryButton } from "./components/HistoryButton.js";
 import { HistoryModal } from "./components/HistoryModal.js";
 import { CamperModal } from "./components/CampersModal.js";
@@ -27,6 +28,7 @@ export const App = ({ database }) => {
   const activity = useActivity();
   const isRunning = Boolean(activity.value.startTime);
 
+  const showSettingsModal = useSignal(false);
   const showCamperModal = useSignal(false);
   const showSessionTypeModal = useSignal(false);
   const showHistoryModal = useSignal(false);
@@ -122,6 +124,7 @@ export const App = ({ database }) => {
   return html`
     <form class="h-full max-w-md mx-auto p-4 space-y-6 flex flex-col gap-4 z-0" onSubmit=${onSubmit}>
       <header class="text-center relative">
+        <${SettingsButton} onClick=${() => (showSettingsModal.value = true)} class="absolute top-0 left-4" />
         <h1 class="text-2xl font-bold text-primary">Care Clock</h1>
         <${HistoryButton} class="absolute top-0 right-4" hasNotifications=${hasNotifications} onClick=${() => (showHistoryModal.value = true)}/>
       </header>
@@ -205,6 +208,17 @@ const shouldClearWithWho = (oldSessionType, newSessionType) => {
   if (newSessionType === "Individual") return true;
   if (newSessionType === "Group") return true;
   return false;
+};
+
+/**
+ * @param {{onClick: () => void, class: string}} props
+ */
+const SettingsButton = ({ onClick, ...props }) => {
+  return html`
+    <button class=${cn("size-8 flex items-center justify-center hover:bg-tertiary-hover rounded-xl", props.class)} type="button" onClick=${onClick}>
+      <${Settings} />
+    </button>
+  `;
 };
 
 /**
