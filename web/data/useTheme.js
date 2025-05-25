@@ -7,7 +7,19 @@ export const useTheme = () => {
 
   useSignalEffect(() => {
     window.localStorage.setItem("theme", theme.value);
-    document.documentElement.classList.toggle("dark", theme.value === "dark");
+    
+    // Remove existing theme classes
+    document.documentElement.classList.remove("light", "dark");
+    
+    // Apply the appropriate class based on theme selection
+    if (theme.value === "light") {
+      document.documentElement.classList.add("light");
+    } else if (theme.value === "dark") {
+      document.documentElement.classList.add("dark");
+    } else if (theme.value === "system") {
+      // Let system preference handle it via CSS media query
+      // Don't add any class, let :root:not(.light):not(.dark) handle it
+    }
   });
 
   useEffect(() => {
@@ -17,6 +29,7 @@ export const useTheme = () => {
     };
 
     window.addEventListener("storage", updateTheme);
+    
     return () => {
       window.removeEventListener("storage", updateTheme);
     };

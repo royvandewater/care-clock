@@ -19,35 +19,65 @@
     <div id="app" class="h-full"></div>
 
     <style>
+      /* Default light theme variables */
       :root {
-        @media (prefers-color-scheme: light) {
-          --theme-background: #F8F9FA;
-          --theme-foreground: #212529;
-          --theme-foreground-secondary: #6C757D;
+        --theme-background: #F8F9FA;
+        --theme-foreground: #212529;
+        --theme-foreground-secondary: #6C757D;
 
-          --theme-primary: #007AFF;
-          --theme-primary-hover:  #005FCC;
-          --theme-primary-foreground: var(--color-white);
+        --theme-primary: #007AFF;
+        --theme-primary-hover:  #005FCC;
+        --theme-primary-foreground: var(--color-white);
 
-          --theme-secondary:  #6C757D;
-          --theme-secondary-hover: #5A6268;
-          --theme-secondary-foreground: var(--color-white);
+        --theme-secondary:  #6C757D;
+        --theme-secondary-hover: #5A6268;
+        --theme-secondary-foreground: var(--color-white);
 
-          --theme-tertiary-hover: #e3e7ec;
+        --theme-tertiary-hover: #e3e7ec;
 
-          --theme-danger: #BB0000;
-          --theme-danger-foreground: var(--color-white);
+        --theme-danger: #BB0000;
+        --theme-danger-foreground: var(--color-white);
 
-          --theme-warning: #c07c00;
-          --theme-warning-foreground: var(--color-white);
+        --theme-warning: #c07c00;
+        --theme-warning-foreground: var(--color-white);
 
-          --theme-input-background: var(--color-white);
-          --theme-input-border: #CED4DA;
-          --theme-input-border-focus: #007AFF;
+        --theme-input-background: var(--color-white);
+        --theme-input-border: #CED4DA;
+        --theme-input-border-focus: #007AFF;
 
-          --theme-divider: #CED4DA;
-        }
-        @media (prefers-color-scheme: dark) {
+        --theme-divider: #CED4DA;
+      }
+
+      /* Dark theme variables when .dark class is present */
+      :root.dark {
+        --theme-background: #121417;
+        --theme-foreground: #E4E6EB;
+        --theme-foreground-secondary:  #A1A7B3;
+
+        --theme-primary: #4D9AFF;
+        --theme-primary-hover:  #397ED6;
+        --theme-primary-foreground: var(--color-white);
+
+        --theme-secondary:  #A1A7B3;
+        --theme-secondary-hover: #8D94A0;
+        --theme-secondary-foreground: var(--color-white);
+
+        --theme-tertiary-hover: #3A3F45;
+
+        --theme-danger: #FF4949;
+        --theme-danger-foreground: var(--color-white);
+
+        --theme-warning: #FFA500;
+        --theme-warning-foreground: var(--color-white);
+
+        --theme-input-background: #1C1F24;
+        --theme-input-border: #3A3F45;
+        --theme-input-border-focus: #4D9AFF;
+      }
+
+      /* System preference fallback - only applies when no explicit theme class is set */
+      @media (prefers-color-scheme: dark) {
+        :root:not(.light):not(.dark) {
           --theme-background: #121417;
           --theme-foreground: #E4E6EB;
           --theme-foreground-secondary:  #A1A7B3;
