@@ -9,7 +9,9 @@ test("that the page loads", async ({ page }) => {
 test("Filling out the form for a group session", async ({ page }) => {
   await page.goto("/");
 
+  await page.getByLabel("Settings").click();
   await page.getByLabel("Therapist").fill("Integration Test");
+  await page.getByLabel("Back").click();
 
   // select a camper
   await page.getByLabel("Select Campers").click();
@@ -31,7 +33,9 @@ test("Filling out the form for a group session", async ({ page }) => {
 test("Filling out the form for a co-treat session", async ({ page }) => {
   await page.goto("/");
 
+  await page.getByLabel("Settings").click();
   await page.getByLabel("Therapist").fill("Integration Test");
+  await page.getByLabel("Back").click();
 
   // select a camper
   await page.getByLabel("Select Campers").click();
@@ -53,7 +57,9 @@ test("Filling out the form for a co-treat session", async ({ page }) => {
 test("Filling out the form for an individual session", async ({ page }) => {
   await page.goto("/");
 
+  await page.getByLabel("Settings").click();
   await page.getByLabel("Therapist").fill("Integration Test");
+  await page.getByLabel("Back").click();
 
   // select a camper
   await page.getByLabel("Select Campers").click();

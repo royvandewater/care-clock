@@ -135,7 +135,10 @@ export const App = ({ database }) => {
   return html`
     <form class="h-full max-w-md shadow-lg mx-auto p-4 space-y-6 flex flex-col gap-4 z-0" onSubmit=${onSubmit}>
       <header class="text-center relative">
-        <${SettingsButton} onClick=${() => (showSettingsModal.value = true)} class="absolute top-0 left-4" />
+        <${SettingsButton} 
+          onClick=${() => (showSettingsModal.value = true)} 
+          class="absolute top-0 left-4" 
+        />
         <h1 class="text-2xl font-bold text-primary">Care Clock</h1>
         <${HistoryButton} class="absolute top-0 right-4" hasNotifications=${hasNotifications} onClick=${() => (showHistoryModal.value = true)}/>
       </header>
@@ -221,7 +224,7 @@ const shouldClearWithWho = (oldSessionType, newSessionType) => {
  */
 const SettingsButton = ({ onClick, ...props }) => {
   return html`
-    <button class=${cn("size-8 flex items-center justify-center hover:bg-tertiary-hover rounded-xl", props.class)} type="button" onClick=${onClick}>
+    <button aria-label="Settings" class=${cn("size-8 flex items-center justify-center hover:bg-tertiary-hover rounded-xl", props.class)} type="button" onClick=${onClick}>
       <${Settings} />
     </button>
   `;
