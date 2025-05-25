@@ -38,7 +38,7 @@ Icons are from https://heroicons.com/
 8. [x] Instead of group , co treat, who is your student? Call it "with who"
 9. [x] Check what the description character limit is (It's 50k characters)
 10. [x] Add edit icon to unsynced activities
-11. [ ] Deal with multiple tabs being open better (starting an activity in one tab and switching to another overwrites the running activity)
+11. [x] Deal with multiple tabs being open better (starting an activity in one tab and switching to another overwrites the running activity)
 12. [ ] Move Therapist Name input into settings panel
 13. [ ] Toggle dark mode in settings panel
 14. [ ] Pre-curated groups

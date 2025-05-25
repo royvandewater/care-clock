@@ -1,5 +1,5 @@
 import { html } from "htm/preact";
-import { useSignal, useSignalEffect } from "@preact/signals";
+import { useSignal } from "@preact/signals";
 
 import { Modal } from "./Modal.js";
 import { Label } from "./Label.js";
@@ -8,12 +8,13 @@ import { Button } from "./Button.js";
 import { Trash } from "./icons/Trash.js";
 import { Edit } from "./icons/Edit.js";
 
+import { useAvailableCampers } from "../data/useAvailableCampers.js";
+
 /**
  * @param {{onClose: () => void, selectedCampers: string[], onSelectCampers: (campers: string[]) => void}} props
  */
 export const CamperModal = ({ onClose, selectedCampers, onSelectCampers }) => {
-  const campers = useSignal(JSON.parse(localStorage.getItem("campers") ?? "[]"));
-  useSignalEffect(() => localStorage.setItem("campers", JSON.stringify(campers.value)));
+  const campers = useAvailableCampers();
 
   const editMode = useSignal(false);
   const onClickClose = () => {
