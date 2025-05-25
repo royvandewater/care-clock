@@ -1,5 +1,4 @@
 import { html } from "htm/preact";
-import { useSignal } from "@preact/signals";
 import { Modal } from "./Modal.js";
 import { Label } from "./Label.js";
 import { Button } from "./Button.js";
