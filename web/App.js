@@ -12,11 +12,10 @@ import { HistoryModal } from "./components/HistoryModal.js";
 import { CamperModal } from "./components/CampersModal.js";
 import { SessionTypeModal } from "./components/SessionTypeModal.js";
 
-import { sessionTypes, parseSessionType } from "./data/sessionTypes.js";
 import { startActivity } from "./data/startActivity.js";
 import { upsertActivity } from "./data/upsertActivity.js";
 import { hasUnsynchronizedActivities } from "./data/hasUnsynchronizedActivities.js";
-import { useLocalStorageActivity } from "./data/useLocalStorageActivity.js";
+import { useActivity } from "./data/useActivity.js";
 
 import { formatElapsedTime } from "./formatElapsedTime.js";
 import { cn } from "./cn.js";
@@ -25,7 +24,7 @@ import { cn } from "./cn.js";
  * @param {{database: IDBDatabase}} props
  */
 export const App = ({ database }) => {
-  const activity = useLocalStorageActivity();
+  const activity = useActivity();
   const isRunning = Boolean(activity.value.startTime);
 
   const showCamperModal = useSignal(false);

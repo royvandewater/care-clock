@@ -2,7 +2,22 @@ import { useSignal, useSignalEffect, batch, useComputed } from "@preact/signals"
 import { parseSessionType, sessionTypes } from "./sessionTypes.js";
 import { useEffect } from "preact/hooks";
 
-export const useLocalStorageActivity = () => {
+/**
+ * Manages the activity state and synchronizes it with the local storage. It handles
+ * keeping the activity in sync with other tabs. It does not keep it in sync with other
+ * instances of useActivity rendered in the same tab.
+ *
+ * @returns {Signal<{
+ *   therapistName: string,
+ *   campers: {name: string, id: string | null}[],
+ *   groupName: string,
+ *   withWho: string,
+ *   description: string,
+ *   startTime: Date | null,
+ *   endTime: Date | null,
+ * }>}
+ */
+export const useActivity = () => {
   const activity = useSignal(parseLocalStorageActivity(window.localStorage.getItem("activity")));
 
   useSignalEffect(() => window.localStorage.setItem("activity", formatActivityForLocalStorage(activity.value)));
