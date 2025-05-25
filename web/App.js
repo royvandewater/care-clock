@@ -16,6 +16,7 @@ import { sessionTypes, parseSessionType } from "./data/sessionTypes.js";
 import { startActivity } from "./data/startActivity.js";
 import { upsertActivity } from "./data/upsertActivity.js";
 import { hasUnsynchronizedActivities } from "./data/hasUnsynchronizedActivities.js";
+import { useLocalStorageActivity } from "./data/useLocalStorageActivity.js";
 
 import { formatElapsedTime } from "./formatElapsedTime.js";
 import { cn } from "./cn.js";
@@ -24,15 +25,13 @@ import { cn } from "./cn.js";
  * @param {{database: IDBDatabase}} props
  */
 export const App = ({ database }) => {
-  const activity = useSignal(parseLocalStorageActivity(window.localStorage.getItem("activity")));
+  const activity = useLocalStorageActivity();
   const isRunning = Boolean(activity.value.startTime);
 
   const showCamperModal = useSignal(false);
   const showSessionTypeModal = useSignal(false);
   const showHistoryModal = useSignal(false);
   const hasNotifications = useSignal(false);
-
-  useSignalEffect(() => window.localStorage.setItem("activity", formatActivityForLocalStorage(activity.value)));
 
   useEffect(() => {
     const interval = setInterval(() => (activity.value = { ...activity.value, endTime: new Date() }), 1000);
@@ -246,69 +245,4 @@ const AdditionalSessionInfo = ({ sessionType, groupName, onChangeGroupName, with
       />
     </${Label}>
   `;
-};
-
-/**
- * @param {string | null} activityJSON
- * @returns {{
- *   therapistName: string,
- *   campers: {name: string, id: string | null}[],
- *   groupName: string,
- *   withWho: string,
- *   description: string,
- *   startTime: Date | null,
- *   endTime: Date | null,
- * }}
- */
-const parseLocalStorageActivity = (activityJSON) => {
-  if (!activityJSON) {
-    return {
-      therapistName: "",
-      campers: [],
-      groupName: "",
-      withWho: "",
-      sessionType: sessionTypes[0],
-      description: "",
-      startTime: null,
-      endTime: null,
-    };
-  }
-
-  const activity = JSON.parse(activityJSON);
-
-  return {
-    therapistName: activity.therapistName,
-    campers: activity.campers ?? [],
-    sessionType: parseSessionType(activity.sessionType),
-    groupName: activity.groupName,
-    withWho: activity.withWho,
-    description: activity.description,
-    startTime: activity.startTime ? new Date(activity.startTime) : null,
-    endTime: activity.endTime ? new Date(activity.endTime) : null,
-  };
-};
-
-/**
- * @param {{
- *   therapistName: string,
- *   campers: {name: string, id: string | null}[],
- *   sessionType: string,
- *   groupName: string,
- *   withWho: string,
- *   description: string,
- *   startTime: Date | null,
- *   endTime: Date | null,
- * }} activity
- */
-const formatActivityForLocalStorage = (activity) => {
-  return JSON.stringify({
-    therapistName: activity.therapistName,
-    campers: activity.campers,
-    sessionType: activity.sessionType,
-    groupName: activity.groupName,
-    withWho: activity.withWho,
-    description: activity.description,
-    startTime: activity.startTime?.toISOString() ?? null,
-    endTime: activity.endTime?.toISOString() ?? null,
-  });
 };
