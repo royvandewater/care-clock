@@ -75,7 +75,7 @@ export const App = ({ database }) => {
   if (showSettingsModal.value) {
     return html`
       <div class="h-full max-w-md mx-auto p-4 space-y-6 flex flex-col gap-4 z-0">
-        <${SettingsModal} onClose=${() => (showSettingsModal.value = false)} />
+        <${SettingsModal} onClose=${() => (showSettingsModal.value = false)} activity=${activity} />
       </div>
     `;
   }
@@ -131,7 +131,7 @@ export const App = ({ database }) => {
   }
 
   return html`
-    <form class="h-full max-w-md mx-auto p-4 space-y-6 flex flex-col gap-4 z-0" onSubmit=${onSubmit}>
+    <form class="h-full max-w-md shadow-lg mx-auto p-4 space-y-6 flex flex-col gap-4 z-0" onSubmit=${onSubmit}>
       <header class="text-center relative">
         <${SettingsButton} onClick=${() => (showSettingsModal.value = true)} class="absolute top-0 left-4" />
         <h1 class="text-2xl font-bold text-primary">Care Clock</h1>
@@ -141,16 +141,6 @@ export const App = ({ database }) => {
       <${Card} class="flex-1">
         <${CardContent} class="p-4 space-y-4 h-full flex flex-col">
           <div class="flex flex-col gap-4">
-            <${Label} >Therapist
-              <${Input} 
-                id="therapistName" 
-                value=${activity.value.therapistName} 
-                onInput=${(e) => (activity.value = { ...activity.value, therapistName: e.target.value })} 
-                autoFocus=${!Boolean(activity.value.therapistName)}
-                placeholder="Jane"  
-              />
-            </${Label}>
-
             <${LabelLike} onClick=${() => (showCamperModal.value = true)}>Campers
               <div class="flex justify-between items-center font-medium">
                 <span class="text-sm font-medium text-foreground px-3">${activity.value.campers.map((camper) => camper.name).join(", ") || "No campers selected"}</span>
@@ -197,7 +187,12 @@ export const App = ({ database }) => {
               </${Button}>
             </div>
             <div class="pt-4">
-              ${!activity.value.therapistName && html`<div class="text-center text-secondary">Cannot start timer without a therapist name</div>`}
+              ${
+                !activity.value.therapistName &&
+                html`<div class="text-center text-secondary">
+                  Cannot start timer without a therapist name. The therapist name is configured using the settings button on the top left.
+                </div>`
+              }
               ${!activity.value.campers.length && html`<div class="text-center text-secondary">Cannot start timer without campers</div>`}
             </div>
           </div>
