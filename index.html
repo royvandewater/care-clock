@@ -12,6 +12,12 @@
     <link rel="icon" href="./favicon.png"> 
     <link rel="manifest" href="./manifest.json" />
     <title>Care Clock</title>
+    <script>
+      document.documentElement.classList.toggle(
+        "dark",
+        localStorage.theme === "dark" || (localStorage.theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches),
+      );
+    </script>
   </head>
   <body class="h-screen bg-background text-foreground">
     <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -75,6 +81,8 @@
       }
     </style>
     <style type="text/tailwindcss">
+      @custom-variant dark (&:where(.dark, .dark *));
+
       @theme {
           --color-background: var(--theme-background);
           --color-background-header: var(--theme-background-header);
@@ -114,7 +122,7 @@
           "@preact/signals-core": "./web/node_modules/@preact/signals-core/dist/signals-core.mjs",
           "remeda": "./web/node_modules/remeda/dist/index.js",
           "tailwind-merge": "./web/node_modules/tailwind-merge/dist/bundle-mjs.mjs",
-          "zod": "./web/node_modules/zod/lib/index.mjs"
+          "zod": "./web/node_modules/zod/dist/esm/v3/index.js"
         }
       }
     </script>

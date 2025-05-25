@@ -18,6 +18,7 @@ import { startActivity } from "./data/startActivity.js";
 import { upsertActivity } from "./data/upsertActivity.js";
 import { hasUnsynchronizedActivities } from "./data/hasUnsynchronizedActivities.js";
 import { useActivity } from "./data/useActivity.js";
+import { useTheme } from "./data/useTheme.js";
 
 import { formatElapsedTime } from "./formatElapsedTime.js";
 import { cn } from "./cn.js";
@@ -27,9 +28,10 @@ import { cn } from "./cn.js";
  */
 export const App = ({ database }) => {
   const activity = useActivity();
+  const theme = useTheme();
   const isRunning = Boolean(activity.value.startTime);
 
-  const showSettingsModal = useSignal(false);
+  const showSettingsModal = useSignal(true);
   const showCamperModal = useSignal(false);
   const showSessionTypeModal = useSignal(false);
   const showHistoryModal = useSignal(false);
@@ -75,7 +77,7 @@ export const App = ({ database }) => {
   if (showSettingsModal.value) {
     return html`
       <div class="h-full max-w-md mx-auto p-4 space-y-6 flex flex-col gap-4 z-0">
-        <${SettingsModal} onClose=${() => (showSettingsModal.value = false)} activity=${activity} />
+        <${SettingsModal} onClose=${() => (showSettingsModal.value = false)} activity=${activity} theme=${theme} />
       </div>
     `;
   }

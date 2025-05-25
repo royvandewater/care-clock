@@ -1,12 +1,14 @@
 import { html } from "htm/preact";
+import { useSignal } from "@preact/signals";
 import { Modal } from "./Modal.js";
 import { Label } from "./Label.js";
+import { Button } from "./Button.js";
 import { Input } from "./Input.js";
 
 /**
- * @param {{onClose: () => void, activity: Signal<{therapistName: string}>}} props
+ * @param {{onClose: () => void, activity: Signal<{therapistName: string}>, theme: Signal<"light" | "dark" | "system">}} props
  */
-export const SettingsModal = ({ onClose, activity }) => {
+export const SettingsModal = ({ onClose, activity, theme }) => {
   return html`
     <${Modal} title="Settings" onClose=${onClose}>
       <div class="px-4 flex flex-col gap-4">
@@ -18,6 +20,23 @@ export const SettingsModal = ({ onClose, activity }) => {
             autoFocus=${!Boolean(activity.value.therapistName)}
             placeholder="Jane"  
           />
+        </${Label}>
+
+        <${Label}>Interface Theme
+          <div class="flex">
+            <${Button} 
+              variant=${theme.value === "light" ? "default" : "outline"} 
+              onClick=${() => (theme.value = "light")} 
+              className="border-r-0 rounded-r-none">Light</${Button}>
+            <${Button} 
+              variant=${theme.value === "dark" ? "default" : "outline"} 
+              onClick=${() => (theme.value = "dark")} 
+              className="rounded-none">Dark</${Button}>
+            <${Button} 
+              variant=${theme.value === "system" ? "default" : "outline"} 
+              onClick=${() => (theme.value = "system")} 
+              className="border-l-0 rounded-l-none">System</${Button}>
+          </div>
         </${Label}>
       </div>
     </${Modal}>
