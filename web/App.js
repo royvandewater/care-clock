@@ -171,7 +171,7 @@ export const App = ({ database }) => {
           <${Label} class="flex flex-col">Activity Description
             <${TextArea} 
               value=${activity.value.description}
-              class="h-25"
+              class="h-40"
               onInput=${(e) => (activity.value = { ...activity.value, description: e.target.value })}
               placeholder="Describe the current activity" />
           </${Label}>
