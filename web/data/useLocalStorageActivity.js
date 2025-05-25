@@ -1,10 +1,23 @@
 import { useSignal, useSignalEffect, batch, useComputed } from "@preact/signals";
 import { parseSessionType, sessionTypes } from "./sessionTypes.js";
+import { useEffect } from "preact/hooks";
 
 export const useLocalStorageActivity = () => {
   const activity = useSignal(parseLocalStorageActivity(window.localStorage.getItem("activity")));
 
   useSignalEffect(() => window.localStorage.setItem("activity", formatActivityForLocalStorage(activity.value)));
+
+  useEffect(() => {
+    const updateActivity = (event) => {
+      if (event.key !== "activity") return;
+      activity.value = parseLocalStorageActivity(event.newValue);
+    };
+
+    window.addEventListener("storage", updateActivity);
+    return () => {
+      window.removeEventListener("storage", updateActivity);
+    };
+  }, []);
 
   return activity;
 };
