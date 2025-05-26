@@ -1,6 +1,6 @@
 import { render } from "preact";
 import { html } from "htm/preact";
-import { registerServiceWorker } from "./registerServiceWorker.js";
+import { registerServiceWorker } from "./registerServiceWorker";
 import { App } from "./App.js";
 import { connectToDatabase } from "./data/database.js";
 import { assert } from "@/assert";
