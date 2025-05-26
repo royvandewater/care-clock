@@ -1,7 +1,7 @@
 import { upsertActivityInIndexedDB } from "./database";
 import { formatActivity } from "./serialization.js";
 import { apiUrl } from "./apiUrl.js";
-import { assert } from "../assert.js";
+import { assert } from "@/assert";
 
 /**
  * @typedef {import("./sessionTypes.js").SessionType} SessionType
