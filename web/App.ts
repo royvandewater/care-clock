@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/Card";
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import { Label, LabelLike } from "@/components/Label";
-import { TextArea } from "./components/TextArea.js";
+import { TextArea } from "@/components/TextArea";
 import { Settings } from "./components/icons/Settings.js";
 import { HistoryButton } from "./components/HistoryButton.js";
 import { HistoryModal } from "./components/HistoryModal.js";
