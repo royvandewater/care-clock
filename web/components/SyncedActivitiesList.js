@@ -3,7 +3,7 @@ import { useSignal } from "@preact/signals";
 import { useEffect } from "preact/hooks";
 import { getSyncedActivities } from "../data/database";
 import { Edit } from "./icons/Edit.js";
-import { Button } from "./Button.js";
+import { Button } from "@/components/Button";
 
 /**
  * @param {{database: IDBDatabase}} props

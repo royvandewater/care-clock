@@ -8,7 +8,7 @@ import { upsertActivity } from "../data/upsertActivity.js";
 import { Modal } from "./Modal.js";
 import { Label, LabelLike } from "./Label.js";
 import { Input } from "./Input.js";
-import { Button } from "./Button.js";
+import { Button } from "@/components/Button";
 import { CamperModal } from "./CampersModal.js";
 import { SessionTypeModal } from "./SessionTypeModal.js";
 import { TextArea } from "./TextArea.js";

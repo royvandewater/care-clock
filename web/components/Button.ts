@@ -1,7 +1,8 @@
 import { html } from "htm/preact";
-import { cva } from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority";
 
-import { cn } from "../cn.js";
+import { cn } from "@/cn";
+import type { JSX } from "preact";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center rounded-md text-sm font-medium cursor-pointer ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
@@ -31,9 +32,14 @@ const buttonVariants = cva(
   }
 );
 
-const Button = ({ className, variant, size, asChild = false, ...props }) => {
-  const Comp = asChild ? Slot : "button";
-  return html` <${Comp} className=${cn(buttonVariants({ variant, size, className }))} ...${props} /> `;
+interface ButtonProps extends JSX.HTMLAttributes<HTMLButtonElement> {
+  className?: string;
+  variant?: VariantProps<typeof buttonVariants>["variant"];
+  size?: VariantProps<typeof buttonVariants>["size"];
+}
+
+const Button = ({ className, variant, size, ...props }: ButtonProps) => {
+  return html` <button className=${cn(buttonVariants({ variant, size, className }))} ...${props} /> `;
 };
 Button.displayName = "Button";
 

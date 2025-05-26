@@ -4,7 +4,7 @@ import { useSignal } from "@preact/signals";
 import { Modal } from "./Modal.js";
 import { Label } from "./Label.js";
 import { Input } from "./Input.js";
-import { Button } from "./Button.js";
+import { Button } from "@/components/Button";
 import { Trash } from "./icons/Trash.js";
 import { Edit } from "./icons/Edit.js";
 

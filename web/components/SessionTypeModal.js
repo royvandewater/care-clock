@@ -1,7 +1,7 @@
 import { html } from "htm/preact";
 
 import { Modal } from "./Modal.js";
-import { Button } from "./Button.js";
+import { Button } from "@/components/Button";
 import { Edit } from "./icons/Edit.js";
 
 import { sessionTypes } from "../data/sessionTypes.js";

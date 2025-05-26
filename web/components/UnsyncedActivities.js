@@ -6,7 +6,7 @@ import { upsertActivity } from "../data/upsertActivity.js";
 import { getActivitesThatAreNotSynced } from "../data/database";
 import { Syncing } from "./icons/Syncing.js";
 import { Edit } from "./icons/Edit.js";
-import { Button } from "./Button.js";
+import { Button } from "@/components/Button";
 import { Unsynced } from "./icons/Unsynced.js";
 
 export const UnsyncedActivities = ({ database, onEditActivity }) => {
