@@ -1,4 +1,4 @@
-import { getUnsyncedActivities } from "./database.js";
+import { getUnsyncedActivities } from "./database";
 
 /**
  * @param {{ database: IDBDatabase }} props

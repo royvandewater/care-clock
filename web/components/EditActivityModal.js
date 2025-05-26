@@ -2,7 +2,7 @@ import { html } from "htm/preact";
 import { useSignal } from "@preact/signals";
 import { useEffect } from "preact/hooks";
 
-import { getActivityFromIndexedDB } from "../data/database.js";
+import { getActivityFromIndexedDB } from "../data/database";
 import { upsertActivity } from "../data/upsertActivity.js";
 
 import { Modal } from "./Modal.js";

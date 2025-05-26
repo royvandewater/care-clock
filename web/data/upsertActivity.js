@@ -1,4 +1,4 @@
-import { upsertActivityInIndexedDB } from "./database.js";
+import { upsertActivityInIndexedDB } from "./database";
 import { formatActivity } from "./serialization.js";
 import { apiUrl } from "./apiUrl.js";
 import { assert } from "../assert.js";

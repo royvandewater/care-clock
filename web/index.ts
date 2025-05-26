@@ -2,7 +2,7 @@ import { render } from "preact";
 import { html } from "htm/preact";
 import { registerServiceWorker } from "./registerServiceWorker";
 import { App } from "./App.js";
-import { connectToDatabase } from "./data/database.js";
+import { connectToDatabase } from "./data/database";
 import { assert } from "@/assert";
 
 import "./index.css";

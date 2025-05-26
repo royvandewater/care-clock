@@ -1,7 +1,7 @@
 import { html } from "htm/preact";
 import { useSignal } from "@preact/signals";
 import { useEffect } from "preact/hooks";
-import { getSyncedActivities } from "../data/database.js";
+import { getSyncedActivities } from "../data/database";
 import { Edit } from "./icons/Edit.js";
 import { Button } from "./Button.js";
 

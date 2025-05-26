@@ -3,7 +3,7 @@ import { useEffect } from "preact/hooks";
 import { useSignal } from "@preact/signals";
 
 import { upsertActivity } from "../data/upsertActivity.js";
-import { getActivitesThatAreNotSynced } from "../data/database.js";
+import { getActivitesThatAreNotSynced } from "../data/database";
 import { Syncing } from "./icons/Syncing.js";
 import { Edit } from "./icons/Edit.js";
 import { Button } from "./Button.js";
