@@ -1,25 +1,31 @@
 import { html } from "htm/preact";
-import { Modal } from "./Modal.js";
+import { Signal } from "@preact/signals";
+import { Modal } from "@/components/Modal";
 import { Label } from "@/components/Label";
 import { Button } from "@/components/Button";
-import { Input } from "./Input";
+import { Input } from "@/components/Input";
+import { assert } from "@/assert";
 
-/**
- * @param {{onClose: () => void, activity: Signal<{therapistName: string}>, theme: Signal<"light" | "dark" | "system">}} props
- */
-export const SettingsModal = ({ onClose, activity, theme }) => {
+export const SettingsModal = ({ onClose, activity, theme }: { onClose: () => void; activity: Signal<{ therapistName: string }>; theme: Signal<"light" | "dark" | "system"> }) => {
+  const onSubmit = (e: SubmitEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onClose();
+  };
+
+  const onTherapistNameInput = (e: InputEvent) => {
+    assert(e.target instanceof HTMLInputElement, "Input event target must be an HTMLInputElement");
+    activity.value = { ...activity.value, therapistName: e.target.value };
+  };
+
   return html`
     <${Modal} title="Settings" onClose=${onClose}>
-      <form class="px-4 flex flex-col gap-4" onSubmit=${(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        onClose();
-      }}>
+      <form class="px-4 flex flex-col gap-4" onSubmit=${onSubmit}>
         <${Label} >Therapist
           <${Input} 
             id="therapistName" 
             value=${activity.value.therapistName} 
-            onInput=${(e) => (activity.value = { ...activity.value, therapistName: e.target.value })} 
+            onInput=${onTherapistNameInput} 
             autoFocus=${!Boolean(activity.value.therapistName)}
             placeholder="Jane"  
           />

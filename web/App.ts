@@ -12,7 +12,7 @@ import { HistoryButton } from "@/components/HistoryButton";
 import { HistoryModal } from "@/components/HistoryModal";
 import { CamperModal } from "@/components/CampersModal";
 import { SessionTypeModal } from "@/components/SessionTypeModal";
-import { SettingsModal } from "./components/SettingsModal.js";
+import { SettingsModal } from "@/components/SettingsModal";
 
 import { startActivity } from "./data/startActivity.js";
 import { upsertActivity } from "./data/upsertActivity.js";
