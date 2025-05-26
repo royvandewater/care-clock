@@ -1,4 +1,4 @@
-import { formatActivity, parseActivity } from "./serialization.js";
+import { formatActivity, parseActivity, type Activity } from "@/data/serialization";
 import { assert } from "@/assert";
 
 export const connectToDatabase = () => {
@@ -26,8 +26,6 @@ export const connectToDatabase = () => {
     };
   });
 };
-
-type Activity = ReturnType<typeof parseActivity>;
 
 export const upsertActivityInIndexedDB = async (database: IDBDatabase, activity: Activity) => {
   return new Promise<void>((resolve, reject) => {

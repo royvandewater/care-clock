@@ -1,5 +1,5 @@
 import { upsertActivityInIndexedDB } from "./database";
-import { formatActivity } from "./serialization.js";
+import { formatActivity } from "@/data/serialization";
 import { apiUrl } from "./apiUrl.js";
 import { assert } from "@/assert";
 
@@ -38,7 +38,7 @@ export const upsertActivity = async ({ database }, activity) => {
 
       // intentionally not awaited so that the function is not blocked on the network request
       putActivity({ database }, updatedActivity);
-    })
+    }),
   );
 
   return {

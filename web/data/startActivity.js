@@ -16,6 +16,6 @@ export const startActivity = async ({ database }, activity) => {
       ...activity,
       startTime: new Date(),
       endTime: null,
-    }
+    },
   );
 };
