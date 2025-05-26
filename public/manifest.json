@@ -2,44 +2,44 @@
   "name": "Care Clock",
   "icons": [
     {
-      "src": "icon.svg",
+      "src": "/icon.svg",
       "type": "image/svg+xml",
       "sizes": "any"
     }
   ],
-  "start_url": "https://royvandewater.com/care-clock/",
-  "id": "/care-clock/",
+  "start_url": "https://care-clock.com/",
+  "id": "/care-clock.com/",
   "display": "standalone",
   "screenshots": [
     {
-      "src": "https://royvandewater.com/care-clock/web/screenshots/app.png",
+      "src": "https://care-clock.com/screenshots/app.png",
       "type": "image/png",
       "sizes": "1082x2402"
     },
     {
-      "src": "https://royvandewater.com/care-clock/web/screenshots/offline.png",
+      "src": "https://care-clock.com/screenshots/offline.png",
       "type": "image/png",
       "sizes": "1082x2402"
     },
     {
-      "src": "https://royvandewater.com/care-clock/web/screenshots/app-dark.png",
+      "src": "https://care-clock.com/screenshots/app-dark.png",
       "type": "image/png",
       "sizes": "1082x2402"
     },
     {
-      "src": "https://royvandewater.com/care-clock/web/screenshots/wide-app.png",
+      "src": "https://care-clock.com/screenshots/wide-app.png",
       "type": "image/png",
       "sizes": "880x710",
       "form_factor": "wide"
     },
     {
-      "src": "https://royvandewater.com/care-clock/web/screenshots/wide-offline.png",
+      "src": "https://care-clock.com/screenshots/wide-offline.png",
       "type": "image/png",
       "sizes": "880x710",
       "form_factor": "wide"
     },
     {
-      "src": "https://royvandewater.com/care-clock/web/screenshots/wide-app-dark.png",
+      "src": "https://care-clock.com/screenshots/wide-app-dark.png",
       "type": "image/png",
       "sizes": "880x710",
       "form_factor": "wide"
