@@ -2,9 +2,10 @@
   "name": "cloudflare-workers-openapi",
   "version": "0.0.1",
   "private": true,
+  "type": "module",
   "scripts": {
     "deploy": "wrangler deploy",
-    "dev": "wrangler dev",
+    "dev": "vite --port 8787",
     "live-server": "live-server --ignore=.git --ignore=node_modules --ignore=src --ignore=.wrangler --ignore=test-results --ignore=.playwright --no-browser",
     "start": "concurrently --names \"live-server,wrangler\" --prefix-colors \"blue.bold,green.bold\" \"npm run live-server\" \"npm run dev\"",
     "cf-typegen": "wrangler types",
@@ -20,12 +21,16 @@
     "zod": "^3.25.23"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.2.4",
     "@cloudflare/workers-types": "^4.20250523.0",
     "@playwright/test": "^1.52.0",
+    "@tailwindcss/vite": "^4.1.7",
     "@types/node": "22.15.21",
     "@types/service-worker-mock": "^2.0.1",
+    "@vitejs/plugin-react-swc": "^3.10.0",
     "concurrently": "^9.1.2",
     "live-server": "^1.2.2",
+    "vite": "^6.3.5",
     "wrangler": "^4.16.1"
   },
   "packageManager": "npm@10.8.2+sha512.c7f0088c520a46596b85c6f8f1da943400199748a0f7ea8cb8df75469668dc26f6fb3ba26df87e2884a5ebe91557292d0f3db7d0929cdb4f14910c3032ac81fb"

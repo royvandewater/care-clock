@@ -1,7 +1,7 @@
 import { OpenAPIRoute, Uuid } from "chanfana";
 import { Activity } from "../types";
 import { z } from "zod";
-import { getSheetFromEnv } from "sheets";
+import { getSheetFromEnv } from "../sheets";
 import { fromISOString, toDurationString, toLocaleString } from "../date";
 
 export class ActivityUpsert extends OpenAPIRoute {

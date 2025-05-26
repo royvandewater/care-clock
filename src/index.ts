@@ -2,7 +2,7 @@ import { fromHono } from "chanfana";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 
-import { ActivityUpsert } from "endpoints/activityUpsert";
+import { ActivityUpsert } from "./endpoints/activityUpsert";
 
 // Start a Hono app
 const app = new Hono();
