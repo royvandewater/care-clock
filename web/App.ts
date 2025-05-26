@@ -16,7 +16,7 @@ import { SettingsModal } from "@/components/SettingsModal";
 
 import { startActivity } from "@/data/startActivity";
 import { upsertActivity } from "@/data/upsertActivity";
-import { hasUnsynchronizedActivities } from "./data/hasUnsynchronizedActivities.js";
+import { hasUnsynchronizedActivities } from "@/data/hasUnsynchronizedActivities";
 import { useActivity } from "./data/useActivity.js";
 import { useTheme } from "./data/useTheme.js";
 
