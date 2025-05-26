@@ -10,6 +10,7 @@
     "live-server": "live-server --ignore=.git --ignore=node_modules --ignore=src --ignore=.wrangler --ignore=test-results --ignore=.playwright --no-browser",
     "start": "vite --port 8787",
     "cf-typegen": "wrangler types",
+    "typecheck": "tsc --noEmit",
     "test": "playwright test"
   },
   "dependencies": {

@@ -2,7 +2,7 @@ import { html } from "htm/preact";
 import { useEffect } from "preact/hooks";
 import { useSignal } from "@preact/signals";
 
-import { upsertActivity } from "../data/upsertActivity.js";
+import { upsertActivity } from "@/data/upsertActivity";
 import { getActivitesThatAreNotSynced } from "../data/database";
 import { Syncing } from "./icons/Syncing.js";
 import { Edit } from "./icons/Edit.js";
@@ -30,7 +30,7 @@ export const UnsyncedActivities = ({ database, onEditActivity }) => {
         {
           ...activity,
           campers: [{ name: activity.camperName, id: activity.id }],
-        }
+        },
       );
     });
   };
