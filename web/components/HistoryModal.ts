@@ -5,10 +5,7 @@ import { UnsyncedActivities } from "./UnsyncedActivities.js";
 import { SyncedActivitiesList } from "./SyncedActivitiesList.js";
 import { EditActivityModal } from "./EditActivityModal.js";
 
-/**
- * @param {{database: IDBDatabase, onClose: () => void}} props
- */
-export const HistoryModal = ({ database, onClose }) => {
+export const HistoryModal = ({ database, onClose }: { database: IDBDatabase; onClose: () => void }) => {
   const editActivityId = useSignal(null);
 
   if (editActivityId.value) {

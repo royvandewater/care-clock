@@ -9,7 +9,7 @@ import { Label, LabelLike } from "@/components/Label";
 import { TextArea } from "@/components/TextArea";
 import { Settings } from "@/components/icons/Settings";
 import { HistoryButton } from "@/components/HistoryButton";
-import { HistoryModal } from "./components/HistoryModal.js";
+import { HistoryModal } from "@/components/HistoryModal";
 import { CamperModal } from "./components/CampersModal.js";
 import { SessionTypeModal } from "./components/SessionTypeModal.js";
 import { SettingsModal } from "./components/SettingsModal.js";
