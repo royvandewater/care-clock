@@ -1,19 +1,17 @@
 import { html } from "htm/preact";
-import { useSignal } from "@preact/signals";
+import { Signal, useSignal } from "@preact/signals";
 
 import { Modal } from "./Modal.js";
 import { Label } from "@/components/Label";
-import { Input } from "./Input";
+import { Input } from "./Input.js";
 import { Button } from "@/components/Button";
 import { Trash } from "./icons/Trash.js";
 import { Edit } from "./icons/Edit.js";
 
 import { useAvailableCampers } from "../data/useAvailableCampers.js";
+import { assert } from "@/assert";
 
-/**
- * @param {{onClose: () => void, selectedCampers: string[], onSelectCampers: (campers: string[]) => void}} props
- */
-export const CamperModal = ({ onClose, selectedCampers, onSelectCampers }) => {
+export const CamperModal = ({ onClose, selectedCampers, onSelectCampers }: { onClose: () => void; selectedCampers: string[]; onSelectCampers: (campers: string[]) => void }) => {
   const campers = useAvailableCampers();
 
   const editMode = useSignal(false);
@@ -50,7 +48,7 @@ export const CamperModal = ({ onClose, selectedCampers, onSelectCampers }) => {
   </${Modal}>`;
 };
 
-const Header = ({ onClickEdit }) => {
+const Header = ({ onClickEdit }: { onClickEdit: () => void }) => {
   return html`
     <h1 class="text-2xl font-bold">Campers</h1>
     <button
@@ -64,8 +62,20 @@ const Header = ({ onClickEdit }) => {
   `;
 };
 
-const Camper = ({ camper, editMode, selected, onRemove, onSelect }) => {
-  const onClickRemove = (e) => {
+const Camper = ({
+  camper,
+  editMode,
+  selected,
+  onRemove,
+  onSelect,
+}: {
+  camper: string;
+  editMode: Signal<boolean>;
+  selected: boolean;
+  onRemove: () => void;
+  onSelect: (selected: boolean) => void;
+}) => {
+  const onClickRemove = (e: Event) => {
     e.stopPropagation();
     onRemove();
   };
@@ -97,16 +107,16 @@ const Camper = ({ camper, editMode, selected, onRemove, onSelect }) => {
   </li>`;
 };
 
-const RemoveButton = ({ onClick }) => {
+const RemoveButton = ({ onClick }: { onClick: () => void }) => {
   return html`<${Button} type="button" onClick=${onClick} variant="danger" size="xs">
     <${Trash} class="size-4" />
   </${Button}>`;
 };
 
-const NewCamperForm = ({ onAdd }) => {
+const NewCamperForm = ({ onAdd }: { onAdd: (name: string) => void }) => {
   const name = useSignal("");
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: Event) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -114,9 +124,15 @@ const NewCamperForm = ({ onAdd }) => {
     name.value = "";
   };
 
+  const onInput = (e: InputEvent) => {
+    assert(e.target instanceof HTMLInputElement, "Input event target must be an HTMLInputElement");
+    name.value = e.target.value;
+  };
+
   return html`<form onSubmit=${onSubmit} class="flex items-end gap-4 pb-8">
-    <${Label} class="flex-1">Camper Name
-      <${Input} type="text" name="name" value=${name} onInput=${(e) => (name.value = e.target.value)} />
+    <${Label} class="flex-1">
+      Camper Name
+      <${Input} type="text" name="name" value=${name} onInput=${onInput} />
     </${Label}>
     <${Button} type="submit">Add</${Button}>
   </form>`;

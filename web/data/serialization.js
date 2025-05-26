@@ -1,4 +1,4 @@
-import { parseSessionType } from "./sessionTypes.js";
+import { parseSessionType } from "@/data/sessionTypes";
 
 /**
  * @typedef {import("./sessionTypes.js").SessionType} SessionType

@@ -9,8 +9,8 @@ import { Modal } from "./Modal.js";
 import { Label, LabelLike } from "@/components/Label";
 import { Input } from "./Input";
 import { Button } from "@/components/Button";
-import { CamperModal } from "./CampersModal.js";
-import { SessionTypeModal } from "./SessionTypeModal.js";
+import { CamperModal } from "@/components/CampersModal";
+import { SessionTypeModal } from "@/components/SessionTypeModal";
 import { TextArea } from "./TextArea.js";
 
 export const EditActivityModal = ({ database, activityId, onClose }) => {
@@ -34,7 +34,7 @@ export const EditActivityModal = ({ database, activityId, onClose }) => {
       {
         ...activity.value,
         campers: [{ name: activity.value.camperName, id: activity.value.id }],
-      }
+      },
     );
     onClose();
   };

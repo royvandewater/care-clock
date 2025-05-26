@@ -1,5 +1,5 @@
 import { useSignal, useSignalEffect, batch, useComputed } from "@preact/signals";
-import { parseSessionType, sessionTypes } from "./sessionTypes.js";
+import { parseSessionType, sessionTypes } from "@/data/sessionTypes";
 import { useEffect } from "preact/hooks";
 
 /**
