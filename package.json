@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "deploy": "wrangler deploy",
-    "dev": "vite --port 8787",
+    "emulate-prod": "npm run build && wrangler dev --cwd dist",
+    "build": "tsc -b && vite build",
     "live-server": "live-server --ignore=.git --ignore=node_modules --ignore=src --ignore=.wrangler --ignore=test-results --ignore=.playwright --no-browser",
-    "start": "concurrently --names \"live-server,wrangler\" --prefix-colors \"blue.bold,green.bold\" \"npm run live-server\" \"npm run dev\"",
+    "start": "vite --port 8787",
     "cf-typegen": "wrangler types",
     "test": "playwright test"
   },
@@ -30,6 +31,7 @@
     "@vitejs/plugin-react-swc": "^3.10.0",
     "concurrently": "^9.1.2",
     "live-server": "^1.2.2",
+    "typescript": "^5.8.3",
     "vite": "^6.3.5",
     "wrangler": "^4.16.1"
   },

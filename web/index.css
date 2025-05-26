@@ -1,0 +1,118 @@
+@import "tailwindcss";
+/* @import "tw-animate-css"; */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Default light theme variables */
+:root {
+  --theme-background: #F8F9FA;
+  --theme-foreground: #212529;
+  --theme-foreground-secondary: #6C757D;
+
+  --theme-primary: #007AFF;
+  --theme-primary-hover:  #005FCC;
+  --theme-primary-foreground: var(--color-white);
+
+  --theme-secondary:  #6C757D;
+  --theme-secondary-hover: #5A6268;
+  --theme-secondary-foreground: var(--color-white);
+
+  --theme-tertiary-hover: #e3e7ec;
+
+  --theme-danger: #BB0000;
+  --theme-danger-foreground: var(--color-white);
+
+  --theme-warning: #c07c00;
+  --theme-warning-foreground: var(--color-white);
+
+  --theme-input-background: var(--color-white);
+  --theme-input-border: #CED4DA;
+  --theme-input-border-focus: #007AFF;
+
+  --theme-divider: #CED4DA;
+}
+
+/* Dark theme variables when .dark class is present */
+:root.dark {
+  --theme-background: #121417;
+  --theme-foreground: #E4E6EB;
+  --theme-foreground-secondary:  #A1A7B3;
+
+  --theme-primary: #4D9AFF;
+  --theme-primary-hover:  #397ED6;
+  --theme-primary-foreground: var(--color-white);
+
+  --theme-secondary:  #A1A7B3;
+  --theme-secondary-hover: #8D94A0;
+  --theme-secondary-foreground: var(--color-white);
+
+  --theme-tertiary-hover: #3A3F45;
+
+  --theme-danger: #FF4949;
+  --theme-danger-foreground: var(--color-white);
+
+  --theme-warning: #FFA500;
+  --theme-warning-foreground: var(--color-white);
+
+  --theme-input-background: #1C1F24;
+  --theme-input-border: #3A3F45;
+  --theme-input-border-focus: #4D9AFF;
+}
+
+/* System preference fallback - only applies when no explicit theme class is set */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light):not(.dark) {
+    --theme-background: #121417;
+    --theme-foreground: #E4E6EB;
+    --theme-foreground-secondary:  #A1A7B3;
+
+    --theme-primary: #4D9AFF;
+    --theme-primary-hover:  #397ED6;
+    --theme-primary-foreground: var(--color-white);
+
+    --theme-secondary:  #A1A7B3;
+    --theme-secondary-hover: #8D94A0;
+    --theme-secondary-foreground: var(--color-white);
+
+    --theme-tertiary-hover: #3A3F45;
+
+    --theme-danger: #FF4949;
+    --theme-danger-foreground: var(--color-white);
+
+    --theme-warning: #FFA500;
+    --theme-warning-foreground: var(--color-white);
+
+    --theme-input-background: #1C1F24;
+    --theme-input-border: #3A3F45;
+    --theme-input-border-focus: #4D9AFF;
+  }
+}
+
+@theme {
+    --color-background: var(--theme-background);
+    --color-background-header: var(--theme-background-header);
+    --color-foreground: var(--theme-foreground);
+    --color-foreground-secondary: var(--theme-foreground-secondary);
+
+    --color-primary: var(--theme-primary);
+    --color-primary-hover: var(--theme-primary-hover);
+    --color-primary-foreground: var(--theme-primary-foreground);
+
+    --color-secondary: var(--theme-secondary);
+    --color-secondary-hover: var(--theme-secondary-hover);
+    --color-secondary-foreground: var(--theme-secondary-foreground);
+
+    --color-tertiary-hover: var(--theme-tertiary-hover);
+
+    --color-danger: var(--theme-danger);
+    --color-danger-foreground: var(--theme-danger-foreground);
+
+    --color-warning: var(--theme-warning);
+    --color-warning-foreground: var(--theme-warning-foreground);
+
+    --color-input-background: var(--theme-input-background);
+    --color-input-border: var(--theme-input-border);
+    --color-input-border-focus: var(--theme-input-border-focus);
+}
