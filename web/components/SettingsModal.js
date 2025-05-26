@@ -2,7 +2,7 @@ import { html } from "htm/preact";
 import { Modal } from "./Modal.js";
 import { Label } from "./Label.js";
 import { Button } from "@/components/Button";
-import { Input } from "./Input.js";
+import { Input } from "./Input";
 
 /**
  * @param {{onClose: () => void, activity: Signal<{therapistName: string}>, theme: Signal<"light" | "dark" | "system">}} props
