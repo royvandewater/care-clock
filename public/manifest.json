@@ -2,7 +2,7 @@
   "name": "Care Clock",
   "icons": [
     {
-      "src": "assets/icon.svg",
+      "src": "icon.svg",
       "type": "image/svg+xml",
       "sizes": "any"
     }
