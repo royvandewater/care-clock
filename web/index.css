@@ -9,9 +9,9 @@
 :root {
   --theme-background: #F8F9FA;
   --theme-foreground: #212529;
-  --theme-foreground-secondary: #6C757D;
+  --theme-foreground-secondary: #40454a;
 
-  --theme-primary: #007AFF;
+  --theme-primary: #0172eb;
   --theme-primary-hover:  #005FCC;
   --theme-primary-foreground: var(--color-white);
 
@@ -66,9 +66,9 @@
   :root:not(.light):not(.dark) {
     --theme-background: #121417;
     --theme-foreground: #E4E6EB;
-    --theme-foreground-secondary:  #A1A7B3;
+    --theme-foreground-secondary: #40454a;
 
-    --theme-primary: #4D9AFF;
+    --theme-primary: #0172eb;
     --theme-primary-hover:  #397ED6;
     --theme-primary-foreground: var(--color-white);
 
