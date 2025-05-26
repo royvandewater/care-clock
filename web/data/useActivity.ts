@@ -1,21 +1,12 @@
-import { useSignal, useSignalEffect, batch, useComputed } from "@preact/signals";
+import { useSignal, useSignalEffect } from "@preact/signals";
 import { parseSessionType, sessionTypes } from "@/data/sessionTypes";
 import { useEffect } from "preact/hooks";
+import type { MultiCamperActivity } from "@/data/upsertActivity";
 
 /**
  * Manages the activity state and synchronizes it with the local storage. It handles
  * keeping the activity in sync with other tabs. It does not keep it in sync with other
  * instances of useActivity rendered in the same tab.
- *
- * @returns {Signal<{
- *   therapistName: string,
- *   campers: {name: string, id: string | null}[],
- *   groupName: string,
- *   withWho: string,
- *   description: string,
- *   startTime: Date | null,
- *   endTime: Date | null,
- * }>}
  */
 export const useActivity = () => {
   const activity = useSignal(parseLocalStorageActivity(window.localStorage.getItem("activity")));
@@ -37,19 +28,7 @@ export const useActivity = () => {
   return activity;
 };
 
-/**
- * @param {string | null} activityJSON
- * @returns {{
- *   therapistName: string,
- *   campers: {name: string, id: string | null}[],
- *   groupName: string,
- *   withWho: string,
- *   description: string,
- *   startTime: Date | null,
- *   endTime: Date | null,
- * }}
- */
-const parseLocalStorageActivity = (activityJSON) => {
+const parseLocalStorageActivity = (activityJSON: string | null): MultiCamperActivity => {
   if (!activityJSON) {
     return {
       therapistName: "",
@@ -57,6 +36,7 @@ const parseLocalStorageActivity = (activityJSON) => {
       groupName: "",
       withWho: "",
       sessionType: sessionTypes[0],
+      syncState: "unsynced",
       description: "",
       startTime: null,
       endTime: null,
@@ -69,6 +49,7 @@ const parseLocalStorageActivity = (activityJSON) => {
     therapistName: activity.therapistName,
     campers: activity.campers ?? [],
     sessionType: parseSessionType(activity.sessionType),
+    syncState: activity.syncState ?? "unsynced",
     groupName: activity.groupName,
     withWho: activity.withWho,
     description: activity.description,
@@ -77,19 +58,7 @@ const parseLocalStorageActivity = (activityJSON) => {
   };
 };
 
-/**
- * @param {{
- *   therapistName: string,
- *   campers: {name: string, id: string | null}[],
- *   sessionType: string,
- *   groupName: string,
- *   withWho: string,
- *   description: string,
- *   startTime: Date | null,
- *   endTime: Date | null,
- * }} activity
- */
-const formatActivityForLocalStorage = (activity) => {
+const formatActivityForLocalStorage = (activity: MultiCamperActivity) => {
   return JSON.stringify({
     therapistName: activity.therapistName,
     campers: activity.campers,
@@ -97,6 +66,7 @@ const formatActivityForLocalStorage = (activity) => {
     groupName: activity.groupName,
     withWho: activity.withWho,
     description: activity.description,
+    syncState: activity.syncState,
     startTime: activity.startTime?.toISOString() ?? null,
     endTime: activity.endTime?.toISOString() ?? null,
   });

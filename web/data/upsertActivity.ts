@@ -5,7 +5,7 @@ import { assert } from "@/assert";
 import type { Activity } from "@/data/serialization";
 
 export interface MultiCamperActivity extends Omit<Activity, "camperName" | "id"> {
-  campers: { name: string; id: string }[];
+  campers: { name: string; id: string | null }[];
 }
 
 /**

@@ -17,7 +17,7 @@ import { SettingsModal } from "@/components/SettingsModal";
 import { startActivity } from "@/data/startActivity";
 import { upsertActivity } from "@/data/upsertActivity";
 import { hasUnsynchronizedActivities } from "@/data/hasUnsynchronizedActivities";
-import { useActivity } from "./data/useActivity.js";
+import { useActivity } from "@/data/useActivity";
 import { useTheme } from "./data/useTheme.js";
 
 import { formatElapsedTime } from "./formatElapsedTime.js";
