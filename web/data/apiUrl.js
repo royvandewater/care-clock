@@ -1,5 +1,3 @@
 import { isLocal } from "./isLocal.js";
 
-const url = isLocal() ? "http://localhost:8787" : "https://api.care-clock.workers.dev";
-
-export const apiUrl = (path) => new URL(path, url);
+export const apiUrl = (path) => new URL(path, window.location.origin);
