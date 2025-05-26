@@ -1,4 +1,4 @@
-import { parseActivity } from "./serialization.js";
+import { formatActivity, parseActivity } from "./serialization.js";
 import { assert } from "@/assert";
 
 export const connectToDatabase = () => {
@@ -27,24 +27,12 @@ export const connectToDatabase = () => {
   });
 };
 
-type Activity = {
-  id: string;
-  therapistName: string;
-  camperName: string;
-  groupName: string;
-  description: string;
-  startTime: string;
-  endTime?: string;
-  syncState: "unsynced" | "syncing" | "synced";
-};
+type Activity = ReturnType<typeof parseActivity>;
 
-type ParsedActivity = ReturnType<typeof parseActivity>;
-
-// TODO: This should probably take the unserialized activity and let upsertActivityInIndexedDB do the serialization
 export const upsertActivityInIndexedDB = async (database: IDBDatabase, activity: Activity) => {
   return new Promise<void>((resolve, reject) => {
     const activitiesStore = database.transaction("activities", "readwrite").objectStore("activities");
-    const request = activitiesStore.put(activity);
+    const request = activitiesStore.put(formatActivity(activity));
     request.onsuccess = () => {
       database.dispatchEvent(new Event("activities:changed"));
       return resolve();
@@ -54,7 +42,7 @@ export const upsertActivityInIndexedDB = async (database: IDBDatabase, activity:
 };
 
 export const getActivityFromIndexedDB = async (database: IDBDatabase, id: string) => {
-  return new Promise<ParsedActivity>((resolve, reject) => {
+  return new Promise<Activity>((resolve, reject) => {
     const activitiesStore = database.transaction("activities", "readonly").objectStore("activities");
     const request = activitiesStore.get(id);
     request.onsuccess = () => resolve(parseActivity(request.result));
@@ -63,7 +51,7 @@ export const getActivityFromIndexedDB = async (database: IDBDatabase, id: string
 };
 
 export const getSyncedActivities = async (database: IDBDatabase) => {
-  return new Promise<ParsedActivity[]>((resolve, reject) => {
+  return new Promise<Activity[]>((resolve, reject) => {
     const activitiesStore = database.transaction("activities", "readonly").objectStore("activities");
     const request = activitiesStore.index("syncState").getAll("synced");
     request.onsuccess = () => resolve(request.result.map(parseActivity).sort(startTimesDesc));
@@ -72,7 +60,7 @@ export const getSyncedActivities = async (database: IDBDatabase) => {
 };
 
 export const getUnsyncedActivities = async (database: IDBDatabase) => {
-  return new Promise<ParsedActivity[]>((resolve, reject) => {
+  return new Promise<Activity[]>((resolve, reject) => {
     const activitiesStore = database.transaction("activities", "readonly").objectStore("activities");
     const request = activitiesStore.index("syncState").getAll("unsynced");
     request.onsuccess = () => resolve(request.result.map(parseActivity).sort(startTimesDesc));
@@ -81,7 +69,7 @@ export const getUnsyncedActivities = async (database: IDBDatabase) => {
 };
 
 export const getActivitesThatAreNotSynced = async (database: IDBDatabase) => {
-  return new Promise<ParsedActivity[]>((resolve, reject) => {
+  return new Promise<Activity[]>((resolve, reject) => {
     const activitiesStore = database.transaction("activities", "readonly").objectStore("activities");
     // This bound() call only works because "synced" is before "syncing" lexicographically and is therefore
     // outside the range of "syncing" -> "unsynced"
@@ -91,7 +79,7 @@ export const getActivitesThatAreNotSynced = async (database: IDBDatabase) => {
   });
 };
 
-const startTimesDesc = (a: ParsedActivity, b: ParsedActivity) => {
+const startTimesDesc = (a: Activity, b: Activity) => {
   if (a.startTime === null) {
     return 1;
   }

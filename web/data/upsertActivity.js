@@ -33,7 +33,7 @@ export const upsertActivity = async ({ database }, activity) => {
 
   await Promise.all(
     camperActivities.map(async (camperActivity) => {
-      const updatedActivity = { ...formatActivity(camperActivity), syncState: "syncing" };
+      const updatedActivity = { ...camperActivity, syncState: "syncing" };
       await upsertActivityInIndexedDB(database, updatedActivity);
 
       // intentionally not awaited so that the function is not blocked on the network request
@@ -66,7 +66,7 @@ const putActivity = async ({ database }, activity) => {
   try {
     const res = await fetch(apiUrl(`/activities/${activity.id}`), {
       method: "PUT",
-      body: JSON.stringify(activity),
+      body: JSON.stringify(formatActivity(activity)),
     });
 
     const body = await res.text();
