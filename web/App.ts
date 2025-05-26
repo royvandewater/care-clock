@@ -1,5 +1,5 @@
 import { html } from "htm/preact";
-import { useSignal, useSignalEffect, batch, useComputed } from "@preact/signals";
+import { useSignal } from "@preact/signals";
 import { useEffect } from "preact/hooks";
 
 import { Card, CardContent } from "./components/Card.js";
@@ -23,10 +23,7 @@ import { useTheme } from "./data/useTheme.js";
 import { formatElapsedTime } from "./formatElapsedTime.js";
 import { cn } from "./cn.js";
 
-/**
- * @param {{database: IDBDatabase}} props
- */
-export const App = ({ database }) => {
+export const App = ({ database }: { database: IDBDatabase }) => {
   const activity = useActivity();
   const theme = useTheme();
   const isRunning = Boolean(activity.value.startTime);
@@ -57,7 +54,7 @@ export const App = ({ database }) => {
     };
   };
 
-  useEffect(async () => {
+  useEffect(() => {
     const updateHasNotifications = async () => {
       hasNotifications.value = await hasUnsynchronizedActivities({ database });
     };

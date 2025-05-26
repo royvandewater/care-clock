@@ -1,7 +1,7 @@
 import { render } from "preact";
 import { html } from "htm/preact";
 import { registerServiceWorker } from "./registerServiceWorker";
-import { App } from "./App.js";
+import { App } from "./App";
 import { connectToDatabase } from "./data/database";
 import { assert } from "@/assert";
 
