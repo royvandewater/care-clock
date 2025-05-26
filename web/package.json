@@ -9,7 +9,7 @@
   "license": "MIT",
   "description": "",
   "dependencies": {
-    "@preact/signals": "^2.0.4",
+    "@preact/signals": "^2.0.5",
     "@tailwindcss/browser": "^4.1.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
