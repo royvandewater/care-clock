@@ -1,6 +1,6 @@
 import { html } from "htm/preact";
 import { Modal } from "./Modal.js";
-import { Label } from "./Label.js";
+import { Label } from "@/components/Label";
 import { Button } from "@/components/Button";
 import { Input } from "./Input";
 

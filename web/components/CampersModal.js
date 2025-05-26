@@ -2,7 +2,7 @@ import { html } from "htm/preact";
 import { useSignal } from "@preact/signals";
 
 import { Modal } from "./Modal.js";
-import { Label } from "./Label.js";
+import { Label } from "@/components/Label";
 import { Input } from "./Input";
 import { Button } from "@/components/Button";
 import { Trash } from "./icons/Trash.js";

@@ -33,13 +33,12 @@ const buttonVariants = cva(
 );
 
 interface ButtonProps extends JSX.HTMLAttributes<HTMLButtonElement> {
-  className?: string;
   variant?: VariantProps<typeof buttonVariants>["variant"];
   size?: VariantProps<typeof buttonVariants>["size"];
 }
 
-const Button = ({ className, variant, size, ...props }: ButtonProps) => {
-  return html` <button className=${cn(buttonVariants({ variant, size, className }))} ...${props} /> `;
+const Button = ({ className, class: klass, variant, size, ...props }: ButtonProps) => {
+  return html` <button className=${cn(buttonVariants({ variant, size, className: className ?? klass }))} ...${props} /> `;
 };
 Button.displayName = "Button";
 

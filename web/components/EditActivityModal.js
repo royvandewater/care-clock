@@ -6,7 +6,7 @@ import { getActivityFromIndexedDB } from "../data/database";
 import { upsertActivity } from "../data/upsertActivity.js";
 
 import { Modal } from "./Modal.js";
-import { Label, LabelLike } from "./Label.js";
+import { Label, LabelLike } from "@/components/Label";
 import { Input } from "./Input";
 import { Button } from "@/components/Button";
 import { CamperModal } from "./CampersModal.js";
