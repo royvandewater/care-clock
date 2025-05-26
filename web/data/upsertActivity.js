@@ -20,8 +20,8 @@ import { assert } from "@/assert";
  *   groupName: string,
  *   withWho: string,
  *   description: string,
- *   startTime: Date,
- *   endTime: Date,
+ *   startTime: Date | null,
+ *   endTime: Date | null,
  * }} activity
  */
 export const upsertActivity = async ({ database }, activity) => {

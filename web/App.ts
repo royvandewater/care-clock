@@ -14,7 +14,7 @@ import { CamperModal } from "@/components/CampersModal";
 import { SessionTypeModal } from "@/components/SessionTypeModal";
 import { SettingsModal } from "@/components/SettingsModal";
 
-import { startActivity } from "./data/startActivity.js";
+import { startActivity } from "@/data/startActivity";
 import { upsertActivity } from "./data/upsertActivity.js";
 import { hasUnsynchronizedActivities } from "./data/hasUnsynchronizedActivities.js";
 import { useActivity } from "./data/useActivity.js";
