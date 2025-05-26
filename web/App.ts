@@ -2,7 +2,7 @@ import { html } from "htm/preact";
 import { useSignal } from "@preact/signals";
 import { useEffect } from "preact/hooks";
 
-import { Card, CardContent } from "./components/Card.js";
+import { Card, CardContent } from "@/components/Card";
 import { Button } from "./components/Button.js";
 import { Input } from "./components/Input.js";
 import { Label, LabelLike } from "./components/Label.js";
