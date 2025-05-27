@@ -2,7 +2,7 @@ import { html } from "htm/preact";
 import { useSignal } from "@preact/signals";
 import { useEffect } from "preact/hooks";
 import { getSyncedActivities } from "@/data/database";
-import { Edit } from "@/components/Icons/Edit";
+import { Edit } from "@/components/icons/Edit";
 import { Button } from "@/components/Button";
 import type { Activity } from "@/data/serialization.js";
 

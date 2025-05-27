@@ -1,7 +1,7 @@
 import { html } from "htm/preact";
 
 import { cn } from "@/cn";
-import { Back } from "./icons/Back.js";
+import { Back } from "@/components/icons/Back";
 
 /**
  * @typedef {import("preact").ComponentChildren} ComponentChildren

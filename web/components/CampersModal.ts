@@ -6,7 +6,7 @@ import { Label } from "@/components/Label";
 import { Input } from "./Input.js";
 import { Button } from "@/components/Button";
 import { Trash } from "./icons/Trash.js";
-import { Edit } from "@/components/Icons/Edit";
+import { Edit } from "@/components/icons/Edit";
 
 import { useAvailableCampers } from "../data/useAvailableCampers.js";
 import { assert } from "@/assert";
