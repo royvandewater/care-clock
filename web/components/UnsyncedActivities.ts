@@ -7,7 +7,7 @@ import { getActivitesThatAreNotSynced } from "../data/database.js";
 import { Syncing } from "@/components/icons/Syncing";
 import { Edit } from "@/components/icons/Edit";
 import { Button } from "@/components/Button";
-import { Unsynced } from "./icons/Unsynced.js";
+import { Unsynced } from "@/components/icons/Unsynced";
 import type { Activity } from "@/data/serialization.js";
 import type { SyncState } from "@/data/syncStates.js";
 
