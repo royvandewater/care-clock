@@ -3,13 +3,13 @@ import { useEffect } from "preact/hooks";
 import { useSignal } from "@preact/signals";
 
 import { upsertActivity } from "@/data/upsertActivity";
-import { getActivitesThatAreNotSynced } from "../data/database.js";
+import { getActivitesThatAreNotSynced } from "@/data/database";
 import { Syncing } from "@/components/icons/Syncing";
 import { Edit } from "@/components/icons/Edit";
 import { Button } from "@/components/Button";
 import { Unsynced } from "@/components/icons/Unsynced";
-import type { Activity } from "@/data/serialization.js";
-import type { SyncState } from "@/data/syncStates.js";
+import type { Activity } from "@/data/serialization";
+import type { SyncState } from "@/data/syncStates";
 
 export const UnsyncedActivities = ({ database, onEditActivity }: { database: IDBDatabase; onEditActivity: (id: string) => void }) => {
   const unSyncedActivities = useSignal<Activity[]>([]);
