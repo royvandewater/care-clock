@@ -18,10 +18,12 @@ import { startActivity } from "@/data/startActivity";
 import { upsertActivity } from "@/data/upsertActivity";
 import { hasUnsynchronizedActivities } from "@/data/hasUnsynchronizedActivities";
 import { useActivity } from "@/data/useActivity";
+import type { SessionType } from "@/data/sessionTypes";
 import { useTheme } from "./data/useTheme.js";
 
 import { formatElapsedTime } from "./formatElapsedTime.js";
 import { cn } from "./cn.js";
+import { assert } from "./assert.js";
 
 export const App = ({ database }: { database: IDBDatabase }) => {
   const activity = useActivity();
@@ -64,7 +66,7 @@ export const App = ({ database }: { database: IDBDatabase }) => {
     return () => database.removeEventListener("activities:changed", updateHasNotifications);
   }, [database]);
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: SubmitEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (isRunning) return stopTimer();
@@ -93,7 +95,7 @@ export const App = ({ database }: { database: IDBDatabase }) => {
         <${CamperModal}
           selectedCampers=${activity.value.campers.map((camper) => camper.name)}
           onClose=${() => (showCamperModal.value = false)}
-          onSelectCampers=${(campers) => {
+          onSelectCampers=${(campers: string[]) => {
             activity.value = {
               ...activity.value,
               campers: campers.sort().map((camper) => {
@@ -114,7 +116,7 @@ export const App = ({ database }: { database: IDBDatabase }) => {
       <div class="h-full max-w-md mx-auto p-4 space-y-6 flex flex-col gap-4 z-0">
         <${SessionTypeModal}
           onClose=${() => (showSessionTypeModal.value = false)}
-          onSelect=${(sessionType) => {
+          onSelect=${(sessionType: SessionType) => {
             if (shouldClearGroup(activity.value.sessionType, sessionType)) {
               activity.value = { ...activity.value, groupName: "" };
             }
@@ -165,16 +167,19 @@ export const App = ({ database }: { database: IDBDatabase }) => {
           <${AdditionalSessionInfo}
             sessionType=${activity.value.sessionType}
             groupName=${activity.value.groupName}
-            onChangeGroupName=${(e) => (activity.value = { ...activity.value, groupName: e.target.value })}
+            onChangeGroupName=${(groupName: string) => (activity.value = { ...activity.value, groupName })}
             withWho=${activity.value.withWho}
-            onChangeWithWho=${(e) => (activity.value = { ...activity.value, withWho: e.target.value })}
+            onChangeWithWho=${(withWho: string) => (activity.value = { ...activity.value, withWho })}
           />
 
           <${Label} class="flex flex-col">Activity Description
             <${TextArea} 
               value=${activity.value.description}
               class="h-40"
-              onInput=${(e) => (activity.value = { ...activity.value, description: e.target.value })}
+              onInput=${(e: InputEvent) => {
+                assert(e.target instanceof HTMLTextAreaElement, "this onInput was not called on a textarea");
+                return (activity.value = { ...activity.value, description: e.target.value });
+              }}
               placeholder="Describe the current activity" />
           </${Label}>
 
@@ -204,7 +209,7 @@ export const App = ({ database }: { database: IDBDatabase }) => {
   `;
 };
 
-const shouldClearGroup = (oldSessionType, newSessionType) => {
+const shouldClearGroup = (oldSessionType: SessionType, newSessionType: SessionType) => {
   if (oldSessionType === newSessionType) return false;
   return oldSessionType === "Group";
 };
@@ -227,16 +232,19 @@ const SettingsButton = ({ onClick, ...props }) => {
   `;
 };
 
-/**
- * @param {{
- *   sessionType: string,
- *   groupName: string,
- *   onChangeGroupName: (e: Event) => void,
- *   withWho: string,
- *   onChangeWithWho: (e: Event) => void,
- * }} props
- */
-const AdditionalSessionInfo = ({ sessionType, groupName, onChangeGroupName, withWho, onChangeWithWho }) => {
+const AdditionalSessionInfo = ({
+  sessionType,
+  groupName,
+  onChangeGroupName,
+  withWho,
+  onChangeWithWho,
+}: {
+  sessionType: SessionType;
+  groupName: string;
+  onChangeGroupName: (name: string) => void;
+  withWho: string;
+  onChangeWithWho: (name: string) => void;
+}) => {
   if (sessionType === "Individual") {
     return null;
   }
@@ -247,7 +255,10 @@ const AdditionalSessionInfo = ({ sessionType, groupName, onChangeGroupName, with
         <${Input} 
           id="groupName" 
           value=${groupName} 
-          onInput=${onChangeGroupName} 
+          onInput=${(e: InputEvent) => {
+            assert(e.target instanceof HTMLInputElement);
+            onChangeGroupName(e.target.value);
+          }}
           placeholder="Triathlon"  
         />
       </${Label}>
@@ -259,7 +270,10 @@ const AdditionalSessionInfo = ({ sessionType, groupName, onChangeGroupName, with
       <${Input} 
         id="withWho" 
         value=${withWho} 
-        onInput=${onChangeWithWho} 
+        onInput=${(e: InputEvent) => {
+          assert(e.target instanceof HTMLInputElement);
+          onChangeWithWho(e.target.value);
+        }}
         placeholder="Mr. John"  
       />
     </${Label}>
