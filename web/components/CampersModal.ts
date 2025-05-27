@@ -8,7 +8,7 @@ import { Button } from "@/components/Button";
 import { Trash } from "@/components/icons/Trash";
 import { Edit } from "@/components/icons/Edit";
 
-import { useAvailableCampers } from "../data/useAvailableCampers.js";
+import { useAvailableCampers } from "@/data/useAvailableCampers";
 import { assert } from "@/assert";
 
 export const CamperModal = ({ onClose, selectedCampers, onSelectCampers }: { onClose: () => void; selectedCampers: string[]; onSelectCampers: (campers: string[]) => void }) => {

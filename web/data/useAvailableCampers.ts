@@ -13,9 +13,9 @@ export const useAvailableCampers = () => {
   useSignalEffect(() => localStorage.setItem("campers", JSON.stringify(campers.value)));
 
   useEffect(() => {
-    const updateCampers = (event) => {
+    const updateCampers = (event: StorageEvent) => {
       if (event.key !== "campers") return;
-      campers.value = JSON.parse(event.newValue);
+      campers.value = JSON.parse(event.newValue ?? "[]");
     };
     window.addEventListener("storage", updateCampers);
   }, []);
