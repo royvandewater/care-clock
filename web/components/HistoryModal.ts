@@ -3,7 +3,7 @@ import { useSignal } from "@preact/signals";
 import { Modal } from "./Modal.js";
 import { UnsyncedActivities } from "@/components/UnsyncedActivities";
 import { SyncedActivitiesList } from "@/components/SyncedActivitiesList";
-import { EditActivityModal } from "./EditActivityModal.js";
+import { EditActivityModal } from "@/components/EditActivityModal";
 
 export const HistoryModal = ({ database, onClose }: { database: IDBDatabase; onClose: () => void }) => {
   const editActivityId = useSignal<string | null>(null);

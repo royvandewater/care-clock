@@ -2,19 +2,22 @@ import { html } from "htm/preact";
 import { useSignal } from "@preact/signals";
 import { useEffect } from "preact/hooks";
 
-import { getActivityFromIndexedDB } from "../data/database";
+import { getActivityFromIndexedDB } from "@/data/database";
 import { upsertActivity } from "@/data/upsertActivity";
 
-import { Modal } from "./Modal.js";
+import { Modal } from "@/components/Modal";
 import { Label, LabelLike } from "@/components/Label";
-import { Input } from "./Input";
+import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
 import { CamperModal } from "@/components/CampersModal";
 import { SessionTypeModal } from "@/components/SessionTypeModal";
-import { TextArea } from "./TextArea.js";
+import { TextArea } from "@/components/TextArea";
+import type { Activity } from "@/data/serialization";
+import { assert } from "@/assert";
+import type { SessionType } from "@/data/sessionTypes";
 
 export const EditActivityModal = ({ database, activityId, onClose }) => {
-  const activity = useSignal(null);
+  const activity = useSignal<Activity | null>(null);
   const showCamperModal = useSignal(false);
   const showSessionTypeModal = useSignal(false);
 
@@ -29,6 +32,8 @@ export const EditActivityModal = ({ database, activityId, onClose }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    assert(activity.value);
+
     await upsertActivity(
       { database },
       {
@@ -43,12 +48,26 @@ export const EditActivityModal = ({ database, activityId, onClose }) => {
 
   if (!activity.value) return html`<${Modal} title=${header} onClose=${onClose} class="gap-y-10" />`;
 
+  assert(activity.value.startTime);
+
   if (showCamperModal.value) {
-    return html`<${CamperModal} onClose=${() => (showCamperModal.value = false)} onSelect=${(camper) => (activity.value = { ...activity.value, camperName: camper })} />`;
+    return html`<${CamperModal}
+      onClose=${() => (showCamperModal.value = false)}
+      onSelect=${(camperName: string) => {
+        assert(activity.value);
+        activity.value = { ...activity.value, camperName };
+      }}
+    />`;
   }
 
   if (showSessionTypeModal.value) {
-    return html`<${SessionTypeModal} onClose=${() => (showSessionTypeModal.value = false)} onSelect=${(sessionType) => (activity.value = { ...activity.value, sessionType })} />`;
+    return html`<${SessionTypeModal}
+      onClose=${() => (showSessionTypeModal.value = false)}
+      onSelect=${(sessionType: SessionType) => {
+        assert(activity.value);
+        activity.value = { ...activity.value, sessionType };
+      }}
+    />`;
   }
 
   return html`<${Modal} title=${header} onClose=${onClose} class="gap-y-10" >
@@ -57,7 +76,11 @@ export const EditActivityModal = ({ database, activityId, onClose }) => {
         <${Input} 
           id="therapistName" 
           value=${activity.value.therapistName} 
-          onInput=${(e) => (activity.value = { ...activity.value, therapistName: e.target.value })} 
+          onInput=${(e: InputEvent) => {
+            assert(e.target instanceof HTMLInputElement);
+            assert(activity.value);
+            activity.value = { ...activity.value, therapistName: e.target.value };
+          }} 
           autoFocus=${!Boolean(activity.value.therapistName)}
           placeholder="Jane"  
         />
@@ -85,7 +108,11 @@ export const EditActivityModal = ({ database, activityId, onClose }) => {
         <${Input} 
           id="groupName" 
           value=${activity.value.groupName} 
-          onInput=${(e) => (activity.value = { ...activity.value, groupName: e.target.value })} 
+          onInput=${(e: InputEvent) => {
+            assert(e.target instanceof HTMLInputElement);
+            assert(activity.value);
+            activity.value = { ...activity.value, groupName: e.target.value };
+          }} 
           placeholder="Triathlon"  
         />
       </${Label}>
@@ -94,7 +121,11 @@ export const EditActivityModal = ({ database, activityId, onClose }) => {
         <${TextArea} 
           value=${activity.value.description}
           class="h-25"
-          onInput=${(e) => (activity.value = { ...activity.value, description: e.target.value })}
+          onInput=${(e: InputEvent) => {
+            assert(e.target instanceof HTMLTextAreaElement);
+            assert(activity.value);
+            activity.value = { ...activity.value, description: e.target.value };
+          }}
           placeholder="Describe the current activity" />
       </${Label}>
 
@@ -104,9 +135,11 @@ export const EditActivityModal = ({ database, activityId, onClose }) => {
             id="startDate" 
             type="date"
             value=${activity.value.startTime.toISOString().slice(0, 10)} 
-            onInput=${(e) => {
+            onInput=${(e: InputEvent) => {
+              assert(e.target instanceof HTMLInputElement);
+              assert(activity.value?.startTime);
               const time = activity.value.startTime.toISOString().slice(11);
-              return (activity.value = { ...activity.value, startTime: combineDateAndTime(e.target.value, time) });
+              activity.value = { ...activity.value, startTime: combineDateAndTime(e.target.value, time) };
             }} 
           />
         </${Label}>
@@ -117,9 +150,11 @@ export const EditActivityModal = ({ database, activityId, onClose }) => {
             type="time"
             value=${activity.value.startTime.toTimeString().slice(0, 8)} 
             step="1"
-            onInput=${(e) => {
+            onInput=${(e: InputEvent) => {
+              assert(e.target instanceof HTMLInputElement);
+              assert(activity.value?.startTime);
               const date = activity.value.startTime.toISOString().slice(0, 10);
-              return (activity.value = { ...activity.value, startTime: combineDateAndTime(date, e.target.value) });
+              activity.value = { ...activity.value, startTime: combineDateAndTime(date, e.target.value) };
             }} 
           />
         </${Label}>
@@ -131,9 +166,11 @@ export const EditActivityModal = ({ database, activityId, onClose }) => {
             id="endDate" 
             type="date"
             value=${activity.value.endTime?.toISOString().slice(0, 10)} 
-            onInput=${(e) => {
+            onInput=${(e: InputEvent) => {
+              assert(e.target instanceof HTMLInputElement);
+              assert(activity.value);
               const time = activity.value.endTime?.toISOString().slice(11) ?? "00:00";
-              return (activity.value = { ...activity.value, endTime: combineDateAndTime(e.target.value, time) });
+              activity.value = { ...activity.value, endTime: combineDateAndTime(e.target.value, time) };
             }} 
           />
         </${Label}>
@@ -144,15 +181,17 @@ export const EditActivityModal = ({ database, activityId, onClose }) => {
             type="time"
             value=${activity.value.endTime?.toTimeString().slice(0, 8)} 
             step="1"
-            onInput=${(e) => {
+            onInput=${(e: InputEvent) => {
+              assert(e.target instanceof HTMLInputElement);
+              assert(activity.value);
               const date = (activity.value.endTime ?? new Date()).toISOString().slice(0, 10);
-              return (activity.value = { ...activity.value, endTime: combineDateAndTime(date, e.target.value) });
+              activity.value = { ...activity.value, endTime: combineDateAndTime(date, e.target.value) };
             }} 
           />
         </${Label}>
       </div>
 
-      <${Button} tyep="submit" disabled=${!activity.value.camperName || !activity.value.therapistName}>
+      <${Button} type="submit" disabled=${!activity.value.camperName || !activity.value.therapistName}>
         Save
       </${Button}>
     </form>

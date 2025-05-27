@@ -43,6 +43,7 @@ Icons are from https://heroicons.com/
 13. [x] Toggle dark mode in settings panel
 14. [ ] Migrate to TS and serve everything up from one app
 15. [ ] Fix Group/WithWho in edit activity from history (currently always shows Group)
-16. [ ] Pre-curated groups
-17. [ ] ~Have it show up as a widget on lock screen~ I looked into it and it doesn't look like it's possible without a native app
-18. [ ] [Create maskable icon](https://web.dev/articles/maskable-icon)
+16. [ ] Fix opening the CamperModal when editing an activity from history (renders white page with no recourse, maybe just render an input box and don't have a modal?)
+17. [ ] Pre-curated groups
+18. [ ] ~Have it show up as a widget on lock screen~ I looked into it and it doesn't look like it's possible without a native app
+19. [ ] [Create maskable icon](https://web.dev/articles/maskable-icon)
