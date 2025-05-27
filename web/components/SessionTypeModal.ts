@@ -1,6 +1,6 @@
 import { html } from "htm/preact";
 
-import { Modal } from "./Modal.js";
+import { Modal } from "@/components/Modal";
 import { Button } from "@/components/Button";
 
 import { sessionTypes, type SessionType } from "@/data/sessionTypes";
