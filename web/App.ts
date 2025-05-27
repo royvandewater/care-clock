@@ -19,7 +19,7 @@ import { upsertActivity } from "@/data/upsertActivity";
 import { hasUnsynchronizedActivities } from "@/data/hasUnsynchronizedActivities";
 import { useActivity } from "@/data/useActivity";
 import type { SessionType } from "@/data/sessionTypes";
-import { useTheme } from "./data/useTheme.js";
+import { useTheme } from "@/data/useTheme";
 
 import { formatElapsedTime } from "@/formatElapsedTime";
 import { cn } from "@/cn";

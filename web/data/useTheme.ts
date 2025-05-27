@@ -7,10 +7,10 @@ export const useTheme = () => {
 
   useSignalEffect(() => {
     window.localStorage.setItem("theme", theme.value);
-    
+
     // Remove existing theme classes
     document.documentElement.classList.remove("light", "dark");
-    
+
     // Apply the appropriate class based on theme selection
     if (theme.value === "light") {
       document.documentElement.classList.add("light");
@@ -23,13 +23,13 @@ export const useTheme = () => {
   });
 
   useEffect(() => {
-    const updateTheme = (event) => {
+    const updateTheme = (event: StorageEvent) => {
       if (event.key !== "theme") return;
       theme.value = themeSchema.parse(event.newValue);
     };
 
     window.addEventListener("storage", updateTheme);
-    
+
     return () => {
       window.removeEventListener("storage", updateTheme);
     };
