@@ -1,9 +1,4 @@
-/**
- * @param {Date | null} endTime
- * @param {Date | null} startTime
- * @returns {String}
- */
-export const formatElapsedTime = (startTime, endTime) => {
+export const formatElapsedTime = (startTime: Date | null, endTime: Date | null) => {
   if (!startTime || !endTime) return "00:00:00";
   if (endTime.getTime() < startTime.getTime()) return "00:00:00";
 

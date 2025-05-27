@@ -21,7 +21,7 @@ import { useActivity } from "@/data/useActivity";
 import type { SessionType } from "@/data/sessionTypes";
 import { useTheme } from "./data/useTheme.js";
 
-import { formatElapsedTime } from "./formatElapsedTime.js";
+import { formatElapsedTime } from "@/formatElapsedTime";
 import { cn } from "./cn.js";
 import { assert } from "./assert.js";
 
