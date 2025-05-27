@@ -6,7 +6,7 @@
   "scripts": {
     "deploy": "wrangler deploy",
     "emulate-prod": "npm run build && wrangler dev --cwd dist",
-    "build": "tsc -b && vite build",
+    "build": "tsc --build && vite build",
     "live-server": "live-server --ignore=.git --ignore=node_modules --ignore=src --ignore=.wrangler --ignore=test-results --ignore=.playwright --no-browser",
     "start": "vite --port 8787",
     "cf-typegen": "wrangler types",

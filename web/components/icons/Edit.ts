@@ -2,11 +2,8 @@ import { html } from "htm/preact";
 
 import { cn } from "@/cn";
 
-/**
- * @param {{class: string}} props
- */
-export const Edit = (props) => {
-  return html`<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class=${cn("size-6", props.class)}>
+export const Edit = (props: { class?: string; className?: string }) => {
+  return html`<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class=${cn("size-6", props.class, props.className)}>
     <path
       stroke-linecap="round"
       stroke-linejoin="round"
