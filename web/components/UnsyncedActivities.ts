@@ -4,7 +4,7 @@ import { useSignal } from "@preact/signals";
 
 import { upsertActivity } from "@/data/upsertActivity";
 import { getActivitesThatAreNotSynced } from "../data/database.js";
-import { Syncing } from "./icons/Syncing.js";
+import { Syncing } from "@/components/icons/Syncing";
 import { Edit } from "@/components/icons/Edit";
 import { Button } from "@/components/Button";
 import { Unsynced } from "./icons/Unsynced.js";
