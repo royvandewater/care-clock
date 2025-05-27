@@ -1,7 +1,7 @@
 import { html } from "htm/preact";
 import { useSignal } from "@preact/signals";
 import { Modal } from "./Modal.js";
-import { UnsyncedActivities } from "./UnsyncedActivities.js";
+import { UnsyncedActivities } from "@/components/UnsyncedActivities";
 import { SyncedActivitiesList } from "@/components/SyncedActivitiesList";
 import { EditActivityModal } from "./EditActivityModal.js";
 

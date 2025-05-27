@@ -22,7 +22,7 @@ export const upsertActivity = async ({ database }: { database: IDBDatabase }, ac
 
   await Promise.all(
     camperActivities.map(async (camperActivity) => {
-      const updatedActivity = { ...camperActivity, syncState: "syncing" };
+      const updatedActivity: Activity = { ...camperActivity, syncState: "syncing" };
       await upsertActivityInIndexedDB(database, updatedActivity);
 
       // intentionally not awaited so that the function is not blocked on the network request

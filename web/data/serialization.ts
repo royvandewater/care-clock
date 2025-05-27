@@ -1,4 +1,5 @@
 import { parseSessionType, type SessionType } from "@/data/sessionTypes";
+import { parseSyncState, type SyncState } from "@/data/syncStates";
 
 export interface Activity {
   id: string;
@@ -10,7 +11,7 @@ export interface Activity {
   description: string;
   startTime: Date | null;
   endTime: Date | null;
-  syncState: string;
+  syncState: SyncState;
 }
 
 export interface SerializableActivity {
@@ -52,6 +53,6 @@ export const parseActivity = (activity: SerializableActivity): Activity => {
     description: activity.description || "",
     startTime: activity.startTime ? new Date(activity.startTime) : null,
     endTime: activity.endTime ? new Date(activity.endTime) : null,
-    syncState: activity.syncState,
+    syncState: parseSyncState(activity.syncState),
   };
 };
