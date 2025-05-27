@@ -1,11 +1,11 @@
 import { html } from "htm/preact";
 import { Signal, useSignal } from "@preact/signals";
 
-import { Modal } from "./Modal.js";
+import { Modal } from "@/components/Modal";
 import { Label } from "@/components/Label";
-import { Input } from "./Input.js";
+import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
-import { Trash } from "./icons/Trash.js";
+import { Trash } from "@/components/icons/Trash";
 import { Edit } from "@/components/icons/Edit";
 
 import { useAvailableCampers } from "../data/useAvailableCampers.js";
