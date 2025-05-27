@@ -22,8 +22,8 @@ import type { SessionType } from "@/data/sessionTypes";
 import { useTheme } from "./data/useTheme.js";
 
 import { formatElapsedTime } from "@/formatElapsedTime";
-import { cn } from "./cn.js";
-import { assert } from "./assert.js";
+import { cn } from "@/cn";
+import { assert } from "@/assert";
 
 export const App = ({ database }: { database: IDBDatabase }) => {
   const activity = useActivity();

@@ -1,6 +1,6 @@
 import { html } from "htm/preact";
 import { History } from "./icons/History.js";
-import { cn } from "../cn.js";
+import { cn } from "@/cn";
 import type { Signal } from "@preact/signals";
 
 /**

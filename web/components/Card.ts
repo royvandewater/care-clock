@@ -1,5 +1,5 @@
 import { html } from "htm/preact";
-import { cn } from "../cn.js";
+import { cn } from "@/cn";
 
 const Card = ({ className, ...props }) => html` <div className=${cn("rounded-lg bg-card text-card-foreground", className)} ...${props} /> `;
 Card.displayName = "Card";

@@ -1,6 +1,6 @@
 import { html } from "htm/preact";
 
-import { cn } from "../cn.js";
+import { cn } from "@/cn";
 import { Back } from "./icons/Back.js";
 
 /**
