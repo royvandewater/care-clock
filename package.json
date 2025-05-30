@@ -29,7 +29,7 @@
     "@preact/signals": "^2.1.0",
     "@tailwindcss/browser": "^4.1.7",
     "@tailwindcss/vite": "^4.1.7",
-    "@types/node": "22.15.21",
+    "@types/node": "22.15.27",
     "@types/service-worker-mock": "^2.0.1",
     "@vitejs/plugin-react-swc": "^3.10.0",
     "class-variance-authority": "^0.7.1",
