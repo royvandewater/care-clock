@@ -7,112 +7,112 @@
 
 /* Default light theme variables */
 :root {
-  --theme-background: #F8F9FA;
+  --theme-background: #f8f9fa;
   --theme-foreground: #212529;
   --theme-foreground-secondary: #40454a;
 
   --theme-primary: #0172eb;
-  --theme-primary-hover:  #005FCC;
+  --theme-primary-hover: #005fcc;
   --theme-primary-foreground: var(--color-white);
 
-  --theme-secondary:  #6C757D;
-  --theme-secondary-hover: #5A6268;
+  --theme-secondary: #6c757d;
+  --theme-secondary-hover: #5a6268;
   --theme-secondary-foreground: var(--color-white);
 
   --theme-tertiary-hover: #e3e7ec;
 
-  --theme-danger: #BB0000;
+  --theme-danger: #bb0000;
   --theme-danger-foreground: var(--color-white);
 
   --theme-warning: #c07c00;
   --theme-warning-foreground: var(--color-white);
 
   --theme-input-background: var(--color-white);
-  --theme-input-border: #CED4DA;
-  --theme-input-border-focus: #007AFF;
+  --theme-input-border: #ced4da;
+  --theme-input-border-focus: #007aff;
 
-  --theme-divider: #CED4DA;
+  --theme-divider: #ced4da;
 }
 
 /* Dark theme variables when .dark class is present */
 :root.dark {
   --theme-background: #121417;
-  --theme-foreground: #E4E6EB;
-  --theme-foreground-secondary:  #A1A7B3;
+  --theme-foreground: #e4e6eb;
+  --theme-foreground-secondary: #a1a7b3;
 
-  --theme-primary: #4D9AFF;
-  --theme-primary-hover:  #397ED6;
+  --theme-primary: #4d9aff;
+  --theme-primary-hover: #397ed6;
   --theme-primary-foreground: var(--color-white);
 
-  --theme-secondary:  #A1A7B3;
-  --theme-secondary-hover: #8D94A0;
+  --theme-secondary: #a1a7b3;
+  --theme-secondary-hover: #8d94a0;
   --theme-secondary-foreground: var(--color-white);
 
-  --theme-tertiary-hover: #3A3F45;
+  --theme-tertiary-hover: #3a3f45;
 
-  --theme-danger: #FF4949;
+  --theme-danger: #ff4949;
   --theme-danger-foreground: var(--color-white);
 
-  --theme-warning: #FFA500;
+  --theme-warning: #ffa500;
   --theme-warning-foreground: var(--color-white);
 
-  --theme-input-background: #1C1F24;
-  --theme-input-border: #3A3F45;
-  --theme-input-border-focus: #4D9AFF;
+  --theme-input-background: #1c1f24;
+  --theme-input-border: #3a3f45;
+  --theme-input-border-focus: #4d9aff;
 }
 
 /* System preference fallback - only applies when no explicit theme class is set */
 @media (prefers-color-scheme: dark) {
   :root:not(.light):not(.dark) {
     --theme-background: #121417;
-    --theme-foreground: #E4E6EB;
+    --theme-foreground: #e4e6eb;
     --theme-foreground-secondary: #40454a;
 
     --theme-primary: #0172eb;
-    --theme-primary-hover:  #397ED6;
+    --theme-primary-hover: #397ed6;
     --theme-primary-foreground: var(--color-white);
 
-    --theme-secondary:  #A1A7B3;
-    --theme-secondary-hover: #8D94A0;
+    --theme-secondary: #a1a7b3;
+    --theme-secondary-hover: #8d94a0;
     --theme-secondary-foreground: var(--color-white);
 
-    --theme-tertiary-hover: #3A3F45;
+    --theme-tertiary-hover: #3a3f45;
 
-    --theme-danger: #FF4949;
+    --theme-danger: #ff4949;
     --theme-danger-foreground: var(--color-white);
 
-    --theme-warning: #FFA500;
+    --theme-warning: #ffa500;
     --theme-warning-foreground: var(--color-white);
 
-    --theme-input-background: #1C1F24;
-    --theme-input-border: #3A3F45;
-    --theme-input-border-focus: #4D9AFF;
+    --theme-input-background: #1c1f24;
+    --theme-input-border: #3a3f45;
+    --theme-input-border-focus: #4d9aff;
   }
 }
 
 @theme {
-    --color-background: var(--theme-background);
-    --color-background-header: var(--theme-background-header);
-    --color-foreground: var(--theme-foreground);
-    --color-foreground-secondary: var(--theme-foreground-secondary);
+  --color-background: var(--theme-background);
+  --color-background-header: var(--theme-background-header);
+  --color-foreground: var(--theme-foreground);
+  --color-foreground-secondary: var(--theme-foreground-secondary);
 
-    --color-primary: var(--theme-primary);
-    --color-primary-hover: var(--theme-primary-hover);
-    --color-primary-foreground: var(--theme-primary-foreground);
+  --color-primary: var(--theme-primary);
+  --color-primary-hover: var(--theme-primary-hover);
+  --color-primary-foreground: var(--theme-primary-foreground);
 
-    --color-secondary: var(--theme-secondary);
-    --color-secondary-hover: var(--theme-secondary-hover);
-    --color-secondary-foreground: var(--theme-secondary-foreground);
+  --color-secondary: var(--theme-secondary);
+  --color-secondary-hover: var(--theme-secondary-hover);
+  --color-secondary-foreground: var(--theme-secondary-foreground);
 
-    --color-tertiary-hover: var(--theme-tertiary-hover);
+  --color-tertiary-hover: var(--theme-tertiary-hover);
 
-    --color-danger: var(--theme-danger);
-    --color-danger-foreground: var(--theme-danger-foreground);
+  --color-danger: var(--theme-danger);
+  --color-danger-foreground: var(--theme-danger-foreground);
 
-    --color-warning: var(--theme-warning);
-    --color-warning-foreground: var(--theme-warning-foreground);
+  --color-warning: var(--theme-warning);
+  --color-warning-foreground: var(--theme-warning-foreground);
 
-    --color-input-background: var(--theme-input-background);
-    --color-input-border: var(--theme-input-border);
-    --color-input-border-focus: var(--theme-input-border-focus);
+  --color-input-background: var(--theme-input-background);
+  --color-input-border: var(--theme-input-border);
+  --color-input-border-focus: var(--theme-input-border-focus);
 }

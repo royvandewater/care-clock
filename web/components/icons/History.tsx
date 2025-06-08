@@ -1,5 +1,12 @@
 export const History = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke-width="1.5"
+    stroke="currentColor"
+    className="size-6"
+  >
     <defs id="defs1">
       <marker
         style="overflow:visible"
@@ -27,7 +34,10 @@ export const History = () => (
       style="marker-start:url(#RoundedArrow)"
     />
     <g id="layer2">
-      <path d="m 11.613783,7.1689485 v 6.0000025 l 3.81614,2.198122" style="display:inline;stroke-linecap:round;stroke-linejoin:round" />
+      <path
+        d="m 11.613783,7.1689485 v 6.0000025 l 3.81614,2.198122"
+        style="display:inline;stroke-linecap:round;stroke-linejoin:round"
+      />
     </g>
   </svg>
 );

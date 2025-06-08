@@ -17,7 +17,15 @@ import { shouldClearGroup } from "@/data/shouldClearGroup";
 import { shouldClearWithWho } from "@/data/shouldClearWithWho";
 import { GroupOrWithWho } from "@/components/GroupOrWithWho";
 
-export const EditActivityModal = ({ database, activityId, onClose }: { database: IDBDatabase; activityId: string; onClose: () => void }) => {
+export const EditActivityModal = ({
+  database,
+  activityId,
+  onClose,
+}: {
+  database: IDBDatabase;
+  activityId: string;
+  onClose: () => void;
+}) => {
   const activity = useSignal<Activity | null>(null);
   const showSessionTypeModal = useSignal(false);
 

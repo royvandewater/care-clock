@@ -10,7 +10,15 @@ import { Edit } from "@/components/icons/Edit";
 import { useAvailableCampers } from "@/data/useAvailableCampers";
 import { assert } from "@/assert";
 
-export const CamperModal = ({ onClose, selectedCampers, onSelectCampers }: { onClose: () => void; selectedCampers: string[]; onSelectCampers: (campers: string[]) => void }) => {
+export const CamperModal = ({
+  onClose,
+  selectedCampers,
+  onSelectCampers,
+}: {
+  onClose: () => void;
+  selectedCampers: string[];
+  onSelectCampers: (campers: string[]) => void;
+}) => {
   const campers = useAvailableCampers();
 
   const editMode = useSignal(false);
@@ -28,7 +36,9 @@ export const CamperModal = ({ onClose, selectedCampers, onSelectCampers }: { onC
       {editMode.value && <NewCamperForm onAdd={(name) => (campers.value = [...campers.value, name].sort())} />}
 
       <ul class="flex flex-col divide-y-1 divide-secondary/40">
-        {campers.value.length === 0 && <li class="text-center text-secondary pt-10">Use the edit button on the top right to add a camper</li>}
+        {campers.value.length === 0 && (
+          <li class="text-center text-secondary pt-10">Use the edit button on the top right to add a camper</li>
+        )}
         {campers.value.map((camper, i) => (
           <Camper
             camper={camper}
@@ -52,7 +62,12 @@ export const CamperModal = ({ onClose, selectedCampers, onSelectCampers }: { onC
 const Header = ({ onClickEdit }: { onClickEdit: () => void }) => (
   <>
     <h1 class="text-2xl font-bold">Campers</h1>
-    <button type="button" aria-label="Edit Campers" class="size-8 flex items-center justify-center hover:bg-tertiary-hover rounded-xl absolute top-4 right-6" onClick={onClickEdit}>
+    <button
+      type="button"
+      aria-label="Edit Campers"
+      class="size-8 flex items-center justify-center hover:bg-tertiary-hover rounded-xl absolute top-4 right-6"
+      onClick={onClickEdit}
+    >
       <Edit />
     </button>
   </>
