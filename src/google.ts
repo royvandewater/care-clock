@@ -114,7 +114,7 @@ export class GoogleAuth {
           hash: { name: "SHA-256" },
         },
         false,
-        ["sign"]
+        ["sign"],
       );
     } catch (err) {
       console.error("Private key import error:", err);
@@ -134,7 +134,7 @@ export class GoogleAuth {
           hash: { name: "SHA-256" },
         },
         key,
-        data
+        data,
       );
 
       return encodeBase64(signature);

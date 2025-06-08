@@ -13,7 +13,17 @@ export const getClientFromEnv = async (env: Record<string, string>) => {
   return getDoc(configurationFromEnv(env));
 };
 
-const getDoc = async ({ email, privateKey, sheetId, scope }: { email: string; privateKey: string; sheetId: string; scope: string }) => {
+const getDoc = async ({
+  email,
+  privateKey,
+  sheetId,
+  scope,
+}: {
+  email: string;
+  privateKey: string;
+  sheetId: string;
+  scope: string;
+}) => {
   return new GoogleSpreadsheet(sheetId, new GoogleAuth({ email, privateKey, scope }));
 };
 
