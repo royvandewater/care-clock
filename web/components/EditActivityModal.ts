@@ -9,7 +9,6 @@ import { Modal } from "@/components/Modal";
 import { Label, LabelLike } from "@/components/Label";
 import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
-import { CamperModal } from "@/components/CampersModal";
 import { SessionTypeModal } from "@/components/SessionTypeModal";
 import { TextArea } from "@/components/TextArea";
 import type { Activity } from "@/data/serialization";
@@ -21,7 +20,6 @@ import { GroupOrWithWho } from "@/components/GroupOrWithWho";
 
 export const EditActivityModal = ({ database, activityId, onClose }) => {
   const activity = useSignal<Activity | null>(null);
-  const showCamperModal = useSignal(false);
   const showSessionTypeModal = useSignal(false);
 
   useEffect(() => {
@@ -52,16 +50,6 @@ export const EditActivityModal = ({ database, activityId, onClose }) => {
   if (!activity.value) return html`<${Modal} title=${header} onClose=${onClose} class="gap-y-10" />`;
 
   assert(activity.value.startTime);
-
-  if (showCamperModal.value) {
-    return html`<${CamperModal}
-      onClose=${() => (showCamperModal.value = false)}
-      onSelect=${(camperName: string) => {
-        assert(activity.value);
-        activity.value = { ...activity.value, camperName };
-      }}
-    />`;
-  }
 
   if (showSessionTypeModal.value) {
     return html`<${SessionTypeModal}
@@ -97,14 +85,15 @@ export const EditActivityModal = ({ database, activityId, onClose }) => {
         />
       </${Label}>
 
-      <${LabelLike} onClick=${() => (showCamperModal.value = true)}>Camper
-        <div class="flex justify-between items-center font-medium">
-          ${activity.value.camperName ?? ""}
-          <${Button} type="button" variant="outline" size="sm">
-            ${activity.value.camperName ? "Change" : "Select"}
-          </${Button}>
-        </div>
-      </${LabelLike}>
+      <${Label}>Camper
+          <${Input} 
+            value=${activity.value.camperName} 
+            onInput=${(e: InputEvent) => {
+              assert(activity.value, "Activity was undefined in Camper onInput");
+              assert(e.target instanceof HTMLInputElement);
+              activity.value = { ...activity.value, camperName: e.target.value };
+            }}/>
+      </${Label}>
 
       <${LabelLike} onClick=${() => (showSessionTypeModal.value = true)}>Session Type
         <div class="flex justify-between items-center font-medium">
