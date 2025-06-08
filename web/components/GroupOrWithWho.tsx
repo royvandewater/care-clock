@@ -1,4 +1,3 @@
-import { html } from "htm/preact";
 import type { SessionType } from "@/data/sessionTypes";
 import { Input } from "@/components/Input";
 import { Label } from "@/components/Label";
@@ -22,32 +21,34 @@ export const GroupOrWithWho = ({
   }
 
   if (sessionType === "Group") {
-    return html`
-      <${Label} >Group
-        <${Input} 
-          id="groupName" 
-          value=${groupName} 
-          onInput=${(e: InputEvent) => {
+    return (
+      <Label>
+        Group
+        <Input
+          id="groupName"
+          value={groupName}
+          onInput={(e: InputEvent) => {
             assert(e.target instanceof HTMLInputElement);
             onChangeGroupName(e.target.value);
           }}
-          placeholder="Triathlon"  
+          placeholder="Triathlon"
         />
-      </${Label}>
-    `;
+      </Label>
+    );
   }
 
-  return html`
-    <${Label} >With Who
-      <${Input} 
-        id="withWho" 
-        value=${withWho} 
-        onInput=${(e: InputEvent) => {
+  return (
+    <Label>
+      With Who
+      <Input
+        id="withWho"
+        value={withWho}
+        onInput={(e: InputEvent) => {
           assert(e.target instanceof HTMLInputElement);
           onChangeWithWho(e.target.value);
         }}
-        placeholder="Mr. John"  
+        placeholder="Mr. John"
       />
-    </${Label}>
-  `;
+    </Label>
+  );
 };
