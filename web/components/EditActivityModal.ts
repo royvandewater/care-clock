@@ -15,6 +15,9 @@ import { TextArea } from "@/components/TextArea";
 import type { Activity } from "@/data/serialization";
 import { assert } from "@/assert";
 import type { SessionType } from "@/data/sessionTypes";
+import { shouldClearGroup } from "@/data/shouldClearGroup";
+import { shouldClearWithWho } from "@/data/shouldClearWithWho";
+import { GroupOrWithWho } from "@/components/GroupOrWithWho";
 
 export const EditActivityModal = ({ database, activityId, onClose }) => {
   const activity = useSignal<Activity | null>(null);
@@ -64,7 +67,15 @@ export const EditActivityModal = ({ database, activityId, onClose }) => {
     return html`<${SessionTypeModal}
       onClose=${() => (showSessionTypeModal.value = false)}
       onSelect=${(sessionType: SessionType) => {
-        assert(activity.value);
+        assert(activity.value, "Activity was not defined in onSelect SessionType");
+
+        if (shouldClearGroup(activity.value.sessionType, sessionType)) {
+          activity.value = { ...activity.value, groupName: "" };
+        }
+        if (shouldClearWithWho(activity.value.sessionType, sessionType)) {
+          activity.value = { ...activity.value, withWho: "" };
+        }
+
         activity.value = { ...activity.value, sessionType };
       }}
     />`;
@@ -104,18 +115,19 @@ export const EditActivityModal = ({ database, activityId, onClose }) => {
         </div>
       </${LabelLike}>
 
-      <${Label} >Group
-        <${Input} 
-          id="groupName" 
-          value=${activity.value.groupName} 
-          onInput=${(e: InputEvent) => {
-            assert(e.target instanceof HTMLInputElement);
-            assert(activity.value);
-            activity.value = { ...activity.value, groupName: e.target.value };
-          }} 
-          placeholder="Triathlon"  
-        />
-      </${Label}>
+      <${GroupOrWithWho}
+        sessionType=${activity.value.sessionType}
+        groupName=${activity.value.groupName}
+        onChangeGroupName=${(groupName: string) => {
+          assert(activity.value, "Activity was not defined in onChangeGroupName");
+          activity.value = { ...activity.value, groupName };
+        }}
+        withWho=${activity.value.withWho}
+        onChangeWithWho=${(withWho: string) => {
+          assert(activity.value, "Activity was not defined in onChangeWithWho");
+          activity.value = { ...activity.value, withWho };
+        }}
+      />
 
       <${Label} class="flex flex-col">Activity Description
         <${TextArea} 

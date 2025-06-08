@@ -4,7 +4,6 @@ import { useEffect } from "preact/hooks";
 
 import { Card, CardContent } from "@/components/Card";
 import { Button } from "@/components/Button";
-import { Input } from "@/components/Input";
 import { Label, LabelLike } from "@/components/Label";
 import { TextArea } from "@/components/TextArea";
 import { Settings } from "@/components/icons/Settings";
@@ -20,10 +19,13 @@ import { hasUnsynchronizedActivities } from "@/data/hasUnsynchronizedActivities"
 import { useActivity } from "@/data/useActivity";
 import type { SessionType } from "@/data/sessionTypes";
 import { useTheme } from "@/data/useTheme";
+import { shouldClearGroup } from "@/data/shouldClearGroup";
+import { shouldClearWithWho } from "@/data/shouldClearWithWho";
 
 import { formatElapsedTime } from "@/formatElapsedTime";
 import { cn } from "@/cn";
 import { assert } from "@/assert";
+import { GroupOrWithWho } from "@/components/GroupOrWithWho";
 
 export const App = ({ database }: { database: IDBDatabase }) => {
   const activity = useActivity();
@@ -164,7 +166,7 @@ export const App = ({ database }: { database: IDBDatabase }) => {
             </${LabelLike}>
           </div>
 
-          <${AdditionalSessionInfo}
+          <${GroupOrWithWho}
             sessionType=${activity.value.sessionType}
             groupName=${activity.value.groupName}
             onChangeGroupName=${(groupName: string) => (activity.value = { ...activity.value, groupName })}
@@ -209,18 +211,6 @@ export const App = ({ database }: { database: IDBDatabase }) => {
   `;
 };
 
-const shouldClearGroup = (oldSessionType: SessionType, newSessionType: SessionType) => {
-  if (oldSessionType === newSessionType) return false;
-  return oldSessionType === "Group";
-};
-
-const shouldClearWithWho = (oldSessionType, newSessionType) => {
-  if (oldSessionType === newSessionType) return false;
-  if (newSessionType === "Individual") return true;
-  if (newSessionType === "Group") return true;
-  return false;
-};
-
 /**
  * @param {{onClick: () => void, class: string}} props
  */
@@ -229,53 +219,5 @@ const SettingsButton = ({ onClick, ...props }) => {
     <button aria-label="Settings" class=${cn("size-8 flex items-center justify-center hover:bg-tertiary-hover rounded-xl", props.class)} type="button" onClick=${onClick}>
       <${Settings} />
     </button>
-  `;
-};
-
-const AdditionalSessionInfo = ({
-  sessionType,
-  groupName,
-  onChangeGroupName,
-  withWho,
-  onChangeWithWho,
-}: {
-  sessionType: SessionType;
-  groupName: string;
-  onChangeGroupName: (name: string) => void;
-  withWho: string;
-  onChangeWithWho: (name: string) => void;
-}) => {
-  if (sessionType === "Individual") {
-    return null;
-  }
-
-  if (sessionType === "Group") {
-    return html`
-      <${Label} >Group
-        <${Input} 
-          id="groupName" 
-          value=${groupName} 
-          onInput=${(e: InputEvent) => {
-            assert(e.target instanceof HTMLInputElement);
-            onChangeGroupName(e.target.value);
-          }}
-          placeholder="Triathlon"  
-        />
-      </${Label}>
-    `;
-  }
-
-  return html`
-    <${Label} >With Who
-      <${Input} 
-        id="withWho" 
-        value=${withWho} 
-        onInput=${(e: InputEvent) => {
-          assert(e.target instanceof HTMLInputElement);
-          onChangeWithWho(e.target.value);
-        }}
-        placeholder="Mr. John"  
-      />
-    </${Label}>
   `;
 };
