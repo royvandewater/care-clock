@@ -24,7 +24,7 @@
     "zod": "^3.25.56"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "^1.2.4",
+    "@cloudflare/vite-plugin": "^1.5.0",
     "@cloudflare/workers-types": "^4.20250525.0",
     "@playwright/test": "^1.52.0",
     "@preact/preset-vite": "^2.10.1",
