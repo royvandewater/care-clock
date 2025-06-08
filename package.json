@@ -18,7 +18,7 @@
     "date-fns": "^4.1.0",
     "google-auth-library": "^9.15.1",
     "google-spreadsheet": "^4.1.4",
-    "hono": "^4.7.10",
+    "hono": "^4.7.11",
     "preact-jsx-runtime": "^1.2.0",
     "uuid": "^11.0.5",
     "zod": "^3.25.56"
