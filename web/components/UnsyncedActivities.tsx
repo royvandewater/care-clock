@@ -1,4 +1,3 @@
-import { html } from "htm/preact";
 import { useEffect } from "preact/hooks";
 import { useSignal } from "@preact/signals";
 
@@ -11,7 +10,13 @@ import { Unsynced } from "@/components/icons/Unsynced";
 import type { Activity } from "@/data/serialization";
 import type { SyncState } from "@/data/syncStates";
 
-export const UnsyncedActivities = ({ database, onEditActivity }: { database: IDBDatabase; onEditActivity: (id: string) => void }) => {
+export const UnsyncedActivities = ({
+  database,
+  onEditActivity,
+}: {
+  database: IDBDatabase;
+  onEditActivity: (id: string) => void;
+}) => {
   const unSyncedActivities = useSignal<Activity[]>([]);
 
   useEffect(() => {
@@ -36,49 +41,57 @@ export const UnsyncedActivities = ({ database, onEditActivity }: { database: IDB
     });
   };
 
-  return html`
+  return (
     <div class="flex flex-col gap-y-4">
       <h2 class="text-center text-lg font-bold">Unsynced Activities</h2>
       <ul class="divide-solid divide-y-1 divide-input-border">
-        ${unSyncedActivities.value.map((activity) => html`<${ActivityRow} activity=${activity} onEditActivity=${onEditActivity} />`)}
-        ${unSyncedActivities.value.length === 0 && html`<li class="text-foreground-secondary text-center">All activities are uploaded.</li>`}
+        {unSyncedActivities.value.map((activity) => (
+          <ActivityRow activity={activity} onEditActivity={onEditActivity} />
+        ))}
+        {unSyncedActivities.value.length === 0 && (
+          <li class="text-foreground-secondary text-center">All activities are uploaded.</li>
+        )}
       </ul>
       <button
         class="bg-primary text-primary-foreground p-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
         type="button"
-        onClick=${onSyncAll}
-        disabled=${unSyncedActivities.value.length === 0}
+        onClick={onSyncAll}
+        disabled={unSyncedActivities.value.length === 0}
       >
         Upload All Unsynced Activities
       </button>
     </div>
-  `;
+  );
 };
 
 const ActivityRow = ({ activity, onEditActivity }: { activity: Activity; onEditActivity: (id: string) => void }) => {
   const startTime = activity.startTime ? new Date(activity.startTime).toLocaleString() : "UNKNOWN";
 
-  return html`<li onClick=${() => onEditActivity(activity.id)}>
-    <div class="flex justify-between items-center py-2">
-      <div>
-        <h2 class="text-sm">${activity.camperName}</h3>
-        <h3 class="text-xs text-foreground-secondary">${startTime}</h2>
+  return (
+    <li onClick={() => onEditActivity(activity.id)}>
+      <div class="flex justify-between items-center py-2">
+        <div>
+          <h2 class="text-sm">{activity.camperName}</h2>
+          <h3 class="text-xs text-foreground-secondary">{startTime}</h3>
+        </div>
+        <span class="flex gap-x-2 items-center">
+          <SyncState syncState={activity.syncState} />
+          <Button variant="tertiary" size="xs" type="button">
+            <Edit />
+          </Button>
+        </span>
       </div>
-      <span class="flex gap-x-2 items-center">
-        <${SyncState} syncState=${activity.syncState} />
-        <${Button} variant="tertiary" size="xs" type="button"><${Edit} /></${Button}>
-      </span>
-    </div>
-  </li>`;
+    </li>
+  );
 };
 
 const SyncState = ({ syncState }: { syncState: SyncState }) => {
   if (syncState === "syncing") {
-    return html`<${Syncing} />`;
+    return <Syncing />;
   }
 
   if (syncState === "unsynced") {
-    return html`<${Unsynced} />`;
+    return <Unsynced />;
   }
 
   throw new Error(`Unhandled sync state: ${syncState}`);
