@@ -163,7 +163,7 @@ export const App = ({ database }: { database: IDBDatabase }) => {
             <LabelLike onClick={() => (showSessionTypeModal.value = true)}>
               Session Type
               <div class="flex justify-between items-center font-medium">
-                <span class="text-sm font-medium text-foreground px-3">${activity.value.sessionType}</span>
+                <span class="text-sm font-medium text-foreground px-3">{activity.value.sessionType}</span>
                 <Button type="button" variant="outline" size="sm" aria-label="Select Session Type">
                   Select
                 </Button>
