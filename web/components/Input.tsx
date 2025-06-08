@@ -1,7 +1,7 @@
 import { cn } from "@/cn";
 import type { JSX } from "preact";
 
-const Input = ({ className, ...props }: JSX.HTMLAttributes<HTMLInputElement>) => (
+const Input = ({ className, ...props }: JSX.InputHTMLAttributes<HTMLInputElement>) => (
   <input
     {...props}
     className={cn(
