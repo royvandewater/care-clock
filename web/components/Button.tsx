@@ -1,4 +1,3 @@
-import { html } from "htm/preact";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/cn";
@@ -29,7 +28,7 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
+  },
 );
 
 interface ButtonProps extends JSX.HTMLAttributes<HTMLButtonElement> {
@@ -37,8 +36,8 @@ interface ButtonProps extends JSX.HTMLAttributes<HTMLButtonElement> {
   size?: VariantProps<typeof buttonVariants>["size"];
 }
 
-const Button = ({ className, class: klass, variant, size, ...props }: ButtonProps) => {
-  return html` <button className=${cn(buttonVariants({ variant, size, className: className ?? klass }))} ...${props} /> `;
+const Button = ({ className, variant, size, ...props }: ButtonProps) => {
+  return <button {...props} className={cn(buttonVariants({ variant, size, className }))} />;
 };
 Button.displayName = "Button";
 
