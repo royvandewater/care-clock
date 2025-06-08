@@ -141,7 +141,8 @@ export const App = ({ database }: { database: IDBDatabase }) => {
           class="absolute top-0 left-4" 
         />
         <h1 class="text-2xl font-bold text-primary">Care Clock</h1>
-        <${HistoryButton} className="absolute top-0 right-4" hasNotifications=${hasNotifications} onClick=${() => (showHistoryModal.value = true)}/>
+        <${HistoryButton} className="absolute top-0 right-4" hasNotifications=${hasNotifications} onClick=${() =>
+    (showHistoryModal.value = true)}/>
       </header>
 
       <${Card} className="flex-1">
@@ -149,7 +150,9 @@ export const App = ({ database }: { database: IDBDatabase }) => {
           <div class="flex flex-col gap-4">
             <${LabelLike} onClick=${() => (showCamperModal.value = true)}>Campers
               <div class="flex justify-between items-center font-medium">
-                <span class="text-sm font-medium text-foreground px-3">${activity.value.campers.map((camper) => camper.name).join(", ") || "No campers selected"}</span>
+                <span class="text-sm font-medium text-foreground px-3">${
+                  activity.value.campers.map((camper) => camper.name).join(", ") || "No campers selected"
+                }</span>
                 <${Button} type="button" variant="outline" size="sm" aria-label="Select Campers">
                   Select
                 </${Button}>
@@ -186,9 +189,14 @@ export const App = ({ database }: { database: IDBDatabase }) => {
           </${Label}>
 
           <div class="text-center">
-            <div class=${cn("text-4xl font-mono font-bold mb-2", isRunning ? "" : "opacity-50")}>${formatElapsedTime(activity.value.startTime, activity.value.endTime)}</div>
+            <div class=${cn("text-4xl font-mono font-bold mb-2", isRunning ? "" : "opacity-50")}>${formatElapsedTime(
+    activity.value.startTime,
+    activity.value.endTime,
+  )}</div>
             <div class="space-x-2">
-              <${Button} disabled=${isRunning || !activity.value.campers.length || !activity.value.therapistName} aria-label="Start Timer">
+              <${Button} disabled=${
+    isRunning || !activity.value.campers.length || !activity.value.therapistName
+  } aria-label="Start Timer">
                 Start
               </${Button}>
               <${Button} disabled=${!isRunning} variant="secondary" aria-label="Stop Timer">
@@ -199,10 +207,14 @@ export const App = ({ database }: { database: IDBDatabase }) => {
               ${
                 !activity.value.therapistName &&
                 html`<div class="text-center text-secondary">
-                  Cannot start timer without a therapist name. The therapist name is configured using the settings button on the top left.
+                  Cannot start timer without a therapist name. The therapist name is configured using the settings
+                  button on the top left.
                 </div>`
               }
-              ${!activity.value.campers.length && html`<div class="text-center text-secondary">Cannot start timer without campers</div>`}
+              ${
+                !activity.value.campers.length &&
+                html`<div class="text-center text-secondary">Cannot start timer without campers</div>`
+              }
             </div>
           </div>
         </${CardContent}>
@@ -216,7 +228,12 @@ export const App = ({ database }: { database: IDBDatabase }) => {
  */
 const SettingsButton = ({ onClick, ...props }) => {
   return html`
-    <button aria-label="Settings" class=${cn("size-8 flex items-center justify-center hover:bg-tertiary-hover rounded-xl", props.class)} type="button" onClick=${onClick}>
+    <button
+      aria-label="Settings"
+      class=${cn("size-8 flex items-center justify-center hover:bg-tertiary-hover rounded-xl", props.class)}
+      type="button"
+      onClick=${onClick}
+    >
       <${Settings} />
     </button>
   `;
