@@ -18,7 +18,7 @@ import { shouldClearGroup } from "@/data/shouldClearGroup";
 import { shouldClearWithWho } from "@/data/shouldClearWithWho";
 import { GroupOrWithWho } from "@/components/GroupOrWithWho";
 
-export const EditActivityModal = ({ database, activityId, onClose }) => {
+export const EditActivityModal = ({ database, activityId, onClose }: { database: IDBDatabase; activityId: string; onClose: () => void }) => {
   const activity = useSignal<Activity | null>(null);
   const showSessionTypeModal = useSignal(false);
 
@@ -31,7 +31,7 @@ export const EditActivityModal = ({ database, activityId, onClose }) => {
     return () => database.removeEventListener("activities:changed", refreshActivity);
   }, [activityId]);
 
-  const onSubmit = async (e) => {
+  const onSubmit = async (e: SubmitEvent) => {
     e.preventDefault();
     assert(activity.value);
 
