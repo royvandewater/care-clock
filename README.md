@@ -43,7 +43,7 @@ Icons are from https://heroicons.com/
 13. [x] Toggle dark mode in settings panel
 14. [x] Migrate to TS and serve everything up from one app
 15. [x] Fix Group/WithWho in edit activity from history (currently always shows Group)
-16. [ ] Fix opening the CamperModal when editing an activity from history (renders white page with no recourse, maybe just render an input box and don't have a modal?)
+16. [x] Fix opening the CamperModal when editing an activity from history (renders white page with no recourse, maybe just render an input box and don't have a modal?)
 17. [ ] [Migrate to JSX](https://preactjs.com/guide/v10/getting-started/#setting-up-jsx)
 18. [ ] Pre-curated groups
 19. [ ] ~Have it show up as a widget on lock screen~ I looked into it and it doesn't look like it's possible without a native app
