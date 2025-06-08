@@ -24,34 +24,28 @@ export const CamperModal = ({ onClose, selectedCampers, onSelectCampers }: { onC
   };
 
   return (
-    <Modal
-      title={<Header onClickEdit={() => (editMode.value = !editMode.value)} />}
-      onClose={onClickClose}
-      children={
-        <>
-          {editMode.value && <NewCamperForm onAdd={(name) => (campers.value = [...campers.value, name].sort())} />}
+    <Modal title={<Header onClickEdit={() => (editMode.value = !editMode.value)} />} onClose={onClickClose}>
+      {editMode.value && <NewCamperForm onAdd={(name) => (campers.value = [...campers.value, name].sort())} />}
 
-          <ul class="flex flex-col divide-y-1 divide-secondary/40">
-            {campers.value.length === 0 && <li class="text-center text-secondary pt-10">Use the edit button on the top right to add a camper</li>}
-            {campers.value.map((camper, i) => (
-              <Camper
-                camper={camper}
-                editMode={editMode}
-                selected={selectedCampers.includes(camper)}
-                onSelect={(selected) => {
-                  if (selected) {
-                    onSelectCampers([...selectedCampers, camper]);
-                  } else {
-                    onSelectCampers(selectedCampers.filter((c) => c !== camper));
-                  }
-                }}
-                onRemove={() => (campers.value = campers.value.toSpliced(i, 1))}
-              />
-            ))}
-          </ul>
-        </>
-      }
-    />
+      <ul class="flex flex-col divide-y-1 divide-secondary/40">
+        {campers.value.length === 0 && <li class="text-center text-secondary pt-10">Use the edit button on the top right to add a camper</li>}
+        {campers.value.map((camper, i) => (
+          <Camper
+            camper={camper}
+            editMode={editMode}
+            selected={selectedCampers.includes(camper)}
+            onSelect={(selected) => {
+              if (selected) {
+                onSelectCampers([...selectedCampers, camper]);
+              } else {
+                onSelectCampers(selectedCampers.filter((c) => c !== camper));
+              }
+            }}
+            onRemove={() => (campers.value = campers.value.toSpliced(i, 1))}
+          />
+        ))}
+      </ul>
+    </Modal>
   );
 };
 
