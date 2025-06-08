@@ -1,5 +1,3 @@
-import { html } from "htm/preact";
-
 import { Modal } from "@/components/Modal";
 import { Button } from "@/components/Button";
 
