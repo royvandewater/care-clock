@@ -5,7 +5,7 @@ import { Button } from "@/components/Button";
 
 import { sessionTypes, type SessionType } from "@/data/sessionTypes";
 
-export const SessionTypeModal = ({ onClose, onSelect }: { onClose: () => void; onSelect: (sessionType: string) => void }) => {
+export const SessionTypeModal = ({ onClose, onSelect }: { onClose: () => void; onSelect: (sessionType: SessionType) => void }) => {
   const onSelectSessionType = (sessionType: SessionType) => {
     onSelect(sessionType);
     onClose();

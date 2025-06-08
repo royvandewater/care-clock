@@ -1,7 +1,7 @@
 import { cn } from "@/cn";
 import type { JSX } from "preact";
 
-const TextArea = ({ className, ...props }: JSX.HTMLAttributes<HTMLTextAreaElement>) => (
+const TextArea = ({ className, ...props }: JSX.TextareaHTMLAttributes<HTMLTextAreaElement>) => (
   <textarea
     {...props}
     class={cn(
