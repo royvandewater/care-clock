@@ -121,7 +121,7 @@ export const EditActivityModal = ({ database, activityId, onClose }) => {
       <${Label} className="flex flex-col">Activity Description
         <${TextArea} 
           value=${activity.value.description}
-          className="h-25"
+          className="h-40"
           onInput=${(e: InputEvent) => {
             assert(e.target instanceof HTMLTextAreaElement);
             assert(activity.value);

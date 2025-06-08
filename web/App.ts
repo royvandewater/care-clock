@@ -177,7 +177,7 @@ export const App = ({ database }: { database: IDBDatabase }) => {
           <${Label} className="flex flex-col">Activity Description
             <${TextArea} 
               value=${activity.value.description}
-              class="h-40"
+              className="h-40"
               onInput=${(e: InputEvent) => {
                 assert(e.target instanceof HTMLTextAreaElement, "this onInput was not called on a textarea");
                 return (activity.value = { ...activity.value, description: e.target.value });
