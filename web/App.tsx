@@ -1,4 +1,3 @@
-import { html } from "htm/preact";
 import { useSignal } from "@preact/signals";
 import { useEffect } from "preact/hooks";
 
@@ -26,6 +25,7 @@ import { formatElapsedTime } from "@/formatElapsedTime";
 import { cn } from "@/cn";
 import { assert } from "@/assert";
 import { GroupOrWithWho } from "@/components/GroupOrWithWho";
+import type { JSX } from "preact";
 
 export const App = ({ database }: { database: IDBDatabase }) => {
   const activity = useActivity();
@@ -76,28 +76,28 @@ export const App = ({ database }: { database: IDBDatabase }) => {
   };
 
   if (showSettingsModal.value) {
-    return html`
+    return (
       <div class="h-full max-w-md mx-auto p-4 space-y-6 flex flex-col gap-4 z-0">
-        <${SettingsModal} onClose=${() => (showSettingsModal.value = false)} activity=${activity} theme=${theme} />
+        <SettingsModal onClose={() => (showSettingsModal.value = false)} activity={activity} theme={theme} />
       </div>
-    `;
+    );
   }
 
   if (showHistoryModal.value) {
-    return html`
+    return (
       <div class="h-full max-w-md mx-auto p-4 space-y-6 flex flex-col gap-4 z-0">
-        <${HistoryModal} database=${database} onClose=${() => (showHistoryModal.value = false)} />
+        <HistoryModal database={database} onClose={() => (showHistoryModal.value = false)} />
       </div>
-    `;
+    );
   }
 
   if (showCamperModal.value) {
-    return html`
+    return (
       <div class="h-full max-w-md mx-auto p-4 space-y-6 flex flex-col gap-4 z-0">
-        <${CamperModal}
-          selectedCampers=${activity.value.campers.map((camper) => camper.name)}
-          onClose=${() => (showCamperModal.value = false)}
-          onSelectCampers=${(campers: string[]) => {
+        <CamperModal
+          selectedCampers={activity.value.campers.map((camper) => camper.name)}
+          onClose={() => (showCamperModal.value = false)}
+          onSelectCampers={(campers: string[]) => {
             activity.value = {
               ...activity.value,
               campers: campers.sort().map((camper) => {
@@ -110,15 +110,15 @@ export const App = ({ database }: { database: IDBDatabase }) => {
           }}
         />
       </div>
-    `;
+    );
   }
 
   if (showSessionTypeModal.value) {
-    return html`
+    return (
       <div class="h-full max-w-md mx-auto p-4 space-y-6 flex flex-col gap-4 z-0">
-        <${SessionTypeModal}
-          onClose=${() => (showSessionTypeModal.value = false)}
-          onSelect=${(sessionType: SessionType) => {
+        <SessionTypeModal
+          onClose={() => (showSessionTypeModal.value = false)}
+          onSelect={(sessionType: SessionType) => {
             if (shouldClearGroup(activity.value.sessionType, sessionType)) {
               activity.value = { ...activity.value, groupName: "" };
             }
@@ -130,111 +130,109 @@ export const App = ({ database }: { database: IDBDatabase }) => {
           }}
         />
       </div>
-    `;
+    );
   }
 
-  return html`
-    <form class="h-full max-w-md shadow-lg mx-auto p-4 space-y-6 flex flex-col gap-4 z-0" onSubmit=${onSubmit}>
+  return (
+    <form class="h-full max-w-md shadow-lg mx-auto p-4 space-y-6 flex flex-col gap-4 z-0" onSubmit={onSubmit}>
       <header class="text-center relative">
-        <${SettingsButton} 
-          onClick=${() => (showSettingsModal.value = true)} 
-          class="absolute top-0 left-4" 
-        />
+        <SettingsButton onClick={() => (showSettingsModal.value = true)} class="absolute top-0 left-4" />
         <h1 class="text-2xl font-bold text-primary">Care Clock</h1>
-        <${HistoryButton} className="absolute top-0 right-4" hasNotifications=${hasNotifications} onClick=${() =>
-    (showHistoryModal.value = true)}/>
+        <HistoryButton
+          className="absolute top-0 right-4"
+          hasNotifications={hasNotifications}
+          onClick={() => (showHistoryModal.value = true)}
+        />
       </header>
 
-      <${Card} className="flex-1">
-        <${CardContent} className="p-4 space-y-4 h-full flex flex-col">
+      <Card className="flex-1">
+        <CardContent className="p-4 space-y-4 h-full flex flex-col">
           <div class="flex flex-col gap-4">
-            <${LabelLike} onClick=${() => (showCamperModal.value = true)}>Campers
+            <LabelLike onClick={() => (showCamperModal.value = true)}>
+              Campers
               <div class="flex justify-between items-center font-medium">
-                <span class="text-sm font-medium text-foreground px-3">${
-                  activity.value.campers.map((camper) => camper.name).join(", ") || "No campers selected"
-                }</span>
-                <${Button} type="button" variant="outline" size="sm" aria-label="Select Campers">
+                <span class="text-sm font-medium text-foreground px-3">
+                  {activity.value.campers.map((camper) => camper.name).join(", ") || "No campers selected"}
+                </span>
+                <Button type="button" variant="outline" size="sm" aria-label="Select Campers">
                   Select
-                </${Button}>
+                </Button>
               </div>
-            </${LabelLike}>
+            </LabelLike>
 
-            <${LabelLike} onClick=${() => (showSessionTypeModal.value = true)}>Session Type
+            <LabelLike onClick={() => (showSessionTypeModal.value = true)}>
+              Session Type
               <div class="flex justify-between items-center font-medium">
                 <span class="text-sm font-medium text-foreground px-3">${activity.value.sessionType}</span>
-                <${Button} type="button" variant="outline" size="sm" aria-label="Select Session Type">
+                <Button type="button" variant="outline" size="sm" aria-label="Select Session Type">
                   Select
-                </${Button}>
+                </Button>
               </div>
-            </${LabelLike}>
+            </LabelLike>
           </div>
 
-          <${GroupOrWithWho}
-            sessionType=${activity.value.sessionType}
-            groupName=${activity.value.groupName}
-            onChangeGroupName=${(groupName: string) => (activity.value = { ...activity.value, groupName })}
-            withWho=${activity.value.withWho}
-            onChangeWithWho=${(withWho: string) => (activity.value = { ...activity.value, withWho })}
+          <GroupOrWithWho
+            sessionType={activity.value.sessionType}
+            groupName={activity.value.groupName}
+            onChangeGroupName={(groupName: string) => (activity.value = { ...activity.value, groupName })}
+            withWho={activity.value.withWho}
+            onChangeWithWho={(withWho: string) => (activity.value = { ...activity.value, withWho })}
           />
 
-          <${Label} className="flex flex-col">Activity Description
-            <${TextArea} 
-              value=${activity.value.description}
+          <Label className="flex flex-col">
+            Activity Description
+            <TextArea
+              value={activity.value.description}
               className="h-40"
-              onInput=${(e: InputEvent) => {
+              onInput={(e: InputEvent) => {
                 assert(e.target instanceof HTMLTextAreaElement, "this onInput was not called on a textarea");
                 return (activity.value = { ...activity.value, description: e.target.value });
               }}
-              placeholder="Describe the current activity" />
-          </${Label}>
+              placeholder="Describe the current activity"
+            />
+          </Label>
 
           <div class="text-center">
-            <div class=${cn("text-4xl font-mono font-bold mb-2", isRunning ? "" : "opacity-50")}>${formatElapsedTime(
-    activity.value.startTime,
-    activity.value.endTime,
-  )}</div>
+            <div class={cn("text-4xl font-mono font-bold mb-2", isRunning ? "" : "opacity-50")}>
+              {formatElapsedTime(activity.value.startTime, activity.value.endTime)}
+            </div>
             <div class="space-x-2">
-              <${Button} disabled=${
-    isRunning || !activity.value.campers.length || !activity.value.therapistName
-  } aria-label="Start Timer">
+              <Button
+                disabled={isRunning || !activity.value.campers.length || !activity.value.therapistName}
+                aria-label="Start Timer"
+              >
                 Start
-              </${Button}>
-              <${Button} disabled=${!isRunning} variant="secondary" aria-label="Stop Timer">
+              </Button>
+              <Button disabled={!isRunning} variant="secondary" aria-label="Stop Timer">
                 Stop
-              </${Button}>
+              </Button>
             </div>
             <div class="pt-4">
-              ${
-                !activity.value.therapistName &&
-                html`<div class="text-center text-secondary">
+              {!activity.value.therapistName && (
+                <div class="text-center text-secondary">
                   Cannot start timer without a therapist name. The therapist name is configured using the settings
                   button on the top left.
-                </div>`
-              }
-              ${
-                !activity.value.campers.length &&
-                html`<div class="text-center text-secondary">Cannot start timer without campers</div>`
-              }
+                </div>
+              )}
+              {!activity.value.campers.length && (
+                <div class="text-center text-secondary">Cannot start timer without campers</div>
+              )}
             </div>
           </div>
-        </${CardContent}>
-      </${Card}>
+        </CardContent>
+      </Card>
     </form>
-  `;
+  );
 };
 
-/**
- * @param {{onClick: () => void, class: string}} props
- */
-const SettingsButton = ({ onClick, ...props }) => {
-  return html`
-    <button
-      aria-label="Settings"
-      class=${cn("size-8 flex items-center justify-center hover:bg-tertiary-hover rounded-xl", props.class)}
-      type="button"
-      onClick=${onClick}
-    >
-      <${Settings} />
-    </button>
-  `;
-};
+const SettingsButton = ({ onClick, className, ...props }: JSX.ButtonHTMLAttributes<HTMLButtonElement>) => (
+  <button
+    aria-label="Settings"
+    class={cn("size-8 flex items-center justify-center hover:bg-tertiary-hover rounded-xl", className)}
+    type="button"
+    onClick={onClick}
+    {...props}
+  >
+    <Settings />
+  </button>
+);
