@@ -47,7 +47,7 @@ export const EditActivityModal = ({ database, activityId, onClose }) => {
 
   const header = html`<h1 class="text-2xl font-bold">Edit Activity</h1>`;
 
-  if (!activity.value) return html`<${Modal} title=${header} onClose=${onClose} class="gap-y-10" />`;
+  if (!activity.value) return html`<${Modal} title=${header} onClose=${onClose} className="gap-y-10" />`;
 
   assert(activity.value.startTime);
 
@@ -69,7 +69,7 @@ export const EditActivityModal = ({ database, activityId, onClose }) => {
     />`;
   }
 
-  return html`<${Modal} title=${header} onClose=${onClose} class="gap-y-10" >
+  return html`<${Modal} title=${header} onClose=${onClose} className="gap-y-10" >
     <form onSubmit=${onSubmit} class="flex flex-col gap-4">
       <${Label} >Therapist
         <${Input} 
@@ -118,10 +118,10 @@ export const EditActivityModal = ({ database, activityId, onClose }) => {
         }}
       />
 
-      <${Label} class="flex flex-col">Activity Description
+      <${Label} className="flex flex-col">Activity Description
         <${TextArea} 
           value=${activity.value.description}
-          class="h-25"
+          className="h-25"
           onInput=${(e: InputEvent) => {
             assert(e.target instanceof HTMLTextAreaElement);
             assert(activity.value);

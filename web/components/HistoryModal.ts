@@ -12,7 +12,7 @@ export const HistoryModal = ({ database, onClose }: { database: IDBDatabase; onC
     return html`<${EditActivityModal} database=${database} activityId=${editActivityId.value} onClose=${() => (editActivityId.value = null)} />`;
   }
 
-  return html`<${Modal} title=${html`<h1 class="text-2xl font-bold">History</h1>`} onClose=${onClose} class="gap-y-10">
+  return html`<${Modal} title=${html`<h1 class="text-2xl font-bold">History</h1>`} onClose=${onClose} className="gap-y-10">
     <${UnsyncedActivities} database=${database} onEditActivity=${(id: string) => (editActivityId.value = id)} />
     <${SyncedActivitiesList} database=${database} onEditActivity=${(id: string) => (editActivityId.value = id)} />
   </${Modal}>`;

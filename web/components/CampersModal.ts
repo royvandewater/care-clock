@@ -109,7 +109,7 @@ const Camper = ({
 
 const RemoveButton = ({ onClick }: { onClick: () => void }) => {
   return html`<${Button} type="button" onClick=${onClick} variant="danger" size="xs">
-    <${Trash} class="size-4" />
+    <${Trash} className="size-4" />
   </${Button}>`;
 };
 
@@ -130,7 +130,7 @@ const NewCamperForm = ({ onAdd }: { onAdd: (name: string) => void }) => {
   };
 
   return html`<form onSubmit=${onSubmit} class="flex items-end gap-4 pb-8">
-    <${Label} class="flex-1">
+    <${Label} className="flex-1">
       Camper Name
       <${Input} type="text" name="name" value=${name} onInput=${onInput} />
     </${Label}>

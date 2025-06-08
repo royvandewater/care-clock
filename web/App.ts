@@ -141,11 +141,11 @@ export const App = ({ database }: { database: IDBDatabase }) => {
           class="absolute top-0 left-4" 
         />
         <h1 class="text-2xl font-bold text-primary">Care Clock</h1>
-        <${HistoryButton} class="absolute top-0 right-4" hasNotifications=${hasNotifications} onClick=${() => (showHistoryModal.value = true)}/>
+        <${HistoryButton} className="absolute top-0 right-4" hasNotifications=${hasNotifications} onClick=${() => (showHistoryModal.value = true)}/>
       </header>
 
-      <${Card} class="flex-1">
-        <${CardContent} class="p-4 space-y-4 h-full flex flex-col">
+      <${Card} className="flex-1">
+        <${CardContent} className="p-4 space-y-4 h-full flex flex-col">
           <div class="flex flex-col gap-4">
             <${LabelLike} onClick=${() => (showCamperModal.value = true)}>Campers
               <div class="flex justify-between items-center font-medium">
@@ -174,7 +174,7 @@ export const App = ({ database }: { database: IDBDatabase }) => {
             onChangeWithWho=${(withWho: string) => (activity.value = { ...activity.value, withWho })}
           />
 
-          <${Label} class="flex flex-col">Activity Description
+          <${Label} className="flex flex-col">Activity Description
             <${TextArea} 
               value=${activity.value.description}
               class="h-40"
