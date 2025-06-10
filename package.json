@@ -29,7 +29,7 @@
     "@playwright/test": "^1.52.0",
     "@preact/preset-vite": "^2.10.1",
     "@preact/signals": "^2.2.0",
-    "@tailwindcss/browser": "^4.1.7",
+    "@tailwindcss/browser": "^4.1.8",
     "@tailwindcss/vite": "^4.1.8",
     "@types/node": "22.15.29",
     "@types/service-worker-mock": "^2.0.1",
