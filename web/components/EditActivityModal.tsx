@@ -146,23 +146,8 @@ export const EditActivityModal = ({
           />
         </Label>
 
-        <div class="flex gap-4">
-          <Label class="flex-1">
-            Start Date
-            <Input
-              id="startDate"
-              type="date"
-              value={activity.value.startTime.toISOString().slice(0, 10)}
-              onInput={(e: InputEvent) => {
-                assert(e.target instanceof HTMLInputElement);
-                assert(activity.value?.startTime);
-                const time = activity.value.startTime.toISOString().slice(11);
-                activity.value = { ...activity.value, startTime: combineDateAndTime(e.target.value, time) };
-              }}
-            />
-          </Label>
-
-          <Label class="flex-1">
+        <div className="flex gap-4">
+          <Label className="flex-1">
             Start Time
             <Input
               id="startTime"
@@ -177,25 +162,8 @@ export const EditActivityModal = ({
               }}
             />
           </Label>
-        </div>
 
-        <div class="flex gap-4">
-          <Label class="flex-1">
-            End Date
-            <Input
-              id="endDate"
-              type="date"
-              value={activity.value.endTime?.toISOString().slice(0, 10)}
-              onInput={(e: InputEvent) => {
-                assert(e.target instanceof HTMLInputElement);
-                assert(activity.value);
-                const time = activity.value.endTime?.toISOString().slice(11) ?? "00:00";
-                activity.value = { ...activity.value, endTime: combineDateAndTime(e.target.value, time) };
-              }}
-            />
-          </Label>
-
-          <Label class="flex-1">
+          <Label className="flex-1">
             End Time
             <Input
               id="endTime"
