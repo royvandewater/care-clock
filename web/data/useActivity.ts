@@ -28,19 +28,21 @@ export const useActivity = () => {
   return activity;
 };
 
+export const blankActivity: MultiCamperActivity = {
+  therapistName: "",
+  campers: [],
+  groupName: "",
+  withWho: "",
+  sessionType: sessionTypes[0],
+  syncState: "unsynced",
+  description: "",
+  startTime: null,
+  endTime: null,
+};
+
 const parseLocalStorageActivity = (activityJSON: string | null): MultiCamperActivity => {
   if (!activityJSON) {
-    return {
-      therapistName: "",
-      campers: [],
-      groupName: "",
-      withWho: "",
-      sessionType: sessionTypes[0],
-      syncState: "unsynced",
-      description: "",
-      startTime: null,
-      endTime: null,
-    };
+    return structuredClone(blankActivity);
   }
 
   const activity = JSON.parse(activityJSON);

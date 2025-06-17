@@ -15,7 +15,7 @@ import { SettingsModal } from "@/components/SettingsModal";
 import { startActivity } from "@/data/startActivity";
 import { upsertActivity } from "@/data/upsertActivity";
 import { hasUnsynchronizedActivities } from "@/data/hasUnsynchronizedActivities";
-import { useActivity } from "@/data/useActivity";
+import { blankActivity, useActivity } from "@/data/useActivity";
 import type { SessionType } from "@/data/sessionTypes";
 import { useTheme } from "@/data/useTheme";
 import { shouldClearGroup } from "@/data/shouldClearGroup";
@@ -52,9 +52,8 @@ export const App = ({ database }: { database: IDBDatabase }) => {
     await upsertActivity({ database }, activity.value);
 
     activity.value = {
-      ...activity.value,
-      campers: activity.value.campers.map((camper) => ({ ...camper, id: null })),
-      startTime: null,
+      ...blankActivity,
+      therapistName: activity.value.therapistName,
     };
   };
 
