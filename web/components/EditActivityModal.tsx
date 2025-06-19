@@ -16,6 +16,7 @@ import type { SessionType } from "@/data/sessionTypes";
 import { shouldClearGroup } from "@/data/shouldClearGroup";
 import { shouldClearWithWho } from "@/data/shouldClearWithWho";
 import { GroupOrWithWho } from "@/components/GroupOrWithWho";
+import { dateToLocalIsoString } from "@/data/dateToLocalIsoString";
 
 export const EditActivityModal = ({
   database,
@@ -77,6 +78,8 @@ export const EditActivityModal = ({
       />
     );
   }
+
+  const warning = getDatetimeWarning(activity.value.startTime, activity.value.endTime);
 
   return (
     <Modal title={header} onClose={onClose} className="gap-y-10">
@@ -152,11 +155,11 @@ export const EditActivityModal = ({
             <Input
               id="startDate"
               type="date"
-              value={dateFromISOString(activity.value.startTime.toISOString())}
+              value={dateStrFromDate(activity.value.startTime)}
               onInput={(e: InputEvent) => {
                 assert(e.target instanceof HTMLInputElement);
                 assert(activity.value?.startTime);
-                const time = timeFromISOString(activity.value.startTime.toISOString());
+                const time = timeStrFromDate(activity.value.startTime);
                 activity.value = { ...activity.value, startTime: combineDateAndTime(e.target.value, time) };
               }}
             />
@@ -167,12 +170,12 @@ export const EditActivityModal = ({
             <Input
               id="startTime"
               type="time"
-              value={timeFromISOString(activity.value.startTime.toISOString())}
+              value={timeStrFromDate(activity.value.startTime)}
               step="1"
               onInput={(e: InputEvent) => {
                 assert(e.target instanceof HTMLInputElement);
                 assert(activity.value?.startTime);
-                const date = dateFromISOString(activity.value.startTime.toISOString());
+                const date = dateStrFromDate(activity.value.startTime);
                 activity.value = { ...activity.value, startTime: combineDateAndTime(date, e.target.value) };
               }}
             />
@@ -185,11 +188,11 @@ export const EditActivityModal = ({
             <Input
               id="endDate"
               type="date"
-              value={dateFromISOString(activity.value.endTime?.toISOString())}
+              value={dateStrFromDate(activity.value.endTime)}
               onInput={(e: InputEvent) => {
                 assert(e.target instanceof HTMLInputElement);
                 assert(activity.value);
-                const time = timeFromISOString(activity.value.endTime?.toISOString());
+                const time = timeStrFromDate(activity.value.endTime);
                 activity.value = { ...activity.value, endTime: combineDateAndTime(e.target.value, time) };
               }}
             />
@@ -200,17 +203,19 @@ export const EditActivityModal = ({
             <Input
               id="endTime"
               type="time"
-              value={timeFromISOString(activity.value.endTime?.toISOString())}
+              value={timeStrFromDate(activity.value.endTime)}
               step="1"
               onInput={(e: InputEvent) => {
                 assert(e.target instanceof HTMLInputElement);
                 assert(activity.value);
-                const date = dateFromISOString(activity.value.endTime?.toISOString());
+                const date = dateStrFromDate(activity.value.endTime);
                 activity.value = { ...activity.value, endTime: combineDateAndTime(date, e.target.value) };
               }}
             />
           </Label>
         </div>
+
+        {warning && <div class="text-red-500">{warning}</div>}
 
         <Button type="submit" disabled={!activity.value.camperName || !activity.value.therapistName}>
           Save
@@ -224,12 +229,35 @@ const combineDateAndTime = (date: string, time: string) => {
   return new Date(`${date}T${time}`);
 };
 
-const dateFromISOString = (isoString: string | undefined) => {
-  isoString ??= new Date().toISOString();
+// activity.value.startTime.toTimeString().slice(0, 8)
+const dateStrFromDate = (date: Date | null) => {
+  date ??= new Date();
 
-  return isoString.slice(0, 10);
+  return dateToLocalIsoString(date).slice(0, 10);
 };
 
-const timeFromISOString = (isoString: string | undefined) => {
-  return isoString?.slice(11, 19) ?? "00:00:00";
+const timeStrFromDate = (date: Date | null) => {
+  date ??= new Date();
+
+  return dateToLocalIsoString(date).slice(11, 19);
+};
+
+const getDatetimeWarning = (start: Date, end: Date | null) => {
+  const now = new Date();
+
+  if (start > now) {
+    return "Start date/time is in the future";
+  }
+
+  if (!end) return;
+
+  if (end < start) {
+    return "End date/time is before start time";
+  }
+
+  if (end.getTime() - start.getTime() > 1000 * 60 * 60 * 10) {
+    return "Activity is longer than 10 hours";
+  }
+
+  return;
 };
