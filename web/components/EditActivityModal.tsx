@@ -160,7 +160,11 @@ export const EditActivityModal = ({
                 assert(e.target instanceof HTMLInputElement);
                 assert(activity.value?.startTime);
                 const time = timeStrFromDate(activity.value.startTime);
-                activity.value = { ...activity.value, startTime: combineDateAndTime(e.target.value, time) };
+                const startTime = combineDateAndTime(e.target.value, time);
+
+                if (!startTime) return;
+
+                activity.value = { ...activity.value, startTime };
               }}
             />
           </Label>
@@ -176,7 +180,11 @@ export const EditActivityModal = ({
                 assert(e.target instanceof HTMLInputElement);
                 assert(activity.value?.startTime);
                 const date = dateStrFromDate(activity.value.startTime);
-                activity.value = { ...activity.value, startTime: combineDateAndTime(date, e.target.value) };
+                const startTime = combineDateAndTime(date, e.target.value);
+
+                if (!startTime) return;
+
+                activity.value = { ...activity.value, startTime };
               }}
             />
           </Label>
@@ -193,7 +201,11 @@ export const EditActivityModal = ({
                 assert(e.target instanceof HTMLInputElement);
                 assert(activity.value);
                 const time = timeStrFromDate(activity.value.endTime);
-                activity.value = { ...activity.value, endTime: combineDateAndTime(e.target.value, time) };
+                const endTime = combineDateAndTime(e.target.value, time);
+
+                if (!endTime) return;
+
+                activity.value = { ...activity.value, endTime };
               }}
             />
           </Label>
@@ -209,7 +221,11 @@ export const EditActivityModal = ({
                 assert(e.target instanceof HTMLInputElement);
                 assert(activity.value);
                 const date = dateStrFromDate(activity.value.endTime);
-                activity.value = { ...activity.value, endTime: combineDateAndTime(date, e.target.value) };
+                const endTime = combineDateAndTime(date, e.target.value);
+
+                if (!endTime) return;
+
+                activity.value = { ...activity.value, endTime };
               }}
             />
           </Label>
@@ -226,7 +242,10 @@ export const EditActivityModal = ({
 };
 
 const combineDateAndTime = (date: string, time: string) => {
-  return new Date(`${date}T${time}`);
+  let d = new Date(`${date}T${time}`);
+
+  if (isNaN(d.getTime())) return;
+  return d;
 };
 
 // activity.value.startTime.toTimeString().slice(0, 8)
