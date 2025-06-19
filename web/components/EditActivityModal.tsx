@@ -252,7 +252,7 @@ const getDatetimeWarning = (start: Date, end: Date | null) => {
   if (!end) return;
 
   if (end < start) {
-    return "End date/time is before start time";
+    return "End date/time is before start date/time";
   }
 
   if (end.getTime() - start.getTime() > 1000 * 60 * 60 * 10) {
