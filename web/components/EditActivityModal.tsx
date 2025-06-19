@@ -152,11 +152,11 @@ export const EditActivityModal = ({
             <Input
               id="startDate"
               type="date"
-              value={activity.value.startTime.toISOString().slice(0, 10)}
+              value={dateFromISOString(activity.value.startTime.toISOString())}
               onInput={(e: InputEvent) => {
                 assert(e.target instanceof HTMLInputElement);
                 assert(activity.value?.startTime);
-                const time = activity.value.startTime.toISOString().slice(11);
+                const time = timeFromISOString(activity.value.startTime.toISOString());
                 activity.value = { ...activity.value, startTime: combineDateAndTime(e.target.value, time) };
               }}
             />
@@ -167,12 +167,12 @@ export const EditActivityModal = ({
             <Input
               id="startTime"
               type="time"
-              value={activity.value.startTime.toTimeString().slice(0, 8)}
+              value={timeFromISOString(activity.value.startTime.toISOString())}
               step="1"
               onInput={(e: InputEvent) => {
                 assert(e.target instanceof HTMLInputElement);
                 assert(activity.value?.startTime);
-                const date = activity.value.startTime.toISOString().slice(0, 10);
+                const date = dateFromISOString(activity.value.startTime.toISOString());
                 activity.value = { ...activity.value, startTime: combineDateAndTime(date, e.target.value) };
               }}
             />
@@ -185,11 +185,11 @@ export const EditActivityModal = ({
             <Input
               id="endDate"
               type="date"
-              value={activity.value.endTime?.toISOString().slice(0, 10)}
+              value={dateFromISOString(activity.value.endTime?.toISOString())}
               onInput={(e: InputEvent) => {
                 assert(e.target instanceof HTMLInputElement);
                 assert(activity.value);
-                const time = activity.value.endTime?.toISOString().slice(11) ?? "00:00";
+                const time = timeFromISOString(activity.value.endTime?.toISOString());
                 activity.value = { ...activity.value, endTime: combineDateAndTime(e.target.value, time) };
               }}
             />
@@ -200,12 +200,12 @@ export const EditActivityModal = ({
             <Input
               id="endTime"
               type="time"
-              value={activity.value.endTime?.toTimeString().slice(0, 8)}
+              value={timeFromISOString(activity.value.endTime?.toISOString())}
               step="1"
               onInput={(e: InputEvent) => {
                 assert(e.target instanceof HTMLInputElement);
                 assert(activity.value);
-                const date = (activity.value.endTime ?? new Date()).toISOString().slice(0, 10);
+                const date = dateFromISOString(activity.value.endTime?.toISOString());
                 activity.value = { ...activity.value, endTime: combineDateAndTime(date, e.target.value) };
               }}
             />
@@ -222,4 +222,14 @@ export const EditActivityModal = ({
 
 const combineDateAndTime = (date: string, time: string) => {
   return new Date(`${date}T${time}`);
+};
+
+const dateFromISOString = (isoString: string | undefined) => {
+  isoString ??= new Date().toISOString();
+
+  return isoString.slice(0, 10);
+};
+
+const timeFromISOString = (isoString: string | undefined) => {
+  return isoString?.slice(11, 19) ?? "00:00:00";
 };
