@@ -52,12 +52,12 @@ export class ActivityUpsert extends OpenAPIRoute {
     const row = rows.find((r) => r.get("Id") === id);
     if (!row) {
       await sheet.addRow({
-        Therapist: activity.therapistName,
-        Camper: activity.camperName,
+        Therapist: activity.therapistName.trim(),
+        Camper: activity.camperName.trim(),
         Type: activity.sessionType,
         Group: activity.groupName || null,
-        "With Who": activity.withWho || null,
-        Description: activity.description,
+        "With Who": activity.withWho?.trim() || null,
+        Description: activity.description.trim(),
         Start: toLocaleString(fromISOString(activity.startTime)),
         End: activity.endTime ? toLocaleString(fromISOString(activity.endTime)) : null,
         Duration: getDuration(activity.startTime, activity.endTime),
@@ -66,12 +66,12 @@ export class ActivityUpsert extends OpenAPIRoute {
       return new Response(null, { status: 204 });
     }
 
-    row.set("Therapist", activity.therapistName);
-    row.set("Camper", activity.camperName);
+    row.set("Therapist", activity.therapistName.trim());
+    row.set("Camper", activity.camperName.trim());
     row.set("Type", activity.sessionType);
     row.set("Group", activity.groupName || null);
-    row.set("With Who", activity.withWho || null);
-    row.set("Description", activity.description);
+    row.set("With Who", activity.withWho?.trim() || null);
+    row.set("Description", activity.description.trim());
     row.set("Start", toLocaleString(fromISOString(activity.startTime)));
     row.set("End", activity.endTime ? toLocaleString(fromISOString(activity.endTime)) : null);
     row.set("Duration", getDuration(activity.startTime, activity.endTime));
