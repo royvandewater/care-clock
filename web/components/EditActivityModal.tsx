@@ -1,5 +1,5 @@
 import { useSignal } from "@preact/signals";
-import { useEffect } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 
 import { getActivityFromIndexedDB } from "@/data/database";
 import { upsertActivity } from "@/data/upsertActivity";
@@ -29,6 +29,7 @@ export const EditActivityModal = ({
 }) => {
   const activity = useSignal<Activity | null>(null);
   const showSessionTypeModal = useSignal(false);
+  const [controlsDisabled, setControlsDisabled] = useState(false);
 
   useEffect(() => {
     const refreshActivity = async () => {
@@ -43,6 +44,7 @@ export const EditActivityModal = ({
     e.preventDefault();
     assert(activity.value);
 
+    setControlsDisabled(true);
     await upsertActivity(
       { database },
       {
@@ -50,6 +52,7 @@ export const EditActivityModal = ({
         campers: [{ name: activity.value.camperName, id: activity.value.id }],
       },
     );
+    setControlsDisabled(false);
     onClose();
   };
 
@@ -84,158 +87,160 @@ export const EditActivityModal = ({
   return (
     <Modal title={header} onClose={onClose} className="gap-y-10">
       <form onSubmit={onSubmit} class="flex flex-col gap-4">
-        <Label>
-          Therapist
-          <Input
-            id="therapistName"
-            value={activity.value.therapistName}
-            onInput={(e: InputEvent) => {
-              assert(e.target instanceof HTMLInputElement);
-              assert(activity.value);
-              activity.value = { ...activity.value, therapistName: e.target.value };
-            }}
-            autoFocus={!Boolean(activity.value.therapistName)}
-            placeholder="Jane"
-          />
-        </Label>
+        <fieldset disabled={controlsDisabled} className="flex flex-col gap-4">
+          <Label>
+            Therapist
+            <Input
+              id="therapistName"
+              value={activity.value.therapistName}
+              onInput={(e: InputEvent) => {
+                assert(e.target instanceof HTMLInputElement);
+                assert(activity.value);
+                activity.value = { ...activity.value, therapistName: e.target.value };
+              }}
+              autoFocus={!Boolean(activity.value.therapistName)}
+              placeholder="Jane"
+            />
+          </Label>
 
-        <Label>
-          Camper
-          <Input
-            value={activity.value.camperName}
-            onInput={(e: InputEvent) => {
-              assert(activity.value, "Activity was undefined in Camper onInput");
-              assert(e.target instanceof HTMLInputElement);
-              activity.value = { ...activity.value, camperName: e.target.value };
+          <Label>
+            Camper
+            <Input
+              value={activity.value.camperName}
+              onInput={(e: InputEvent) => {
+                assert(activity.value, "Activity was undefined in Camper onInput");
+                assert(e.target instanceof HTMLInputElement);
+                activity.value = { ...activity.value, camperName: e.target.value };
+              }}
+            />
+          </Label>
+
+          <LabelLike onClick={() => (showSessionTypeModal.value = true)}>
+            Session Type
+            <div class="flex justify-between items-center font-medium">
+              {activity.value.sessionType}
+              <Button type="button" variant="outline" size="sm">
+                Change
+              </Button>
+            </div>
+          </LabelLike>
+
+          <GroupOrWithWho
+            sessionType={activity.value.sessionType}
+            groupName={activity.value.groupName}
+            onChangeGroupName={(groupName: string) => {
+              assert(activity.value, "Activity was not defined in onChangeGroupName");
+              activity.value = { ...activity.value, groupName };
+            }}
+            withWho={activity.value.withWho}
+            onChangeWithWho={(withWho: string) => {
+              assert(activity.value, "Activity was not defined in onChangeWithWho");
+              activity.value = { ...activity.value, withWho };
             }}
           />
-        </Label>
 
-        <LabelLike onClick={() => (showSessionTypeModal.value = true)}>
-          Session Type
-          <div class="flex justify-between items-center font-medium">
-            {activity.value.sessionType}
-            <Button type="button" variant="outline" size="sm">
-              Change
-            </Button>
+          <Label className="flex flex-col">
+            Activity Description
+            <TextArea
+              value={activity.value.description}
+              className="h-40"
+              onInput={(e: InputEvent) => {
+                assert(e.target instanceof HTMLTextAreaElement);
+                assert(activity.value);
+                activity.value = { ...activity.value, description: e.target.value };
+              }}
+              placeholder="Describe the current activity"
+            />
+          </Label>
+
+          <div class="flex gap-4">
+            <Label class="flex-1">
+              Start Date
+              <Input
+                id="startDate"
+                type="date"
+                value={dateStrFromDate(activity.value.startTime)}
+                onInput={(e: InputEvent) => {
+                  assert(e.target instanceof HTMLInputElement);
+                  assert(activity.value?.startTime);
+                  const time = timeStrFromDate(activity.value.startTime);
+                  const startTime = combineDateAndTime(e.target.value, time);
+
+                  if (!startTime) return;
+
+                  activity.value = { ...activity.value, startTime };
+                }}
+              />
+            </Label>
+
+            <Label class="flex-1">
+              Start Time
+              <Input
+                id="startTime"
+                type="time"
+                value={timeStrFromDate(activity.value.startTime)}
+                step="1"
+                onInput={(e: InputEvent) => {
+                  assert(e.target instanceof HTMLInputElement);
+                  assert(activity.value?.startTime);
+                  const date = dateStrFromDate(activity.value.startTime);
+                  const startTime = combineDateAndTime(date, e.target.value);
+
+                  if (!startTime) return;
+
+                  activity.value = { ...activity.value, startTime };
+                }}
+              />
+            </Label>
           </div>
-        </LabelLike>
 
-        <GroupOrWithWho
-          sessionType={activity.value.sessionType}
-          groupName={activity.value.groupName}
-          onChangeGroupName={(groupName: string) => {
-            assert(activity.value, "Activity was not defined in onChangeGroupName");
-            activity.value = { ...activity.value, groupName };
-          }}
-          withWho={activity.value.withWho}
-          onChangeWithWho={(withWho: string) => {
-            assert(activity.value, "Activity was not defined in onChangeWithWho");
-            activity.value = { ...activity.value, withWho };
-          }}
-        />
+          <div class="flex gap-4">
+            <Label class="flex-1">
+              End Date
+              <Input
+                id="endDate"
+                type="date"
+                value={dateStrFromDate(activity.value.endTime)}
+                onInput={(e: InputEvent) => {
+                  assert(e.target instanceof HTMLInputElement);
+                  assert(activity.value);
+                  const time = timeStrFromDate(activity.value.endTime);
+                  const endTime = combineDateAndTime(e.target.value, time);
 
-        <Label className="flex flex-col">
-          Activity Description
-          <TextArea
-            value={activity.value.description}
-            className="h-40"
-            onInput={(e: InputEvent) => {
-              assert(e.target instanceof HTMLTextAreaElement);
-              assert(activity.value);
-              activity.value = { ...activity.value, description: e.target.value };
-            }}
-            placeholder="Describe the current activity"
-          />
-        </Label>
+                  if (!endTime) return;
 
-        <div class="flex gap-4">
-          <Label class="flex-1">
-            Start Date
-            <Input
-              id="startDate"
-              type="date"
-              value={dateStrFromDate(activity.value.startTime)}
-              onInput={(e: InputEvent) => {
-                assert(e.target instanceof HTMLInputElement);
-                assert(activity.value?.startTime);
-                const time = timeStrFromDate(activity.value.startTime);
-                const startTime = combineDateAndTime(e.target.value, time);
+                  activity.value = { ...activity.value, endTime };
+                }}
+              />
+            </Label>
 
-                if (!startTime) return;
+            <Label class="flex-1">
+              End Time
+              <Input
+                id="endTime"
+                type="time"
+                value={timeStrFromDate(activity.value.endTime)}
+                step="1"
+                onInput={(e: InputEvent) => {
+                  assert(e.target instanceof HTMLInputElement);
+                  assert(activity.value);
+                  const date = dateStrFromDate(activity.value.endTime);
+                  const endTime = combineDateAndTime(date, e.target.value);
 
-                activity.value = { ...activity.value, startTime };
-              }}
-            />
-          </Label>
+                  if (!endTime) return;
 
-          <Label class="flex-1">
-            Start Time
-            <Input
-              id="startTime"
-              type="time"
-              value={timeStrFromDate(activity.value.startTime)}
-              step="1"
-              onInput={(e: InputEvent) => {
-                assert(e.target instanceof HTMLInputElement);
-                assert(activity.value?.startTime);
-                const date = dateStrFromDate(activity.value.startTime);
-                const startTime = combineDateAndTime(date, e.target.value);
+                  activity.value = { ...activity.value, endTime };
+                }}
+              />
+            </Label>
+          </div>
 
-                if (!startTime) return;
+          {warning && <div class="text-red-500">{warning}</div>}
 
-                activity.value = { ...activity.value, startTime };
-              }}
-            />
-          </Label>
-        </div>
-
-        <div class="flex gap-4">
-          <Label class="flex-1">
-            End Date
-            <Input
-              id="endDate"
-              type="date"
-              value={dateStrFromDate(activity.value.endTime)}
-              onInput={(e: InputEvent) => {
-                assert(e.target instanceof HTMLInputElement);
-                assert(activity.value);
-                const time = timeStrFromDate(activity.value.endTime);
-                const endTime = combineDateAndTime(e.target.value, time);
-
-                if (!endTime) return;
-
-                activity.value = { ...activity.value, endTime };
-              }}
-            />
-          </Label>
-
-          <Label class="flex-1">
-            End Time
-            <Input
-              id="endTime"
-              type="time"
-              value={timeStrFromDate(activity.value.endTime)}
-              step="1"
-              onInput={(e: InputEvent) => {
-                assert(e.target instanceof HTMLInputElement);
-                assert(activity.value);
-                const date = dateStrFromDate(activity.value.endTime);
-                const endTime = combineDateAndTime(date, e.target.value);
-
-                if (!endTime) return;
-
-                activity.value = { ...activity.value, endTime };
-              }}
-            />
-          </Label>
-        </div>
-
-        {warning && <div class="text-red-500">{warning}</div>}
-
-        <Button type="submit" disabled={!activity.value.camperName || !activity.value.therapistName}>
-          Save
-        </Button>
+          <Button type="submit" disabled={!activity.value.camperName || !activity.value.therapistName}>
+            Save
+          </Button>
+        </fieldset>
       </form>
     </Modal>
   );
