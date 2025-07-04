@@ -5,7 +5,6 @@ import { Card, CardContent } from "@/components/Card";
 import { Button } from "@/components/Button";
 import { Label, LabelLike } from "@/components/Label";
 import { TextArea } from "@/components/TextArea";
-import { Settings } from "@/components/icons/Settings";
 import { HistoryButton } from "@/components/HistoryButton";
 import { HistoryModal } from "@/components/HistoryModal";
 import { CamperModal } from "@/components/CampersModal";
@@ -25,7 +24,7 @@ import { formatElapsedTime } from "@/formatElapsedTime";
 import { cn } from "@/cn";
 import { assert } from "@/assert";
 import { GroupOrWithWho } from "@/components/GroupOrWithWho";
-import type { JSX } from "preact";
+import { SettingsButton } from "../components/SettingsButton";
 
 export const Timer = ({ database }: { database: IDBDatabase }) => {
   const activity = useActivity();
@@ -231,15 +230,3 @@ export const Timer = ({ database }: { database: IDBDatabase }) => {
     </form>
   );
 };
-
-const SettingsButton = ({ onClick, className, ...props }: JSX.ButtonHTMLAttributes<HTMLButtonElement>) => (
-  <button
-    aria-label="Settings"
-    class={cn("size-8 flex items-center justify-center hover:bg-tertiary-hover rounded-xl", className)}
-    type="button"
-    onClick={onClick}
-    {...props}
-  >
-    <Settings />
-  </button>
-);
