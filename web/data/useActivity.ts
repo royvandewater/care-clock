@@ -14,7 +14,7 @@ export const useActivity = () => {
   useSignalEffect(() => window.localStorage.setItem("activity", formatActivityForLocalStorage(activity.value)));
 
   useEffect(() => {
-    const updateActivity = (event) => {
+    const updateActivity = (event: StorageEvent) => {
       if (event.key !== "activity") return;
       activity.value = parseLocalStorageActivity(event.newValue);
     };

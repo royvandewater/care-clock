@@ -16,7 +16,10 @@ import type { SessionType } from "@/data/sessionTypes";
 import { shouldClearGroup } from "@/data/shouldClearGroup";
 import { shouldClearWithWho } from "@/data/shouldClearWithWho";
 import { GroupOrWithWho } from "@/components/GroupOrWithWho";
-import { dateToLocalIsoString } from "@/data/dateToLocalIsoString";
+import { dateStrFromDate } from "@/data/dateStrFromDate";
+import { timeStrFromDate } from "@/data/timeStrFromDate";
+import { combineDateAndTime } from "@/data/combineDateAndTime";
+import { getDatetimeWarning } from "@/data/getDatetimeWarning";
 
 export const EditActivityModal = ({
   database,
@@ -195,7 +198,7 @@ export const EditActivityModal = ({
           </div>
 
           <div class="flex gap-4">
-            <Label class="flex-1">
+            <Label className="flex-1">
               End Date
               <Input
                 id="endDate"
@@ -214,7 +217,7 @@ export const EditActivityModal = ({
               />
             </Label>
 
-            <Label class="flex-1">
+            <Label className="flex-1">
               End Time
               <Input
                 id="endTime"
@@ -244,44 +247,4 @@ export const EditActivityModal = ({
       </form>
     </Modal>
   );
-};
-
-const combineDateAndTime = (date: string, time: string) => {
-  let d = new Date(`${date}T${time}`);
-
-  if (isNaN(d.getTime())) return;
-  return d;
-};
-
-// activity.value.startTime.toTimeString().slice(0, 8)
-const dateStrFromDate = (date: Date | null) => {
-  date ??= new Date();
-
-  return dateToLocalIsoString(date).slice(0, 10);
-};
-
-const timeStrFromDate = (date: Date | null) => {
-  date ??= new Date();
-
-  return dateToLocalIsoString(date).slice(11, 19);
-};
-
-const getDatetimeWarning = (start: Date, end: Date | null) => {
-  const now = new Date();
-
-  if (start > now) {
-    return "Start date/time is in the future";
-  }
-
-  if (!end) return;
-
-  if (end < start) {
-    return "End date/time is before start date/time";
-  }
-
-  if (end.getTime() - start.getTime() > 1000 * 60 * 60 * 10) {
-    return "Activity is longer than 10 hours";
-  }
-
-  return;
 };

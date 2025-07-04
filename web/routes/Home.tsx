@@ -1,18 +1,29 @@
 import { Button } from "@/components/Button";
 import { CamperModal } from "@/components/CampersModal";
 import { Card, CardContent } from "@/components/Card";
+import { GroupOrWithWho } from "@/components/GroupOrWithWho";
 import { HistoryButton } from "@/components/HistoryButton";
 import { HistoryModal } from "@/components/HistoryModal";
-import { LabelLike } from "@/components/Label";
+import { Label, LabelLike } from "@/components/Label";
 import { SessionTypeModal } from "@/components/SessionTypeModal";
 import { SettingsButton } from "@/components/SettingsButton";
 import { SettingsModal } from "@/components/SettingsModal";
+import { TextArea } from "@/components/TextArea";
 import type { SessionType } from "@/data/sessionTypes";
 import { shouldClearGroup } from "@/data/shouldClearGroup";
 import { shouldClearWithWho } from "@/data/shouldClearWithWho";
-import { useActivity } from "@/data/useActivity";
+import { blankActivity, useActivity } from "@/data/useActivity";
 import { useTheme } from "@/data/useTheme";
 import { useSignal } from "@preact/signals";
+import { assert } from "@/assert";
+import { Input } from "@/components/Input";
+import { dateStrFromDate } from "@/data/dateStrFromDate";
+import { timeStrFromDate } from "@/data/timeStrFromDate";
+import { combineDateAndTime } from "@/data/combineDateAndTime";
+import { getDatetimeWarning } from "@/data/getDatetimeWarning";
+import { useEffect } from "preact/hooks";
+import { roundDateToHour } from "@/data/roundDateToHour";
+import { upsertActivity } from "@/data/upsertActivity";
 
 export const Home = ({ database }: { database: IDBDatabase }) => {
   const activity = useActivity();
@@ -24,7 +35,33 @@ export const Home = ({ database }: { database: IDBDatabase }) => {
   const showCamperModal = useSignal(false);
   const showSessionTypeModal = useSignal(false);
 
-  const onSubmit = (e: SubmitEvent) => {};
+  useEffect(() => {
+    const now = roundDateToHour(new Date());
+
+    activity.value = {
+      ...activity.value,
+      startTime: activity.value.startTime ?? now,
+      endTime: activity.value.endTime ?? now,
+    };
+  }, []);
+
+  const onSubmit = async (e: SubmitEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    controlsDisabled.value = true;
+    await upsertActivity({ database }, activity.value);
+    const now = roundDateToHour(new Date());
+    activity.value = {
+      ...blankActivity,
+      therapistName: activity.value.therapistName,
+      startTime: now,
+      endTime: now,
+    };
+    controlsDisabled.value = false;
+  };
+
+  const warning = getDatetimeWarning(activity.value.startTime, activity.value.endTime);
 
   if (showSettingsModal.value) {
     return (
@@ -121,7 +158,7 @@ export const Home = ({ database }: { database: IDBDatabase }) => {
               </LabelLike>
             </div>
 
-            {/* <GroupOrWithWho
+            <GroupOrWithWho
               sessionType={activity.value.sessionType}
               groupName={activity.value.groupName}
               onChangeGroupName={(groupName: string) => (activity.value = { ...activity.value, groupName })}
@@ -142,33 +179,105 @@ export const Home = ({ database }: { database: IDBDatabase }) => {
               />
             </Label>
 
+            <div class="flex gap-4">
+              <Label className="flex-1">
+                Start Date
+                <Input
+                  id="startDate"
+                  type="date"
+                  value={dateStrFromDate(activity.value.startTime)}
+                  onInput={(e: InputEvent) => {
+                    assert(e.target instanceof HTMLInputElement);
+                    assert(activity.value?.startTime);
+                    const time = timeStrFromDate(activity.value.startTime);
+                    const startTime = combineDateAndTime(e.target.value, time);
+
+                    if (!startTime) return;
+
+                    activity.value = { ...activity.value, startTime };
+                  }}
+                />
+              </Label>
+
+              <Label className="flex-1">
+                Start Time
+                <Input
+                  id="startTime"
+                  type="time"
+                  value={timeStrFromDate(activity.value.startTime)}
+                  step="1"
+                  onInput={(e: InputEvent) => {
+                    assert(e.target instanceof HTMLInputElement);
+                    assert(activity.value?.startTime);
+                    const date = dateStrFromDate(activity.value.startTime);
+                    const startTime = combineDateAndTime(date, e.target.value);
+
+                    if (!startTime) return;
+
+                    activity.value = { ...activity.value, startTime };
+                  }}
+                />
+              </Label>
+            </div>
+
+            <div class="flex gap-4">
+              <Label className="flex-1">
+                End Date
+                <Input
+                  id="endDate"
+                  type="date"
+                  value={dateStrFromDate(activity.value.endTime)}
+                  onInput={(e: InputEvent) => {
+                    assert(e.target instanceof HTMLInputElement);
+                    assert(activity.value);
+                    const time = timeStrFromDate(activity.value.endTime);
+                    const endTime = combineDateAndTime(e.target.value, time);
+
+                    if (!endTime) return;
+
+                    activity.value = { ...activity.value, endTime };
+                  }}
+                />
+              </Label>
+
+              <Label className="flex-1">
+                End Time
+                <Input
+                  id="endTime"
+                  type="time"
+                  value={timeStrFromDate(activity.value.endTime)}
+                  step="1"
+                  onInput={(e: InputEvent) => {
+                    assert(e.target instanceof HTMLInputElement);
+                    assert(activity.value);
+                    const date = dateStrFromDate(activity.value.endTime);
+                    const endTime = combineDateAndTime(date, e.target.value);
+
+                    if (!endTime) return;
+
+                    activity.value = { ...activity.value, endTime };
+                  }}
+                />
+              </Label>
+            </div>
+
             <div class="text-center">
-              <div class={cn("text-4xl font-mono font-bold mb-2", isRunning ? "" : "opacity-50")}>
-                {formatElapsedTime(activity.value.startTime, activity.value.endTime)}
-              </div>
-              <div class="space-x-2">
-                <Button
-                  disabled={isRunning || !activity.value.campers.length || !activity.value.therapistName}
-                  aria-label="Start Timer"
-                >
-                  Start
-                </Button>
-                <Button disabled={!isRunning} variant="secondary" aria-label="Stop Timer">
-                  Stop
-                </Button>
-              </div>
-              <div class="pt-4">
-                {!activity.value.therapistName && (
-                  <div class="text-center text-secondary">
-                    Cannot start timer without a therapist name. The therapist name is configured using the settings
-                    button on the top left.
-                  </div>
-                )}
-                {!activity.value.campers.length && (
-                  <div class="text-center text-secondary">Cannot start timer without campers</div>
-                )}
-              </div>
-            </div> */}
+              {!activity.value.therapistName && (
+                <div class="text-center text-secondary">
+                  Cannot save activity without a therapist name. The therapist name is configured using the settings
+                  button on the top left.
+                </div>
+              )}
+              {!activity.value.campers.length && (
+                <div class="text-center text-secondary">Cannot save activity without campers</div>
+              )}
+
+              {warning && <div class="text-warning">{warning}</div>}
+            </div>
+
+            <Button type="submit" disabled={!activity.value.campers.length || !activity.value.therapistName}>
+              Save
+            </Button>
           </CardContent>
         </Card>
       </fieldset>

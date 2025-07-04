@@ -1,5 +1,5 @@
 import { useSignal } from "@preact/signals";
-import { useEffect, useState } from "preact/hooks";
+import { useEffect } from "preact/hooks";
 
 import { Card, CardContent } from "@/components/Card";
 import { Button } from "@/components/Button";
@@ -31,7 +31,7 @@ export const Timer = ({ database }: { database: IDBDatabase }) => {
   const theme = useTheme();
   const isRunning = Boolean(activity.value.startTime);
 
-  const [controlsDisabled, setControlsDisabled] = useState(false);
+  const controlsDisabled = useSignal(false);
 
   const showSettingsModal = useSignal(false);
   const showCamperModal = useSignal(false);
@@ -46,20 +46,20 @@ export const Timer = ({ database }: { database: IDBDatabase }) => {
   }, []);
 
   const startTimer = async () => {
-    setControlsDisabled(true);
+    controlsDisabled.value = true;
     activity.value = await startActivity({ database }, activity.value);
-    setControlsDisabled(false);
+    controlsDisabled.value = false;
   };
 
   const stopTimer = async () => {
-    setControlsDisabled(true);
+    controlsDisabled.value = true;
     await upsertActivity({ database }, activity.value);
 
     activity.value = {
       ...blankActivity,
       therapistName: activity.value.therapistName,
     };
-    setControlsDisabled(false);
+    controlsDisabled.value = false;
   };
 
   useEffect(() => {
