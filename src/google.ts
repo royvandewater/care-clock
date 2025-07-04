@@ -1,5 +1,5 @@
 import { decodeBase64, encodeBase64, encodeBase64Url } from "./base64";
-import { Headers as GoogleHeaders } from "google-auth-library/build/src/auth/oauth2client";
+import type { Headers as GoogleHeaders } from "google-auth-library/build/src/auth/oauth2client";
 
 /**
  * Class for handling Google OAuth2.0 authentication

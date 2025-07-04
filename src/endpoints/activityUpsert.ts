@@ -3,6 +3,7 @@ import { Activity } from "../types";
 import { z } from "zod";
 import { getSheetFromEnv } from "../sheets";
 import { fromISOString, toDurationString, toLocaleString } from "../date";
+import type { Context } from "hono";
 
 export class ActivityUpsert extends OpenAPIRoute {
   schema = {
@@ -38,7 +39,7 @@ export class ActivityUpsert extends OpenAPIRoute {
     },
   };
 
-  async handle(c) {
+  async handle(c: Context) {
     // Get validated data
     const data = await this.getValidatedData<typeof this.schema>();
 
@@ -51,18 +52,29 @@ export class ActivityUpsert extends OpenAPIRoute {
     const rows = await sheet.getRows();
     const row = rows.find((r) => r.get("Id") === id);
     if (!row) {
-      await sheet.addRow({
+      const row: Record<string, string | number> = {
         Therapist: activity.therapistName.trim(),
         Camper: activity.camperName.trim(),
         Type: activity.sessionType,
-        Group: activity.groupName || null,
-        "With Who": activity.withWho?.trim() || null,
         Description: activity.description.trim(),
         Start: toLocaleString(fromISOString(activity.startTime)),
-        End: activity.endTime ? toLocaleString(fromISOString(activity.endTime)) : null,
-        Duration: getDuration(activity.startTime, activity.endTime),
         Id: id,
-      });
+      };
+
+      if (activity.endTime) {
+        row.End = toLocaleString(fromISOString(activity.endTime));
+        row.Duration = getDuration(activity.startTime, activity.endTime);
+      }
+
+      if (activity.groupName) {
+        row.Group = activity.groupName;
+      }
+
+      if (activity.withWho) {
+        row["With Who"] = activity.withWho.trim();
+      }
+
+      await sheet.addRow(row);
       return new Response(null, { status: 204 });
     }
 
@@ -74,16 +86,14 @@ export class ActivityUpsert extends OpenAPIRoute {
     row.set("Description", activity.description.trim());
     row.set("Start", toLocaleString(fromISOString(activity.startTime)));
     row.set("End", activity.endTime ? toLocaleString(fromISOString(activity.endTime)) : null);
-    row.set("Duration", getDuration(activity.startTime, activity.endTime));
+    row.set("Duration", activity.endTime ? getDuration(activity.startTime, activity.endTime) : null);
     await row.save();
 
     return new Response(null, { status: 204 });
   }
 }
 
-const getDuration = (startTime: string, endTime?: string) => {
-  if (!endTime) return null;
-
+const getDuration = (startTime: string, endTime: string) => {
   const startTimeDate = fromISOString(startTime);
   const endTimeDate = fromISOString(endTime);
   const duration = endTimeDate.getTime() - startTimeDate.getTime();
