@@ -7,7 +7,7 @@
     "module": "ES2022",
     "skipLibCheck": true,
     "paths": {
-      "@/*": ["./web/*"]
+      "@/*": ["./*"]
     },
 
     /* Bundler mode */
@@ -26,5 +26,5 @@
     "noUncheckedSideEffectImports": true,
     "noImplicitAny": false // temporary until all files are converted to TS
   },
-  "include": ["web"]
+  "include": ["**/*.ts", "**/*.tsx"]
 }
