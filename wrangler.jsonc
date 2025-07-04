@@ -7,9 +7,14 @@
   "name": "care-clock",
   "main": "src/index.ts",
   "compatibility_date": "2025-02-14",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": ["nodejs_compat", "assets_navigation_prefers_asset_serving"],
   "observability": {
     "enabled": true
+  },
+
+  "assets": {
+    "directory": "./web/",
+    "binding": "ASSETS"
   }
   /**
    * Smart Placement
