@@ -194,7 +194,9 @@ export const Home = ({ database }: { database: IDBDatabase }) => {
 
                     if (!startTime) return;
 
-                    activity.value = { ...activity.value, startTime };
+                    const oneHour = 1000 * 60 * 60;
+                    const endTime = new Date(startTime.getTime() + oneHour);
+                    activity.value = { ...activity.value, startTime, endTime };
                   }}
                 />
               </Label>
@@ -214,7 +216,9 @@ export const Home = ({ database }: { database: IDBDatabase }) => {
 
                     if (!startTime) return;
 
-                    activity.value = { ...activity.value, startTime };
+                    const oneHour = 1000 * 60 * 60;
+                    const endTime = new Date(startTime.getTime() + oneHour);
+                    activity.value = { ...activity.value, startTime, endTime };
                   }}
                 />
               </Label>
