@@ -34,7 +34,7 @@
     "@tailwindcss/vite": "^4.1.8",
     "@types/node": "22.15.29",
     "@types/service-worker-mock": "^2.0.1",
-    "@vitejs/plugin-react-swc": "^3.10.1",
+    "@vitejs/plugin-react-swc": "^4.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "concurrently": "^9.1.2",
