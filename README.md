@@ -5,9 +5,10 @@ A simple tool to track the time spent on activities with campers.
 ## Development
 
 ```bash
-npm install
-npm run dev # runs the dev API server at http://localhost:8787
-npm run live-server # runs a local web server at http://localhost:8080
+corepack enable # one-time, so pnpm is picked up from the packageManager field
+pnpm install
+pnpm dev # runs the dev API server at http://localhost:8787
+pnpm live-server # runs a local web server at http://localhost:8080
 ```
 
 > [!TIP]
@@ -19,7 +20,7 @@ npm run live-server # runs a local web server at http://localhost:8080
 This project is setup to automatically deploy on pushes to the `main` branch. To deploy manually, run:
 
 ```bash
-npm run deploy
+pnpm run deploy
 ```
 
 ## Icons
