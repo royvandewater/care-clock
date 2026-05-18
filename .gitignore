@@ -172,6 +172,8 @@ dist
 
 .wrangler
 
+worker-configuration.d.ts
+
 tmp
 
 # MacOS
