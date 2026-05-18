@@ -7,8 +7,7 @@ A simple tool to track the time spent on activities with campers.
 ```bash
 corepack enable # one-time, so pnpm is picked up from the packageManager field
 pnpm install
-pnpm dev # runs the dev API server at http://localhost:8787
-pnpm live-server # runs a local web server at http://localhost:8080
+pnpm start # runs the Vite dev server at http://localhost:8787
 ```
 
 > [!TIP]
