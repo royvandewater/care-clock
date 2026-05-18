@@ -16,6 +16,8 @@ import type { SessionType } from "@/data/sessionTypes";
 import { shouldClearGroup } from "@/data/shouldClearGroup";
 import { shouldClearWithWho } from "@/data/shouldClearWithWho";
 import { GroupOrWithWho } from "@/components/GroupOrWithWho";
+import { therapists } from "@/data/therapists";
+import { cn } from "@/cn";
 import { dateStrFromDate } from "@/data/dateStrFromDate";
 import { timeStrFromDate } from "@/data/timeStrFromDate";
 import { combineDateAndTime } from "@/data/combineDateAndTime";
@@ -93,17 +95,26 @@ export const EditActivityModal = ({
         <fieldset disabled={controlsDisabled} className="flex flex-col gap-4">
           <Label>
             Therapist
-            <Input
+            <select
               id="therapistName"
               value={activity.value.therapistName}
-              onInput={(e: InputEvent) => {
-                assert(e.target instanceof HTMLInputElement);
+              onChange={(e: Event) => {
+                assert(e.target instanceof HTMLSelectElement);
                 assert(activity.value);
                 activity.value = { ...activity.value, therapistName: e.target.value };
               }}
               autoFocus={!Boolean(activity.value.therapistName)}
-              placeholder="Jane"
-            />
+              className={cn(
+                "flex h-10 w-full rounded-md border border-input-border bg-input-background px-3 py-2 text-sm ring-offset-background text-foreground font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus:ring-input-border-focus disabled:cursor-not-allowed disabled:opacity-50 disabled:border-gray-200",
+              )}
+            >
+              <option value="" disabled>
+                Select a therapist
+              </option>
+              {therapists.map((therapist) => (
+                <option value={therapist}>{therapist}</option>
+              ))}
+            </select>
           </Label>
 
           <Label>

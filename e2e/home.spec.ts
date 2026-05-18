@@ -10,7 +10,7 @@ test("Filling out the form for a group session", async ({ page }) => {
   await page.goto("/");
 
   await page.getByLabel("Settings").click();
-  await page.getByLabel("Therapist").fill("Integration Test");
+  await page.getByLabel("Therapist").selectOption("Tori");
   await page.getByLabel("Back").click();
 
   // select a camper
@@ -34,7 +34,7 @@ test("Filling out the form for a co-treat session", async ({ page }) => {
   await page.goto("/");
 
   await page.getByLabel("Settings").click();
-  await page.getByLabel("Therapist").fill("Integration Test");
+  await page.getByLabel("Therapist").selectOption("Tori");
   await page.getByLabel("Back").click();
 
   // select a camper
@@ -50,7 +50,7 @@ test("Filling out the form for a co-treat session", async ({ page }) => {
   await page.getByText("Session Type").click();
   await page.getByLabel("Select Co-Treat").click();
 
-  await page.getByLabel("With Who").fill("Bob");
+  await page.getByLabel("With Who").selectOption("Valerie");
   await page.getByLabel("Description").fill("Running automated tests");
 });
 
@@ -58,7 +58,7 @@ test("Filling out the form for an individual session", async ({ page }) => {
   await page.goto("/");
 
   await page.getByLabel("Settings").click();
-  await page.getByLabel("Therapist").fill("Integration Test");
+  await page.getByLabel("Therapist").selectOption("Tori");
   await page.getByLabel("Back").click();
 
   // select a camper

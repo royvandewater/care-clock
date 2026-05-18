@@ -2,8 +2,9 @@ import { Signal } from "@preact/signals";
 import { Modal } from "@/components/Modal";
 import { Label } from "@/components/Label";
 import { Button } from "@/components/Button";
-import { Input } from "@/components/Input";
 import { assert } from "@/assert";
+import { therapists } from "@/data/therapists";
+import { cn } from "@/cn";
 
 export const SettingsModal = ({
   onClose,
@@ -20,8 +21,8 @@ export const SettingsModal = ({
     onClose();
   };
 
-  const onTherapistNameInput = (e: InputEvent) => {
-    assert(e.target instanceof HTMLInputElement, "Input event target must be an HTMLInputElement");
+  const onTherapistNameChange = (e: Event) => {
+    assert(e.target instanceof HTMLSelectElement, "Change event target must be an HTMLSelectElement");
     activity.value = { ...activity.value, therapistName: e.target.value };
   };
 
@@ -30,13 +31,22 @@ export const SettingsModal = ({
       <form class="px-4 flex flex-col gap-4" onSubmit={onSubmit}>
         <Label>
           Therapist
-          <Input
+          <select
             id="therapistName"
             value={activity.value.therapistName}
-            onInput={onTherapistNameInput}
+            onChange={onTherapistNameChange}
             autoFocus={!Boolean(activity.value.therapistName)}
-            placeholder="Jane"
-          />
+            className={cn(
+              "flex h-10 w-full rounded-md border border-input-border bg-input-background px-3 py-2 text-sm ring-offset-background text-foreground font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus:ring-input-border-focus disabled:cursor-not-allowed disabled:opacity-50 disabled:border-gray-200",
+            )}
+          >
+            <option value="" disabled>
+              Select a therapist
+            </option>
+            {therapists.map((therapist) => (
+              <option value={therapist}>{therapist}</option>
+            ))}
+          </select>
         </Label>
 
         <Label>
