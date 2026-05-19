@@ -46,7 +46,7 @@ export class ActivityDelete extends OpenAPIRoute {
     }
 
     for (const header of sheet.headerValues) {
-      row.set(header, null);
+      row.set(header, "");
     }
     await row.save();
 
