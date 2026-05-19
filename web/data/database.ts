@@ -39,6 +39,18 @@ export const upsertActivityInIndexedDB = async (database: IDBDatabase, activity:
   });
 };
 
+export const deleteActivityFromIndexedDB = async (database: IDBDatabase, id: string) => {
+  return new Promise<void>((resolve, reject) => {
+    const activitiesStore = database.transaction("activities", "readwrite").objectStore("activities");
+    const request = activitiesStore.delete(id);
+    request.onsuccess = () => {
+      database.dispatchEvent(new Event("activities:changed"));
+      return resolve();
+    };
+    request.onerror = () => reject(request.error);
+  });
+};
+
 export const getActivityFromIndexedDB = async (database: IDBDatabase, id: string) => {
   return new Promise<Activity>((resolve, reject) => {
     const activitiesStore = database.transaction("activities", "readonly").objectStore("activities");

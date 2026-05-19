@@ -3,6 +3,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 
 import { ActivityUpsert } from "./endpoints/activityUpsert";
+import { ActivityDelete } from "./endpoints/activityDelete";
 
 // Start a Hono app
 const app = new Hono();
@@ -16,6 +17,7 @@ openapi.use(cors());
 
 // Register OpenAPI endpoints
 openapi.put("/activities/:id", ActivityUpsert);
+openapi.delete("/activities/:id", ActivityDelete);
 
 // Export the Hono app
 export default app;
