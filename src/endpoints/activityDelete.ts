@@ -45,10 +45,7 @@ export class ActivityDelete extends OpenAPIRoute {
       return c.json({ success: false, message: `Activity with id ${id} not found` }, 404);
     }
 
-    for (const header of sheet.headerValues) {
-      row.set(header, "");
-    }
-    await row.save();
+    await row.delete();
 
     return new Response(null, { status: 204 });
   }
