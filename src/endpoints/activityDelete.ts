@@ -17,17 +17,6 @@ export class ActivityDelete extends OpenAPIRoute {
       "204": {
         description: "Returns no content",
       },
-      "404": {
-        description: "Returns a 404 status code if the id is not found",
-        content: {
-          "application/json": {
-            schema: z.object({
-              success: z.boolean(),
-              message: z.string(),
-            }),
-          },
-        },
-      },
     },
   };
 
@@ -41,11 +30,9 @@ export class ActivityDelete extends OpenAPIRoute {
 
     const rows = await sheet.getRows();
     const row = rows.find((r) => r.get("Id") === id);
-    if (!row) {
-      return c.json({ success: false, message: `Activity with id ${id} not found` }, 404);
+    if (row) {
+      await sheet.clearRows({ start: row.rowNumber, end: row.rowNumber });
     }
-
-    await sheet.clearRows({ start: row.rowNumber, end: row.rowNumber });
 
     return new Response(null, { status: 204 });
   }
