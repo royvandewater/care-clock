@@ -17,8 +17,8 @@ export const getDatetimeWarning = (start: Date | null, end: Date | null) => {
     return "Activity duration is less than 1 minute";
   }
 
-  if (end.getTime() - start.getTime() > 1000 * 60 * 60 * 10) {
-    return "Activity is longer than 10 hours";
+  if (end.getTime() - start.getTime() > 1000 * 60 * 60 * 2) {
+    return "Activity is longer than 2 hours";
   }
 
   return;
