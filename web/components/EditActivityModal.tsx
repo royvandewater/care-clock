@@ -3,6 +3,7 @@ import { useEffect, useState } from "preact/hooks";
 
 import { getActivityFromIndexedDB } from "@/data/database";
 import { upsertActivity } from "@/data/upsertActivity";
+import { deleteActivity } from "@/data/deleteActivity";
 
 import { Modal } from "@/components/Modal";
 import { Label, LabelLike } from "@/components/Label";
@@ -253,6 +254,26 @@ export const EditActivityModal = ({
 
           <Button type="submit" disabled={!activity.value.camperName || !activity.value.therapistName}>
             Save
+          </Button>
+
+          <Button
+            type="button"
+            variant="danger"
+            onClick={async () => {
+              if (!self.confirm("Delete this activity? This cannot be undone.")) return;
+              setControlsDisabled(true);
+              try {
+                await deleteActivity({ database }, activityId);
+              } catch (error) {
+                setControlsDisabled(false);
+                console.warn("Failed to delete activity", String(error));
+                self.alert("Failed to delete activity. Please try again.");
+                return;
+              }
+              onClose();
+            }}
+          >
+            Delete
           </Button>
         </fieldset>
       </form>
