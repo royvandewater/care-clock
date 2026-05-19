@@ -45,7 +45,7 @@ export class ActivityDelete extends OpenAPIRoute {
       return c.json({ success: false, message: `Activity with id ${id} not found` }, 404);
     }
 
-    await row.delete();
+    await sheet.clearRows({ start: row.rowNumber, end: row.rowNumber });
 
     return new Response(null, { status: 204 });
   }
