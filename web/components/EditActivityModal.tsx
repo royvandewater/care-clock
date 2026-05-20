@@ -23,6 +23,7 @@ import { dateStrFromDate } from "@/data/dateStrFromDate";
 import { timeStrFromDate } from "@/data/timeStrFromDate";
 import { combineDateAndTime } from "@/data/combineDateAndTime";
 import { getDatetimeWarning } from "@/data/getDatetimeWarning";
+import { ConfirmModal } from "@/components/ConfirmModal";
 
 export const EditActivityModal = ({
   database,
@@ -35,6 +36,8 @@ export const EditActivityModal = ({
 }) => {
   const activity = useSignal<Activity | null>(null);
   const showSessionTypeModal = useSignal(false);
+  const showConfirmWarningModal = useSignal(false);
+  const showConfirmDeleteModal = useSignal(false);
   const [controlsDisabled, setControlsDisabled] = useState(false);
 
   useEffect(() => {
@@ -46,8 +49,7 @@ export const EditActivityModal = ({
     return () => database.removeEventListener("activities:changed", refreshActivity);
   }, [activityId]);
 
-  const onSubmit = async (e: SubmitEvent) => {
-    e.preventDefault();
+  const saveActivity = async () => {
     assert(activity.value);
 
     setControlsDisabled(true);
@@ -62,11 +64,65 @@ export const EditActivityModal = ({
     onClose();
   };
 
+  const onSubmit = async (e: SubmitEvent) => {
+    e.preventDefault();
+    assert(activity.value);
+
+    const submitWarning = getDatetimeWarning(activity.value.startTime, activity.value.endTime);
+    if (submitWarning) {
+      showConfirmWarningModal.value = true;
+      return;
+    }
+
+    await saveActivity();
+  };
+
   const header = <h1 class="text-2xl font-bold">Edit Activity</h1>;
 
   if (!activity.value) return <Modal title={header} onClose={onClose} className="gap-y-10" />;
 
   assert(activity.value.startTime);
+
+  const warning = getDatetimeWarning(activity.value.startTime, activity.value.endTime);
+
+  if (showConfirmDeleteModal.value) {
+    return (
+      <ConfirmModal
+        message="Delete this activity? This cannot be undone."
+        confirmLabel="Delete"
+        confirmVariant="danger"
+        disabled={controlsDisabled}
+        onClose={() => (showConfirmDeleteModal.value = false)}
+        onConfirm={async () => {
+          setControlsDisabled(true);
+          try {
+            await deleteActivity({ database }, activityId);
+          } catch (error) {
+            setControlsDisabled(false);
+            console.warn("Failed to delete activity", String(error));
+            self.alert("Failed to delete activity. Please try again.");
+            return;
+          }
+          showConfirmDeleteModal.value = false;
+          onClose();
+        }}
+      />
+    );
+  }
+
+  if (showConfirmWarningModal.value && warning) {
+    return (
+      <ConfirmModal
+        message={`${warning}. Save anyway?`}
+        confirmLabel="Save anyway"
+        onClose={() => (showConfirmWarningModal.value = false)}
+        onConfirm={async () => {
+          showConfirmWarningModal.value = false;
+          await saveActivity();
+        }}
+      />
+    );
+  }
 
   if (showSessionTypeModal.value) {
     return (
@@ -87,8 +143,6 @@ export const EditActivityModal = ({
       />
     );
   }
-
-  const warning = getDatetimeWarning(activity.value.startTime, activity.value.endTime);
 
   return (
     <Modal title={header} onClose={onClose} className="gap-y-10">
@@ -256,23 +310,7 @@ export const EditActivityModal = ({
             Save
           </Button>
 
-          <Button
-            type="button"
-            variant="danger"
-            onClick={async () => {
-              if (!self.confirm("Delete this activity? This cannot be undone.")) return;
-              setControlsDisabled(true);
-              try {
-                await deleteActivity({ database }, activityId);
-              } catch (error) {
-                setControlsDisabled(false);
-                console.warn("Failed to delete activity", String(error));
-                self.alert("Failed to delete activity. Please try again.");
-                return;
-              }
-              onClose();
-            }}
-          >
+          <Button type="button" variant="danger" onClick={() => (showConfirmDeleteModal.value = true)}>
             Delete
           </Button>
         </fieldset>
