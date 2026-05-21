@@ -11,6 +11,7 @@ import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
 import { SessionTypeModal } from "@/components/SessionTypeModal";
 import { TextArea } from "@/components/TextArea";
+import { CharCounter } from "@/components/CharCounter";
 import type { Activity } from "@/data/serialization";
 import { assert } from "@/assert";
 import type { SessionType } from "@/data/sessionTypes";
@@ -220,6 +221,7 @@ export const EditActivityModal = ({
               }}
               placeholder="Describe the current activity"
             />
+            <CharCounter value={activity.value.description} max={140} />
           </Label>
 
           <div class="flex gap-4">

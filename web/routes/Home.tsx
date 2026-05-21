@@ -9,6 +9,7 @@ import { SessionTypeModal } from "@/components/SessionTypeModal";
 import { SettingsButton } from "@/components/SettingsButton";
 import { SettingsModal } from "@/components/SettingsModal";
 import { TextArea } from "@/components/TextArea";
+import { CharCounter } from "@/components/CharCounter";
 import type { SessionType } from "@/data/sessionTypes";
 import { shouldClearGroup } from "@/data/shouldClearGroup";
 import { shouldClearWithWho } from "@/data/shouldClearWithWho";
@@ -204,6 +205,7 @@ export const Home = ({ database }: { database: IDBDatabase }) => {
                 }}
                 placeholder="Describe the current activity"
               />
+              <CharCounter value={activity.value.description} max={140} />
             </Label>
 
             <div class="flex gap-4">
