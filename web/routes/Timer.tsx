@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/Card";
 import { Button } from "@/components/Button";
 import { Label, LabelLike } from "@/components/Label";
 import { TextArea } from "@/components/TextArea";
+import { CharCounter } from "@/components/CharCounter";
 import { HistoryButton } from "@/components/HistoryButton";
 import { HistoryModal } from "@/components/HistoryModal";
 import { CamperModal } from "@/components/CampersModal";
@@ -195,6 +196,7 @@ export const Timer = ({ database }: { database: IDBDatabase }) => {
                 }}
                 placeholder="Describe the current activity"
               />
+              <CharCounter value={activity.value.description} max={140} />
             </Label>
 
             <div class="text-center">
