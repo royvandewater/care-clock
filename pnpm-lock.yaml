@@ -21,8 +21,8 @@ importers:
         specifier: ^4.1.4
         version: 4.1.4(google-auth-library@9.15.1)
       hono:
-        specifier: ^4.7.11
-        version: 4.7.11
+        specifier: ^4.12.18
+        version: 4.12.18
       preact-iso:
         specifier: ^2.9.2
         version: 2.9.2(preact-render-to-string@6.5.13(preact@10.26.8))(preact@10.26.8)
@@ -1536,8 +1536,8 @@ packages:
     resolution: {integrity: sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==}
     hasBin: true
 
-  hono@4.7.11:
-    resolution: {integrity: sha512-rv0JMwC0KALbbmwJDEnxvQCeJh+xbS3KEWW5PC9cMJ08Ur9xgatI0HmtgYZfOdOSOeYsp5LO2cOhdI8cLEbDEQ==}
+  hono@4.12.18:
+    resolution: {integrity: sha512-RWzP96k/yv0PQfyXnWjs6zot20TqfpfsNXhOnev8d1InAxubW93L11/oNUc3tQqn2G0bSdAOBpX+2uDFHV7kdQ==}
     engines: {node: '>=16.9.0'}
 
   http-auth@3.1.3:
@@ -3751,7 +3751,7 @@ snapshots:
 
   he@1.2.0: {}
 
-  hono@4.7.11: {}
+  hono@4.12.18: {}
 
   http-auth@3.1.3:
     dependencies:
