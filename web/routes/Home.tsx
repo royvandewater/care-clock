@@ -24,6 +24,7 @@ import { getDatetimeWarning } from "@/data/getDatetimeWarning";
 import { useEffect } from "preact/hooks";
 import { roundDateToHour } from "@/data/roundDateToHour";
 import { upsertActivity } from "@/data/upsertActivity";
+import { ConfirmModal } from "@/components/ConfirmModal";
 
 export const Home = ({ database }: { database: IDBDatabase }) => {
   const activity = useActivity();
@@ -34,6 +35,7 @@ export const Home = ({ database }: { database: IDBDatabase }) => {
   const showHistoryModal = useSignal(false);
   const showCamperModal = useSignal(false);
   const showSessionTypeModal = useSignal(false);
+  const showConfirmWarningModal = useSignal(false);
 
   useEffect(() => {
     const now = roundDateToHour(new Date());
@@ -45,10 +47,9 @@ export const Home = ({ database }: { database: IDBDatabase }) => {
     };
   }, []);
 
-  const onSubmit = async (e: SubmitEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const warning = getDatetimeWarning(activity.value.startTime, activity.value.endTime);
 
+  const saveActivity = async () => {
     controlsDisabled.value = true;
     await upsertActivity({ database }, activity.value);
     const now = roundDateToHour(new Date());
@@ -61,7 +62,17 @@ export const Home = ({ database }: { database: IDBDatabase }) => {
     controlsDisabled.value = false;
   };
 
-  const warning = getDatetimeWarning(activity.value.startTime, activity.value.endTime);
+  const onSubmit = async (e: SubmitEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (warning) {
+      showConfirmWarningModal.value = true;
+      return;
+    }
+
+    await saveActivity();
+  };
 
   if (showSettingsModal.value) {
     return (
@@ -93,6 +104,22 @@ export const Home = ({ database }: { database: IDBDatabase }) => {
                 return { name: camper, id: existingCamper?.id ?? null };
               }),
             };
+          }}
+        />
+      </div>
+    );
+  }
+
+  if (showConfirmWarningModal.value && warning) {
+    return (
+      <div class="h-full max-w-md mx-auto p-4 space-y-6 flex flex-col gap-4 z-0">
+        <ConfirmModal
+          message={`${warning}. Save anyway?`}
+          confirmLabel="Save anyway"
+          onClose={() => (showConfirmWarningModal.value = false)}
+          onConfirm={async () => {
+            showConfirmWarningModal.value = false;
+            await saveActivity();
           }}
         />
       </div>
