@@ -1,5 +1,4 @@
 import { decodeBase64, encodeBase64, encodeBase64Url } from "./base64";
-import type { Headers as GoogleHeaders } from "google-auth-library/build/src/auth/oauth2client";
 
 /**
  * Class for handling Google OAuth2.0 authentication
@@ -18,12 +17,12 @@ export class GoogleAuth {
     this.scope = scope;
   }
 
-  public async getRequestHeaders(): Promise<GoogleHeaders> {
+  public async getRequestHeaders(): Promise<Headers> {
     const accessToken = await this.getAccessToken();
 
-    return {
+    return new Headers({
       Authorization: `Bearer ${accessToken}`,
-    } as GoogleHeaders;
+    });
   }
 
   private async getAccessToken(): Promise<string> {
