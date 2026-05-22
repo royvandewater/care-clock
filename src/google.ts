@@ -17,12 +17,12 @@ export class GoogleAuth {
     this.scope = scope;
   }
 
-  public async getRequestHeaders(): Promise<Headers> {
+  public async getRequestHeaders(): Promise<Record<string, string>> {
     const accessToken = await this.getAccessToken();
 
-    return new Headers({
+    return {
       Authorization: `Bearer ${accessToken}`,
-    });
+    };
   }
 
   private async getAccessToken(): Promise<string> {
