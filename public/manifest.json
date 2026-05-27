@@ -4,7 +4,14 @@
     {
       "src": "/icon.svg",
       "type": "image/svg+xml",
-      "sizes": "any"
+      "sizes": "any",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "maskable"
     }
   ],
   "start_url": "https://care-clock.com/",
