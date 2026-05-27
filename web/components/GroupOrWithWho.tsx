@@ -39,27 +39,43 @@ export const GroupOrWithWho = ({
     );
   }
 
+  if (sessionType === "Co-Treat") {
+    return (
+      <Label>
+        With Who
+        <select
+          id="withWho"
+          value={withWho}
+          onChange={(e: Event) => {
+            assert(e.target instanceof HTMLSelectElement);
+            onChangeWithWho(e.target.value);
+          }}
+          className={cn(
+            "flex h-10 w-full rounded-md border border-input-border bg-input-background px-3 py-2 text-sm ring-offset-background text-foreground font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus:ring-input-border-focus disabled:cursor-not-allowed disabled:opacity-50 disabled:border-gray-200",
+          )}
+        >
+          <option value="" disabled>
+            Select a therapist
+          </option>
+          {therapists.map((therapist) => (
+            <option value={therapist}>{therapist}</option>
+          ))}
+        </select>
+      </Label>
+    );
+  }
+
   return (
     <Label>
       With Who
-      <select
+      <Input
         id="withWho"
         value={withWho}
-        onChange={(e: Event) => {
-          assert(e.target instanceof HTMLSelectElement);
+        onInput={(e: InputEvent) => {
+          assert(e.target instanceof HTMLInputElement);
           onChangeWithWho(e.target.value);
         }}
-        className={cn(
-          "flex h-10 w-full rounded-md border border-input-border bg-input-background px-3 py-2 text-sm ring-offset-background text-foreground font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus:ring-input-border-focus disabled:cursor-not-allowed disabled:opacity-50 disabled:border-gray-200",
-        )}
-      >
-        <option value="" disabled>
-          Select a therapist
-        </option>
-        {therapists.map((therapist) => (
-          <option value={therapist}>{therapist}</option>
-        ))}
-      </select>
+      />
     </Label>
   );
 };
