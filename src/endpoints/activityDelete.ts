@@ -1,7 +1,8 @@
-import { OpenAPIRoute, Uuid } from "chanfana";
+import { OpenAPIRoute } from "chanfana";
 import { z } from "zod";
 import type { Context } from "hono";
 
+import { assert } from "../assert";
 import { getSheetFromEnv } from "../sheets";
 
 export class ActivityDelete extends OpenAPIRoute {
@@ -10,7 +11,7 @@ export class ActivityDelete extends OpenAPIRoute {
     summary: "Delete an Activity by id. Leaves a blank row in the spreadsheet.",
     request: {
       params: z.object({
-        id: Uuid(),
+        id: z.uuid(),
       }),
     },
     responses: {
@@ -22,6 +23,7 @@ export class ActivityDelete extends OpenAPIRoute {
 
   async handle(c: Context) {
     const data = await this.getValidatedData<typeof this.schema>();
+    assert(data.params, "params should be present after validation");
 
     const id = data.params.id;
 
