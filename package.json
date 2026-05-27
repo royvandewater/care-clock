@@ -33,7 +33,7 @@
     "@preact/signals": "^2.9.0",
     "@tailwindcss/browser": "^4.3.0",
     "@tailwindcss/vite": "^4.3.0",
-    "@types/node": "22.15.29",
+    "@types/node": "24.12.4",
     "@types/service-worker-mock": "^2.0.1",
     "@vitejs/plugin-react-swc": "^4.3.0",
     "class-variance-authority": "^0.7.1",
