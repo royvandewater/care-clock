@@ -18,7 +18,7 @@
     "chanfana": "^2.8.0",
     "date-fns": "^4.1.0",
     "google-auth-library": "^10.6.2",
-    "google-spreadsheet": "^4.1.4",
+    "google-spreadsheet": "^5.2.0",
     "hono": "^4.12.18",
     "preact-iso": "^2.12.0",
     "preact-jsx-runtime": "^1.2.0",
