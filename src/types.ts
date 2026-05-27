@@ -1,14 +1,13 @@
-import { DateTime, Enumeration, Str, Uuid } from "chanfana";
 import { z } from "zod";
 
 export const Activity = z.object({
-  id: Uuid(),
-  therapistName: Str(),
-  camperName: Str(),
-  sessionType: Enumeration({ values: ["Individual", "Co-Treat", "Group", "Consult", "Training"] }),
-  groupName: Str().nullish(),
-  withWho: Str().nullish(),
-  description: Str(),
-  startTime: DateTime(),
-  endTime: DateTime().nullish(),
+  id: z.uuid(),
+  therapistName: z.string(),
+  camperName: z.string(),
+  sessionType: z.enum(["Individual", "Co-Treat", "Group", "Consult", "Training"]),
+  groupName: z.string().nullish(),
+  withWho: z.string().nullish(),
+  description: z.string(),
+  startTime: z.iso.datetime(),
+  endTime: z.iso.datetime().nullish(),
 });

@@ -1,6 +1,7 @@
-import { OpenAPIRoute, Uuid } from "chanfana";
+import { OpenAPIRoute } from "chanfana";
 import { Activity } from "../types";
 import { z } from "zod";
+import { assert } from "../assert";
 import { getSheetFromEnv } from "../sheets";
 import { fromISOString, toDurationString, toLocaleString } from "../date";
 import type { Context } from "hono";
@@ -11,7 +12,7 @@ export class ActivityUpsert extends OpenAPIRoute {
     summary: "Update an Activity, usually to start or stop it",
     request: {
       params: z.object({
-        id: Uuid(),
+        id: z.uuid(),
       }),
       body: {
         content: {
@@ -42,6 +43,8 @@ export class ActivityUpsert extends OpenAPIRoute {
   async handle(c: Context) {
     // Get validated data
     const data = await this.getValidatedData<typeof this.schema>();
+    assert(data.params, "params should be present after validation");
+    assert(data.body, "body should be present after validation");
 
     const id = data.params.id;
     const activity = data.body;
