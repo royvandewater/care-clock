@@ -15,7 +15,7 @@
     "test": "playwright test"
   },
   "dependencies": {
-    "chanfana": "^2.8.0",
+    "chanfana": "^3.3.0",
     "date-fns": "^4.1.0",
     "google-auth-library": "^10.6.2",
     "google-spreadsheet": "^5.2.0",
