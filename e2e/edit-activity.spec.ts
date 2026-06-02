@@ -23,13 +23,18 @@ const createActivity = async (page: Page, { description }: { description: string
 
   // Default start/end are both rounded down to the current hour, which trips
   // the "less than 1 minute" warning. Push end out by an hour so save proceeds
-  // without the confirm-warning modal.
+  // without the confirm-warning modal. Derive the end from a real Date so the
+  // hour rolls the date forward correctly: at 23:00 the old `(hours + 1) % 24`
+  // produced a same-day 00:00, which lands *before* the start and triggers the
+  // "End date/time is before start date/time" warning instead.
+  const startDate = await page.getByLabel("Start Date").inputValue();
   const startTime = await page.getByLabel("Start Time").inputValue();
-  const [hours, minutes, seconds] = startTime.split(":").map(Number);
-  const endHours = String((hours + 1) % 24).padStart(2, "0");
-  await page
-    .getByLabel("End Time")
-    .fill(`${endHours}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`);
+  const end = new Date(`${startDate}T${startTime}`);
+  end.setHours(end.getHours() + 1);
+
+  const pad = (n: number) => String(n).padStart(2, "0");
+  await page.getByLabel("End Date").fill(`${end.getFullYear()}-${pad(end.getMonth() + 1)}-${pad(end.getDate())}`);
+  await page.getByLabel("End Time").fill(`${pad(end.getHours())}:${pad(end.getMinutes())}:${pad(end.getSeconds())}`);
 
   await page.getByRole("button", { name: "Save" }).click();
 };
