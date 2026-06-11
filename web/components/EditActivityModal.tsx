@@ -25,6 +25,7 @@ import { timeStrFromDate } from "@/data/timeStrFromDate";
 import { combineDateAndTime } from "@/data/combineDateAndTime";
 import { getDatetimeWarning } from "@/data/getDatetimeWarning";
 import { ConfirmModal } from "@/components/ConfirmModal";
+import { showToast } from "@/data/toast";
 
 export const EditActivityModal = ({
   database,
@@ -62,6 +63,7 @@ export const EditActivityModal = ({
       },
     );
     setControlsDisabled(false);
+    showToast("Activity saved");
     onClose();
   };
 

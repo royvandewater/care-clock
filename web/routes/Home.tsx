@@ -26,6 +26,7 @@ import { useEffect } from "preact/hooks";
 import { roundDateToHour } from "@/data/roundDateToHour";
 import { upsertActivity } from "@/data/upsertActivity";
 import { ConfirmModal } from "@/components/ConfirmModal";
+import { showToast } from "@/data/toast";
 
 export const Home = ({ database }: { database: IDBDatabase }) => {
   const activity = useActivity();
@@ -65,6 +66,7 @@ export const Home = ({ database }: { database: IDBDatabase }) => {
     };
     datetimeInteracted.value = false;
     controlsDisabled.value = false;
+    showToast("Activity saved");
   };
 
   const onSubmit = async (e: SubmitEvent) => {
