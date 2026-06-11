@@ -37,6 +37,7 @@ export const Home = ({ database }: { database: IDBDatabase }) => {
   const showCamperModal = useSignal(false);
   const showSessionTypeModal = useSignal(false);
   const showConfirmWarningModal = useSignal(false);
+  const datetimeInteracted = useSignal(false);
 
   useEffect(() => {
     const now = roundDateToHour(new Date());
@@ -48,7 +49,9 @@ export const Home = ({ database }: { database: IDBDatabase }) => {
     };
   }, []);
 
-  const warning = getDatetimeWarning(activity.value.startTime, activity.value.endTime);
+  const warning = datetimeInteracted.value
+    ? getDatetimeWarning(activity.value.startTime, activity.value.endTime)
+    : undefined;
 
   const saveActivity = async () => {
     controlsDisabled.value = true;
@@ -60,6 +63,7 @@ export const Home = ({ database }: { database: IDBDatabase }) => {
       startTime: now,
       endTime: now,
     };
+    datetimeInteracted.value = false;
     controlsDisabled.value = false;
   };
 
@@ -218,6 +222,7 @@ export const Home = ({ database }: { database: IDBDatabase }) => {
                   onInput={(e: InputEvent) => {
                     assert(e.target instanceof HTMLInputElement);
                     assert(activity.value?.startTime);
+                    datetimeInteracted.value = true;
                     const time = timeStrFromDate(activity.value.startTime);
                     const startTime = combineDateAndTime(e.target.value, time);
 
@@ -240,6 +245,7 @@ export const Home = ({ database }: { database: IDBDatabase }) => {
                   onInput={(e: InputEvent) => {
                     assert(e.target instanceof HTMLInputElement);
                     assert(activity.value?.startTime);
+                    datetimeInteracted.value = true;
                     const date = dateStrFromDate(activity.value.startTime);
                     const startTime = combineDateAndTime(date, e.target.value);
 
@@ -263,6 +269,7 @@ export const Home = ({ database }: { database: IDBDatabase }) => {
                   onInput={(e: InputEvent) => {
                     assert(e.target instanceof HTMLInputElement);
                     assert(activity.value);
+                    datetimeInteracted.value = true;
                     const time = timeStrFromDate(activity.value.endTime);
                     const endTime = combineDateAndTime(e.target.value, time);
 
@@ -283,6 +290,7 @@ export const Home = ({ database }: { database: IDBDatabase }) => {
                   onInput={(e: InputEvent) => {
                     assert(e.target instanceof HTMLInputElement);
                     assert(activity.value);
+                    datetimeInteracted.value = true;
                     const date = dateStrFromDate(activity.value.endTime);
                     const endTime = combineDateAndTime(date, e.target.value);
 
