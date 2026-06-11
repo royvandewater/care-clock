@@ -9,7 +9,7 @@
     "prebuild": "wrangler types",
     "build": "tsc --build && vite build",
     "start": "vite --port 8787",
-    "dev": "vite --port 8787",
+    "dev": "pnpm start",
     "cf-typegen": "wrangler types",
     "pretypecheck": "wrangler types",
     "typecheck": "tsc --noEmit",
