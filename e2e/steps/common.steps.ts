@@ -1,5 +1,5 @@
 import { expect } from "@playwright/test";
-import { Given, Then } from "./fixtures";
+import { Given, When, Then } from "./fixtures";
 
 Given("I open the home page", async ({ page }) => {
   await page.goto("/");
@@ -19,6 +19,18 @@ Given("the camper {string} has been added and selected", async ({ page }, name: 
   await page.getByRole("button", { name: "Back" }).click(); // back to campers modal
   await page.getByText(name).click();
   await page.getByRole("button", { name: "Back" }).click(); // back to home
+});
+
+When("I click the {string} button", async ({ page }, name: string) => {
+  await page.getByRole("button", { name }).click();
+});
+
+When("I open the camper selector", async ({ page }) => {
+  await page.getByLabel("Select Campers").click();
+});
+
+Then("I should see the {string} heading", async ({ page }, name: string) => {
+  await expect(page.getByRole("heading", { name })).toBeVisible();
 });
 
 Then("I should see {string}", async ({ page }, text: string) => {
