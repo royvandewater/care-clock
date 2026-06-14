@@ -41,12 +41,12 @@ export const CamperImport = () => {
             ))}
           </ul>
 
-          <div class="flex gap-4 mt-auto">
-            <Button type="button" variant="outline" class="flex-1" onClick={onCancel}>
-              Cancel
-            </Button>
-            <Button type="button" class="flex-1" onClick={onConfirm} disabled={campers.length === 0}>
+          <div class="flex flex-col gap-4 mt-auto">
+            <Button type="button" onClick={onConfirm} disabled={campers.length === 0}>
               Confirm
+            </Button>
+            <Button type="button" variant="outline" onClick={onCancel}>
+              Cancel
             </Button>
           </div>
         </CardContent>
