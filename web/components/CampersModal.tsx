@@ -1,6 +1,7 @@
 import { Signal, useSignal } from "@preact/signals";
 
 import { Modal } from "@/components/Modal";
+import { ConfirmModal } from "@/components/ConfirmModal";
 import { Label } from "@/components/Label";
 import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
@@ -22,6 +23,7 @@ export const CamperModal = ({
   const campers = useAvailableCampers();
 
   const editMode = useSignal(false);
+  const showClearConfirm = useSignal(false);
   const onClickClose = () => {
     if (editMode.value) {
       editMode.value = false;
@@ -31,12 +33,29 @@ export const CamperModal = ({
     onClose();
   };
 
+  if (showClearConfirm.value) {
+    return (
+      <ConfirmModal
+        title="Clear All Campers"
+        message="This will remove every camper. Are you sure?"
+        confirmLabel="Clear"
+        confirmVariant="danger"
+        onClose={() => (showClearConfirm.value = false)}
+        onConfirm={() => {
+          campers.value = [];
+          onSelectCampers([]);
+          showClearConfirm.value = false;
+        }}
+      />
+    );
+  }
+
   return (
     <Modal title={<Header onClickEdit={() => (editMode.value = !editMode.value)} />} onClose={onClickClose}>
       {editMode.value && <NewCamperForm onAdd={(name) => (campers.value = [...campers.value, name].sort())} />}
 
       <ul class="flex flex-col divide-y-1 divide-secondary/40">
-        {campers.value.length === 0 && (
+        {campers.value.length === 0 && !editMode.value && (
           <li class="text-center text-secondary pt-10">Use the edit button on the top right to add a camper</li>
         )}
         {campers.value.map((camper, i) => (
@@ -55,6 +74,18 @@ export const CamperModal = ({
           />
         ))}
       </ul>
+
+      {editMode.value && (
+        <Button
+          type="button"
+          variant="danger"
+          className="mt-auto"
+          disabled={campers.value.length === 0}
+          onClick={() => (showClearConfirm.value = true)}
+        >
+          Clear All Campers
+        </Button>
+      )}
     </Modal>
   );
 };
