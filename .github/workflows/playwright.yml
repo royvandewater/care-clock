@@ -37,7 +37,7 @@ jobs:
           printf 'GOOGLE_SHEET_ID="%s"\n' "$GOOGLE_SHEET_ID"
         } > .dev.vars
     - name: Run Playwright tests
-      run: pnpm exec playwright test
+      run: pnpm test
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
