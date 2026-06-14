@@ -1,6 +1,7 @@
 import { Signal, useSignal } from "@preact/signals";
 
 import { Modal } from "@/components/Modal";
+import { ConfirmModal } from "@/components/ConfirmModal";
 import { Label } from "@/components/Label";
 import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
@@ -22,6 +23,7 @@ export const CamperModal = ({
   const campers = useAvailableCampers();
 
   const editMode = useSignal(false);
+  const showClearConfirm = useSignal(false);
   const onClickClose = () => {
     if (editMode.value) {
       editMode.value = false;
@@ -30,6 +32,23 @@ export const CamperModal = ({
 
     onClose();
   };
+
+  if (showClearConfirm.value) {
+    return (
+      <ConfirmModal
+        title="Clear All Campers"
+        message="This will remove every camper. Are you sure?"
+        confirmLabel="Clear"
+        confirmVariant="danger"
+        onClose={() => (showClearConfirm.value = false)}
+        onConfirm={() => {
+          campers.value = [];
+          onSelectCampers([]);
+          showClearConfirm.value = false;
+        }}
+      />
+    );
+  }
 
   return (
     <Modal title={<Header onClickEdit={() => (editMode.value = !editMode.value)} />} onClose={onClickClose}>
@@ -55,6 +74,18 @@ export const CamperModal = ({
           />
         ))}
       </ul>
+
+      {editMode.value && (
+        <Button
+          type="button"
+          variant="danger"
+          className="mt-auto"
+          disabled={campers.value.length === 0}
+          onClick={() => (showClearConfirm.value = true)}
+        >
+          Clear All Campers
+        </Button>
+      )}
     </Modal>
   );
 };
