@@ -25,8 +25,33 @@ When("I click the {string} button", async ({ page }, name: string) => {
   await page.getByRole("button", { name }).click();
 });
 
+When("I click the {string} button exactly", async ({ page }, name: string) => {
+  await page.getByRole("button", { name, exact: true }).click();
+});
+
 When("I open the camper selector", async ({ page }) => {
   await page.getByLabel("Select Campers").click();
+});
+
+When("I enter camper edit mode", async ({ page }) => {
+  await page.getByRole("button", { name: "Edit Campers" }).click();
+});
+
+When("I add the camper {string}", async ({ page }, name: string) => {
+  await page.getByLabel("Camper Name").fill(name);
+  await page.getByRole("button", { name: "Add" }).click();
+});
+
+Then("I should not see the {string} button", async ({ page }, name: string) => {
+  await expect(page.getByRole("button", { name })).not.toBeVisible();
+});
+
+Then("the {string} button should be disabled", async ({ page }, name: string) => {
+  await expect(page.getByRole("button", { name })).toBeDisabled();
+});
+
+Then("the {string} button should be enabled", async ({ page }, name: string) => {
+  await expect(page.getByRole("button", { name })).toBeEnabled();
 });
 
 Then("I should see the {string} heading", async ({ page }, name: string) => {
