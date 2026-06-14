@@ -21,3 +21,7 @@ When("I set the end time to one hour after the start time", async ({ page }) => 
 Then("the {string} field should have value {string}", async ({ page }, label: string, value: string) => {
   await expect(page.getByLabel(label)).toHaveValue(value);
 });
+
+Then("the status message should be {string}", async ({ page }, message: string) => {
+  await expect(page.getByRole("status")).toHaveText(message);
+});
