@@ -21,6 +21,7 @@ Then("the stored campers should be {string}", async ({ page }, list: string) => 
 });
 
 Then("the stored campers should be empty", async ({ page }) => {
-  const campers = await page.evaluate(() => JSON.parse(localStorage.getItem("campers") ?? "[]"));
-  expect(campers).toEqual([]);
+  await expect
+    .poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("campers") ?? "[]")))
+    .toEqual([]);
 });
