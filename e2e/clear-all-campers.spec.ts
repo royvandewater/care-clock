@@ -18,6 +18,17 @@ test("the Clear All Campers button is hidden until edit mode", async ({ page }) 
   await expect(page.getByRole("button", { name: "Clear All Campers" })).not.toBeVisible();
 });
 
+test("the empty-state hint is hidden in edit mode", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("Select Campers").click();
+
+  // shown in the normal (non-edit) view when there are no campers
+  await expect(page.getByText("Use the edit button on the top right to add a camper")).toBeVisible();
+
+  await page.getByRole("button", { name: "Edit Campers" }).click();
+  await expect(page.getByText("Use the edit button on the top right to add a camper")).not.toBeVisible();
+});
+
 test("the Clear All Campers button is disabled when there are no campers", async ({ page }) => {
   await openEditCampers(page);
 
@@ -46,7 +57,8 @@ test("clicking Clear All Campers asks for confirmation before clearing", async (
   await page.getByRole("button", { name: "Clear All Campers" }).click();
   await page.getByRole("button", { name: "Clear", exact: true }).click();
 
-  await expect(page.getByText("Use the edit button on the top right to add a camper")).toBeVisible();
+  // back in edit mode with nothing left to clear
+  await expect(page.getByRole("button", { name: "Clear All Campers" })).toBeDisabled();
 
   await expect
     .poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("campers") ?? "[]")))
