@@ -155,7 +155,7 @@ export const Home = ({ database }: { database: IDBDatabase }) => {
 
   return (
     <form class="h-full max-w-md shadow-lg mx-auto p-4 space-y-6 flex flex-col gap-4 z-0" onSubmit={onSubmit}>
-      <fieldset disabled={controlsDisabled} className="flex flex-col gap-4">
+      <fieldset disabled={controlsDisabled.value} className="flex flex-col gap-4">
         <header class="text-center relative">
           <SettingsButton onClick={() => (showSettingsModal.value = true)} class="absolute top-0 left-4" />
           <h1 class="text-2xl font-bold text-primary">Care Clock</h1>
