@@ -20,7 +20,7 @@
     "date-fns": "^4.4.0",
     "google-auth-library": "^10.6.2",
     "google-spreadsheet": "^5.2.0",
-    "hono": "^4.12.23",
+    "hono": "^4.12.25",
     "preact-iso": "^2.12.0",
     "preact-jsx-runtime": "^1.2.0",
     "uuid": "^14.0.0",
