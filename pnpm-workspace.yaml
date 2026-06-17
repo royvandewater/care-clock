@@ -11,6 +11,13 @@ overrides:
   # checks in v3/v5/v6. Pulled in transitively by @cucumber/messages under
   # playwright-bdd, which caps it below the patched release.
   'uuid@<11.1.1': 11.1.1
+  # GHSA-g7r4-m6w7-qqqr: esbuild >= 0.27.3 < 0.28.1 allows arbitrary file read
+  # via the dev server on Windows. vite and wrangler pin esbuild to 0.27.3
+  # exactly, so force the patched release.
+  'esbuild@>=0.27.3 <0.28.1': 0.28.1
 minimumReleaseAgeExclude:
   # Remove on or after 2026-06-23, once 4.12.25 clears the 14-day minimumReleaseAge.
   - hono@4.12.25
+  # Remove on or after 2026-06-25, once 0.28.1 clears the 14-day minimumReleaseAge.
+  - esbuild@0.28.1
+  - '@esbuild/*'
