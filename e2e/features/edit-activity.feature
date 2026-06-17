@@ -2,7 +2,7 @@ Feature: Edit activity
 
   Scenario: editing an activity persists the new description
     Given I open the home page
-    And the therapist is set to "Tori"
+    And the therapist is set to "Miss Amanda"
     And the camper "Alice" has been added and selected
     And I select the "Individual" session type
     And I fill in the description with "Initial description"
@@ -19,7 +19,7 @@ Feature: Edit activity
   Scenario: deleting an activity removes it from history
     Given the activity delete request will succeed
     And I open the home page
-    And the therapist is set to "Tori"
+    And the therapist is set to "Miss Amanda"
     And the camper "Alice" has been added and selected
     And I select the "Individual" session type
     And I fill in the description with "To be deleted"
