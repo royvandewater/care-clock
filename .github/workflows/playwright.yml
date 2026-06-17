@@ -23,8 +23,18 @@ jobs:
         restore-keys: pnpm-${{ runner.os }}-
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
+    - name: Get installed Playwright version
+      id: playwright-version
+      run: echo "version=$(pnpm exec playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+    - name: Cache Playwright browsers
+      id: playwright-cache
+      uses: actions/cache@v5
+      with:
+        path: ~/.cache/ms-playwright
+        key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
     - name: Install Playwright Browsers
-      run: pnpm exec playwright install --with-deps chromium
+      if: steps.playwright-cache.outputs.cache-hit != 'true'
+      run: pnpm exec playwright install chromium
     - name: Configure .dev.vars
       env:
         GOOGLE_API_CLIENT_EMAIL: ${{ secrets.GOOGLE_API_CLIENT_EMAIL }}
