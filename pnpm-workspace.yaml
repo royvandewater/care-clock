@@ -6,3 +6,6 @@ allowBuilds:
   sharp: true
   workerd: true
 minimumReleaseAge: 20160
+minimumReleaseAgeExclude:
+  # Remove on or after 2026-06-23, once 4.12.25 clears the 14-day minimumReleaseAge.
+  - hono@4.12.25
