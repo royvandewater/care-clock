@@ -1,4 +1,4 @@
-export const therapists = [
+const unsortedTherapists = [
   "Miss Amanda",
   "Miss Ashlea",
   "Miss Carolyn",
@@ -12,4 +12,10 @@ export const therapists = [
   "Mrs. Stephanie",
   "Ms. Denise",
 ] as const;
-export type Therapist = (typeof therapists)[number];
+export type Therapist = (typeof unsortedTherapists)[number];
+
+const nameWithoutHonorific = (therapist: Therapist): string => therapist.replace(/^\S+\s+/, "");
+
+export const therapists: readonly Therapist[] = [...unsortedTherapists].sort((a, b) =>
+  nameWithoutHonorific(a).localeCompare(nameWithoutHonorific(b)),
+);
