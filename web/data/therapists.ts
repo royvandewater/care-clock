@@ -3,13 +3,13 @@ export const therapists = [
   "Miss Ashlea",
   "Miss Carolyn",
   "Miss Danielle",
+  "Ms. Denise",
   "Miss Kaitie",
   "Miss Katie",
   "Miss Kourtney",
-  "Miss Valerie",
   "Mr. Marty",
   "Mr. Rob",
   "Mrs. Stephanie",
-  "Ms. Denise",
+  "Miss Valerie",
 ] as const;
 export type Therapist = (typeof therapists)[number];
