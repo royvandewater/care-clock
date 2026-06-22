@@ -15,9 +15,15 @@ overrides:
   # via the dev server on Windows. vite and wrangler pin esbuild to 0.27.3
   # exactly, so force the patched release.
   'esbuild@>=0.27.3 <0.28.1': 0.28.1
+  # CVE-2026-9697 (GHSA-vmh5-mc38-953g): undici >= 7.23.0 < 7.28.0 bypasses TLS
+  # certificate validation via dropped requestTls in the SOCKS5 ProxyAgent.
+  # Pulled in transitively by miniflare under wrangler/@cloudflare/vite-plugin.
+  'undici@>=7.23.0 <7.28.0': 7.28.0
 minimumReleaseAgeExclude:
   # Remove on or after 2026-06-23, once 4.12.25 clears the 14-day minimumReleaseAge.
   - hono@4.12.25
   # Remove on or after 2026-06-25, once 0.28.1 clears the 14-day minimumReleaseAge.
   - esbuild@0.28.1
   - '@esbuild/*'
+  # Remove on or after 2026-06-29, once 7.28.0 clears the 14-day minimumReleaseAge.
+  - undici@7.28.0
