@@ -25,6 +25,8 @@ Feature: Home page
     And I click the "Reset to now" button
     Then the start date should be today
     And the end date should be today
+    And the start time should be on the hour
+    And the end time should be on the hour
 
   Scenario: Filling out the form for a group session
     Given I open the home page

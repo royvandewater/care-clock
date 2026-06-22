@@ -25,6 +25,14 @@ Then("the end date should be today", async ({ page }) => {
   await expect(page.getByLabel("End Date")).toHaveValue(todayStr());
 });
 
+Then("the start time should be on the hour", async ({ page }) => {
+  await expect(page.getByLabel("Start Time")).toHaveValue(/:00:00$/);
+});
+
+Then("the end time should be on the hour", async ({ page }) => {
+  await expect(page.getByLabel("End Time")).toHaveValue(/:00:00$/);
+});
+
 When("I enter the start time as the end time", async ({ page }) => {
   const startTime = await page.getByLabel("Start Time").inputValue();
   await page.getByLabel("End Time").fill(startTime);
