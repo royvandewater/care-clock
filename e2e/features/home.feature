@@ -19,6 +19,15 @@ Feature: Home page
     When I save the activity anyway
     Then I should not see "Activity duration is less than 1 minute"
 
+  Scenario: resetting the datetime fields to today and now
+    Given I open the home page
+    When I change the start date to "2020-01-01"
+    And I click the "Reset dates to today" button
+    Then the start date should be today
+    And the end date should be today
+    And the start time should be on the hour
+    And the end time should be on the hour
+
   Scenario: Filling out the form for a group session
     Given I open the home page
     And the therapist is set to "Miss Amanda"

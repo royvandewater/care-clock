@@ -304,6 +304,19 @@ export const Home = ({ database }: { database: IDBDatabase }) => {
               </Label>
             </div>
 
+            <Button
+              type="button"
+              variant="ghost"
+              size="xs"
+              className="self-start text-muted-foreground"
+              onClick={() => {
+                const now = roundDateToHour(new Date());
+                activity.value = { ...activity.value, startTime: now, endTime: now };
+              }}
+            >
+              Reset dates to today
+            </Button>
+
             <div class="text-center">
               {!activity.value.therapistName && (
                 <div class="text-center text-secondary">
