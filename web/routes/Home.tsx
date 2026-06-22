@@ -314,7 +314,7 @@ export const Home = ({ database }: { database: IDBDatabase }) => {
                 activity.value = { ...activity.value, startTime: now, endTime: now };
               }}
             >
-              Reset to now
+              Reset dates to today
             </Button>
 
             <div class="text-center">

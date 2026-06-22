@@ -22,7 +22,7 @@ Feature: Home page
   Scenario: resetting the datetime fields to today and now
     Given I open the home page
     When I change the start date to "2020-01-01"
-    And I click the "Reset to now" button
+    And I click the "Reset dates to today" button
     Then the start date should be today
     And the end date should be today
     And the start time should be on the hour
