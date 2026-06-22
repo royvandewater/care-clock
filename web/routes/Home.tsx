@@ -45,8 +45,8 @@ export const Home = ({ database }: { database: IDBDatabase }) => {
 
     activity.value = {
       ...activity.value,
-      startTime: activity.value.startTime ?? now,
-      endTime: activity.value.endTime ?? now,
+      startTime: now,
+      endTime: now,
     };
   }, []);
 
