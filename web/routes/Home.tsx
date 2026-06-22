@@ -214,6 +214,19 @@ export const Home = ({ database }: { database: IDBDatabase }) => {
               <CharCounter value={activity.value.description} max={140} />
             </Label>
 
+            <Button
+              type="button"
+              variant="ghost"
+              size="xs"
+              className="self-end text-muted-foreground"
+              onClick={() => {
+                const now = new Date();
+                activity.value = { ...activity.value, startTime: now, endTime: now };
+              }}
+            >
+              Reset to now
+            </Button>
+
             <div class="flex gap-4">
               <Label className="flex-1">
                 Start Date

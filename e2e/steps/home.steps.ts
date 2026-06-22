@@ -5,6 +5,26 @@ Then("the page title should contain {string}", async ({ page }, title: string) =
   await expect(page).toHaveTitle(new RegExp(title));
 });
 
+When("I change the start date to {string}", async ({ page }, value: string) => {
+  await page.getByLabel("Start Date").fill(value);
+});
+
+const todayStr = () => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
+Then("the start date should be today", async ({ page }) => {
+  await expect(page.getByLabel("Start Date")).toHaveValue(todayStr());
+});
+
+Then("the end date should be today", async ({ page }) => {
+  await expect(page.getByLabel("End Date")).toHaveValue(todayStr());
+});
+
 When("I enter the start time as the end time", async ({ page }) => {
   const startTime = await page.getByLabel("Start Time").inputValue();
   await page.getByLabel("End Time").fill(startTime);
