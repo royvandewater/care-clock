@@ -24,6 +24,13 @@ export const CamperModal = ({
 
   const editMode = useSignal(false);
   const showClearConfirm = useSignal(false);
+
+  // In select mode, also show selected campers that aren't in the stored list (e.g.
+  // off-caseload campers prefilled from a group-session link) so they can be
+  // unselected. Edit mode only manages stored campers.
+  const displayCampers = editMode.value
+    ? campers.value
+    : [...new Set([...campers.value, ...selectedCampers])].sort();
   const onClickClose = () => {
     if (editMode.value) {
       editMode.value = false;
@@ -55,10 +62,10 @@ export const CamperModal = ({
       {editMode.value && <NewCamperForm onAdd={(name) => (campers.value = [...campers.value, name].sort())} />}
 
       <ul class="flex flex-col divide-y-1 divide-secondary/40">
-        {campers.value.length === 0 && !editMode.value && (
+        {displayCampers.length === 0 && !editMode.value && (
           <li class="text-center text-secondary pt-10">Use the edit button on the top right to add a camper</li>
         )}
-        {campers.value.map((camper, i) => (
+        {displayCampers.map((camper, i) => (
           <Camper
             camper={camper}
             editMode={editMode}

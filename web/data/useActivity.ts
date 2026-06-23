@@ -60,7 +60,7 @@ const parseLocalStorageActivity = (activityJSON: string | null): MultiCamperActi
   };
 };
 
-const formatActivityForLocalStorage = (activity: MultiCamperActivity) => {
+export const formatActivityForLocalStorage = (activity: MultiCamperActivity) => {
   return JSON.stringify({
     therapistName: activity.therapistName,
     campers: activity.campers,
