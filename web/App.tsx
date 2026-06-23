@@ -2,6 +2,7 @@ import { LocationProvider, ErrorBoundary, Router, Route } from "preact-iso";
 
 import { Home } from "./routes/Home";
 import { CamperImport } from "./routes/CamperImport";
+import { GroupSession } from "./routes/GroupSession";
 import { Timer } from "./routes/Timer";
 import { NotFound } from "./routes/404";
 import { Toaster } from "./components/Toaster";
@@ -12,6 +13,7 @@ export const App = ({ database }: { database: IDBDatabase }) => (
       <Router>
         <Route path="/" component={Home} database={database} />
         <Route path="/camper-import" component={CamperImport} database={database} />
+        <Route path="/group-session" component={GroupSession} database={database} />
         <Route path="/timer" component={Timer} database={database} />
         <NotFound default />
       </Router>
