@@ -1,6 +1,5 @@
 import { fromHono } from "chanfana";
 import { Hono } from "hono";
-import { cors } from "hono/cors";
 
 import { ActivityUpsert } from "./endpoints/activityUpsert";
 import { ActivityDelete } from "./endpoints/activityDelete";
@@ -12,8 +11,6 @@ const app = new Hono();
 const openapi = fromHono(app, {
   docs_url: "/docs",
 });
-
-openapi.use(cors());
 
 // Register OpenAPI endpoints
 openapi.put("/activities/:id", ActivityUpsert);
