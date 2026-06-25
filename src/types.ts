@@ -7,7 +7,7 @@ export const Activity = z.object({
   sessionType: z.enum(["Individual", "Co-Treat", "Group", "Consult", "Training"]),
   groupName: z.string().nullish(),
   withWho: z.string().nullish(),
-  description: z.string(),
+  description: z.string().max(25000),
   startTime: z.iso.datetime(),
   endTime: z.iso.datetime().nullish(),
 });
