@@ -48,3 +48,4 @@ Icons are from https://heroicons.com/
 18. [ ] Pre-curated groups
 19. [ ] ~Have it show up as a widget on lock screen~ I looked into it and it doesn't look like it's possible without a native app
 20. [ ] [Create maskable icon](https://web.dev/articles/maskable-icon)
+
