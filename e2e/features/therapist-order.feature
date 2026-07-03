@@ -15,4 +15,5 @@ Feature: Therapist ordering
       | Mr. Marty      |
       | Mr. Rob        |
       | Mrs. Stephanie |
+      | Miss Tori      |
       | Miss Valerie   |

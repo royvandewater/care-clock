@@ -10,6 +10,7 @@ export const therapists = [
   "Mr. Marty",
   "Mr. Rob",
   "Mrs. Stephanie",
+  "Miss Tori",
   "Miss Valerie",
 ] as const;
 export type Therapist = (typeof therapists)[number];
