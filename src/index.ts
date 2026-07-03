@@ -4,6 +4,8 @@ import { Hono } from "hono";
 import { ActivityUpsert } from "./endpoints/activityUpsert";
 import { ActivityDelete } from "./endpoints/activityDelete";
 
+export { ActivityQueueDO } from "./activityQueue";
+
 // Start a Hono app
 const app = new Hono();
 

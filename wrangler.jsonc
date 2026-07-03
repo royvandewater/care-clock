@@ -41,6 +41,17 @@
    */
 
   /**
+   * Durable Objects
+   * Serializes all Activity reads/writes against the Google Sheet through a single instance,
+   * so concurrent requests (e.g. multi-camper group activities) can't race each other.
+   * https://developers.cloudflare.com/durable-objects/
+   */
+  "durable_objects": {
+    "bindings": [{ "name": "ACTIVITY_QUEUE", "class_name": "ActivityQueueDO" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["ActivityQueueDO"] }],
+
+  /**
    * Static Assets
    * https://developers.cloudflare.com/workers/static-assets/binding/
    */

@@ -3,7 +3,6 @@ import { z } from "zod";
 import type { Context } from "hono";
 
 import { assert } from "../assert";
-import { getSheetFromEnv } from "../sheets";
 
 export class ActivityDelete extends OpenAPIRoute {
   schema = {
@@ -21,20 +20,15 @@ export class ActivityDelete extends OpenAPIRoute {
     },
   };
 
-  async handle(c: Context) {
+  async handle(c: Context<{ Bindings: Env }>) {
     const data = await this.getValidatedData<typeof this.schema>();
     assert(data.params, "params should be present after validation");
 
     const id = data.params.id;
 
-    const sheet = await getSheetFromEnv(c.env);
-    await sheet.loadHeaderRow();
-
-    const rows = await sheet.getRows();
-    const row = rows.find((r) => r.get("Id") === id);
-    if (row) {
-      await sheet.clearRows({ start: row.rowNumber, end: row.rowNumber });
-    }
+    const stubId = c.env.ACTIVITY_QUEUE.idFromName("singleton");
+    const stub = c.env.ACTIVITY_QUEUE.get(stubId);
+    await stub.deleteActivity(id);
 
     return new Response(null, { status: 204 });
   }
