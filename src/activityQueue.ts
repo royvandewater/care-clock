@@ -4,6 +4,7 @@ import type { z } from "zod";
 import { Activity } from "./types";
 import { fromISOString, toDurationString, toLocaleString } from "./date";
 import { getSheetFromEnv } from "./sheets";
+import { Serializer } from "./serializer";
 
 type ActivityInput = Omit<z.infer<typeof Activity>, "id">;
 
@@ -13,23 +14,14 @@ type ActivityInput = Omit<z.infer<typeof Activity>, "id">;
  * race each other and clobber rows.
  */
 export class ActivityQueueDO extends DurableObject<Env> {
-  private queue: Promise<unknown> = Promise.resolve();
+  private serializer = new Serializer();
 
   async upsertActivity(id: string, activity: ActivityInput): Promise<void> {
-    return this.enqueue(() => this.doUpsertActivity(id, activity));
+    return this.serializer.run(() => this.doUpsertActivity(id, activity));
   }
 
   async deleteActivity(id: string): Promise<void> {
-    return this.enqueue(() => this.doDeleteActivity(id));
-  }
-
-  private enqueue<T>(task: () => Promise<T>): Promise<T> {
-    const result = this.queue.then(task, task);
-    this.queue = result.then(
-      () => undefined,
-      () => undefined,
-    );
-    return result;
+    return this.serializer.run(() => this.doDeleteActivity(id));
   }
 
   private async doUpsertActivity(id: string, activity: ActivityInput): Promise<void> {

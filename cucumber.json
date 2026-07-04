@@ -1,0 +1,6 @@
+{
+  "unit": {
+    "paths": ["test/unit/features/**/*.feature"],
+    "import": ["test/unit/steps/**/*.ts"]
+  }
+}
