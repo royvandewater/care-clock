@@ -3,7 +3,7 @@ import { Activity } from "../types";
 import { z } from "zod";
 import { assert } from "../assert";
 import { getSheetFromEnv } from "../sheets";
-import { fromISOString, toDurationString, toLocaleStringFromISOString } from "../date";
+import { fromISOString, toDurationString, toEasternLocaleString } from "../date";
 import type { Context } from "hono";
 
 export class ActivityUpsert extends OpenAPIRoute {
@@ -60,12 +60,12 @@ export class ActivityUpsert extends OpenAPIRoute {
         Camper: activity.camperName.trim(),
         Type: activity.sessionType,
         Description: activity.description.trim(),
-        Start: toLocaleStringFromISOString(activity.startTime),
+        Start: toEasternLocaleString(activity.startTime),
         Id: id,
       };
 
       if (activity.endTime) {
-        row.End = toLocaleStringFromISOString(activity.endTime);
+        row.End = toEasternLocaleString(activity.endTime);
         row.Duration = getDuration(activity.startTime, activity.endTime);
       }
 
@@ -87,8 +87,8 @@ export class ActivityUpsert extends OpenAPIRoute {
     row.set("Group", activity.groupName || null);
     row.set("With Who", activity.withWho?.trim() || null);
     row.set("Description", activity.description.trim());
-    row.set("Start", toLocaleStringFromISOString(activity.startTime));
-    row.set("End", activity.endTime ? toLocaleStringFromISOString(activity.endTime) : null);
+    row.set("Start", toEasternLocaleString(activity.startTime));
+    row.set("End", activity.endTime ? toEasternLocaleString(activity.endTime) : null);
     row.set("Duration", activity.endTime ? getDuration(activity.startTime, activity.endTime) : null);
     await row.save();
 

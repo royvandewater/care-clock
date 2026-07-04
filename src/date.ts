@@ -3,8 +3,18 @@ import { parse, format, parseISO } from "date-fns";
 import { assert } from "./assert";
 
 const DATE_FORMAT = "MM/dd/yyyy hh:mm:ss aa";
-const ISO_LOCAL_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
-const ISO_LOCAL_DATE_TIME_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/;
+const SHEET_TIME_ZONE = "America/New_York";
+
+const easternDateTimeFormat = new Intl.DateTimeFormat("en-US", {
+  timeZone: SHEET_TIME_ZONE,
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+  hour12: true,
+});
 
 export const fromLocaleString = (dateString: string) => {
   return parse(dateString, DATE_FORMAT, new Date());
@@ -19,17 +29,21 @@ export const fromISOString = (isoString: string) => {
 };
 
 /**
- * Formats the wall-clock date/time embedded in an ISO string (e.g. what the
- * browser sent, including its local UTC offset) without converting it
- * through the server's local timezone. The server (Cloudflare Workers) runs
- * in UTC, so round-tripping through `fromISOString`/`toLocaleString` would
- * shift the displayed time by the browser's UTC offset.
+ * Formats a UTC ISO string as an Eastern-time wall-clock string for Google
+ * Sheets. The browser sends times as UTC ISO strings and the server
+ * (Cloudflare Workers) runs in UTC, so we convert the instant into
+ * America/New_York (EDT/EST, DST-aware) before formatting.
  */
-export const toLocaleStringFromISOString = (isoString: string) => {
-  const match = ISO_LOCAL_DATE_TIME_PATTERN.exec(isoString);
-  assert(match, `Expected an ISO date-time string, got: ${isoString}`);
+export const toEasternLocaleString = (isoString: string) => {
+  const date = parseISO(isoString);
+  assert(!isNaN(date.getTime()), `Expected an ISO date-time string, got: ${isoString}`);
 
-  return format(parse(match[0], ISO_LOCAL_DATE_TIME_FORMAT, new Date()), DATE_FORMAT);
+  const parts: Record<string, string> = {};
+  for (const part of easternDateTimeFormat.formatToParts(date)) {
+    parts[part.type] = part.value;
+  }
+
+  return `${parts.month}/${parts.day}/${parts.year} ${parts.hour}:${parts.minute}:${parts.second} ${parts.dayPeriod}`;
 };
 
 /**
