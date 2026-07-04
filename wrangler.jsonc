@@ -41,6 +41,17 @@
    */
 
   /**
+   * Preview environment
+   * Deployed via CF Workers Builds non-production branch command `wrangler deploy --env preview`.
+   * Writes to a separate Google Sheet so preview/testing activity doesn't pollute production.
+   */
+  "env": {
+    "preview": {
+      "vars": { "GOOGLE_SHEET_ID": "1aYos6AyYNJqisVEPuuRXBcjWGDupSJU_M5ug_HJu1ps" }
+    }
+  },
+
+  /**
    * Static Assets
    * https://developers.cloudflare.com/workers/static-assets/binding/
    */
