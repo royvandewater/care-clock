@@ -2,6 +2,7 @@ import { fromHono } from "chanfana";
 import { Hono } from "hono";
 
 import { ActivityUpsert } from "./endpoints/activityUpsert";
+import { ActivityBatchUpsert } from "./endpoints/activityBatchUpsert";
 import { ActivityDelete } from "./endpoints/activityDelete";
 
 export { ActivityQueueDO } from "./activityQueue";
@@ -15,6 +16,7 @@ const openapi = fromHono(app, {
 });
 
 // Register OpenAPI endpoints
+openapi.post("/activities/batch", ActivityBatchUpsert);
 openapi.put("/activities/:id", ActivityUpsert);
 openapi.delete("/activities/:id", ActivityDelete);
 
