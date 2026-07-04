@@ -1,7 +1,7 @@
 import { useEffect } from "preact/hooks";
 import { useSignal } from "@preact/signals";
 
-import { upsertActivity } from "@/data/upsertActivity";
+import { batchUpsertActivities } from "@/data/batchUpsertActivities";
 import { getActivitesThatAreNotSynced } from "@/data/database";
 import { Syncing } from "@/components/icons/Syncing";
 import { Edit } from "@/components/icons/Edit";
@@ -30,15 +30,7 @@ export const UnsyncedActivities = ({
   }, []);
 
   const onSyncAll = () => {
-    unSyncedActivities.value.forEach((activity) => {
-      upsertActivity(
-        { database },
-        {
-          ...activity,
-          campers: [{ name: activity.camperName, id: activity.id }],
-        },
-      );
-    });
+    batchUpsertActivities({ database }, unSyncedActivities.value);
   };
 
   return (
