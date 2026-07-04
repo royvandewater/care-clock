@@ -2,8 +2,6 @@ import { OpenAPIRoute } from "chanfana";
 import { Activity } from "../types";
 import { z } from "zod";
 import { assert } from "../assert";
-import { getSheetFromEnv } from "../sheets";
-import { fromISOString, toDurationString, toEasternLocaleString } from "../date";
 import type { Context } from "hono";
 
 export class ActivityUpsert extends OpenAPIRoute {
@@ -40,7 +38,7 @@ export class ActivityUpsert extends OpenAPIRoute {
     },
   };
 
-  async handle(c: Context) {
+  async handle(c: Context<{ Bindings: Env }>) {
     // Get validated data
     const data = await this.getValidatedData<typeof this.schema>();
     assert(data.params, "params should be present after validation");
@@ -49,56 +47,10 @@ export class ActivityUpsert extends OpenAPIRoute {
     const id = data.params.id;
     const activity = data.body;
 
-    const sheet = await getSheetFromEnv(c.env);
-    await sheet.loadHeaderRow();
-
-    const rows = await sheet.getRows();
-    const row = rows.find((r) => r.get("Id") === id);
-    if (!row) {
-      const row: Record<string, string | number> = {
-        Therapist: activity.therapistName.trim(),
-        Camper: activity.camperName.trim(),
-        Type: activity.sessionType,
-        Description: activity.description.trim(),
-        Start: toEasternLocaleString(activity.startTime),
-        Id: id,
-      };
-
-      if (activity.endTime) {
-        row.End = toEasternLocaleString(activity.endTime);
-        row.Duration = getDuration(activity.startTime, activity.endTime);
-      }
-
-      if (activity.groupName) {
-        row.Group = activity.groupName;
-      }
-
-      if (activity.withWho) {
-        row["With Who"] = activity.withWho.trim();
-      }
-
-      await sheet.addRow(row);
-      return new Response(null, { status: 204 });
-    }
-
-    row.set("Therapist", activity.therapistName.trim());
-    row.set("Camper", activity.camperName.trim());
-    row.set("Type", activity.sessionType);
-    row.set("Group", activity.groupName || null);
-    row.set("With Who", activity.withWho?.trim() || null);
-    row.set("Description", activity.description.trim());
-    row.set("Start", toEasternLocaleString(activity.startTime));
-    row.set("End", activity.endTime ? toEasternLocaleString(activity.endTime) : null);
-    row.set("Duration", activity.endTime ? getDuration(activity.startTime, activity.endTime) : null);
-    await row.save();
+    const stubId = c.env.ACTIVITY_QUEUE.idFromName("singleton");
+    const stub = c.env.ACTIVITY_QUEUE.get(stubId);
+    await stub.upsertActivity(id, activity);
 
     return new Response(null, { status: 204 });
   }
 }
-
-const getDuration = (startTime: string, endTime: string) => {
-  const startTimeDate = fromISOString(startTime);
-  const endTimeDate = fromISOString(endTime);
-  const duration = endTimeDate.getTime() - startTimeDate.getTime();
-  return toDurationString(duration);
-};

@@ -23,6 +23,8 @@ jobs:
         restore-keys: pnpm-${{ runner.os }}-
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
+    - name: Run unit tests
+      run: pnpm test:unit
     - name: Get installed Playwright version
       id: playwright-version
       run: echo "version=$(pnpm exec playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"

@@ -13,6 +13,7 @@
     "cf-typegen": "wrangler types",
     "pretypecheck": "wrangler types",
     "typecheck": "tsc --noEmit",
+    "test:unit": "cucumber-js -p unit",
     "test": "bddgen && playwright test"
   },
   "dependencies": {
