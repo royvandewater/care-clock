@@ -2,7 +2,7 @@ import { DurableObject } from "cloudflare:workers";
 import type { z } from "zod";
 
 import { Activity } from "./types";
-import { fromISOString, toDurationString, toLocaleString } from "./date";
+import { fromISOString, toDurationString, toEasternLocaleString } from "./date";
 import { getSheetFromEnv } from "./sheets";
 import { Serializer } from "./serializer";
 
@@ -36,12 +36,12 @@ export class ActivityQueueDO extends DurableObject<Env> {
         Camper: activity.camperName.trim(),
         Type: activity.sessionType,
         Description: activity.description.trim(),
-        Start: toLocaleString(fromISOString(activity.startTime)),
+        Start: toEasternLocaleString(activity.startTime),
         Id: id,
       };
 
       if (activity.endTime) {
-        newRow.End = toLocaleString(fromISOString(activity.endTime));
+        newRow.End = toEasternLocaleString(activity.endTime);
         newRow.Duration = getDuration(activity.startTime, activity.endTime);
       }
 
@@ -63,8 +63,8 @@ export class ActivityQueueDO extends DurableObject<Env> {
     row.set("Group", activity.groupName || null);
     row.set("With Who", activity.withWho?.trim() || null);
     row.set("Description", activity.description.trim());
-    row.set("Start", toLocaleString(fromISOString(activity.startTime)));
-    row.set("End", activity.endTime ? toLocaleString(fromISOString(activity.endTime)) : null);
+    row.set("Start", toEasternLocaleString(activity.startTime));
+    row.set("End", activity.endTime ? toEasternLocaleString(activity.endTime) : null);
     row.set("Duration", activity.endTime ? getDuration(activity.startTime, activity.endTime) : null);
     await row.save();
   }
