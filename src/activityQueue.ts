@@ -1,12 +1,15 @@
 import { DurableObject } from "cloudflare:workers";
+import type { GoogleSpreadsheetRow, GoogleSpreadsheetWorksheet } from "google-spreadsheet";
 import type { z } from "zod";
 
 import { Activity } from "./types";
+import { settleBatch, type BatchItemResult } from "./batch";
 import { fromISOString, toDurationString, toEasternLocaleString } from "./date";
 import { getSheetFromEnv } from "./sheets";
 import { Serializer } from "./serializer";
 
 type ActivityInput = Omit<z.infer<typeof Activity>, "id">;
+type ActivityWithId = z.infer<typeof Activity>;
 
 /**
  * Serializes all reads/writes against the Google Sheet through a single Durable Object
@@ -20,6 +23,10 @@ export class ActivityQueueDO extends DurableObject<Env> {
     return this.serializer.run(() => this.doUpsertActivity(id, activity));
   }
 
+  async upsertActivities(activities: ActivityWithId[]): Promise<BatchItemResult[]> {
+    return this.serializer.run(() => this.doUpsertActivities(activities));
+  }
+
   async deleteActivity(id: string): Promise<void> {
     return this.serializer.run(() => this.doDeleteActivity(id));
   }
@@ -29,6 +36,23 @@ export class ActivityQueueDO extends DurableObject<Env> {
     await sheet.loadHeaderRow();
 
     const rows = await sheet.getRows();
+    await this.applyActivity(sheet, rows, id, activity);
+  }
+
+  private async doUpsertActivities(activities: ActivityWithId[]): Promise<BatchItemResult[]> {
+    const sheet = await getSheetFromEnv(this.env as unknown as Record<string, string>);
+    await sheet.loadHeaderRow();
+
+    const rows = await sheet.getRows();
+    return settleBatch(activities, ({ id, ...activity }) => this.applyActivity(sheet, rows, id, activity));
+  }
+
+  private async applyActivity(
+    sheet: GoogleSpreadsheetWorksheet,
+    rows: GoogleSpreadsheetRow[],
+    id: string,
+    activity: ActivityInput,
+  ): Promise<void> {
     const row = rows.find((r) => r.get("Id") === id);
     if (!row) {
       const newRow: Record<string, string | number> = {
@@ -53,7 +77,8 @@ export class ActivityQueueDO extends DurableObject<Env> {
         newRow["With Who"] = activity.withWho.trim();
       }
 
-      await sheet.addRow(newRow);
+      const addedRow = await sheet.addRow(newRow);
+      rows.push(addedRow);
       return;
     }
 
