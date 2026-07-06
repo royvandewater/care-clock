@@ -32,3 +32,8 @@ Then("exactly one batch sync request should have been made", async () => {
 Then("the batch sync request should have contained {int} activities", async ({}, count: number) => {
   expect(batchRequests[0]).toHaveLength(count);
 });
+
+Then("no batch sync request should have been made", async () => {
+  // Give any fire-and-forget request a chance to land before asserting none did.
+  await expect.poll(() => batchRequests.length).toBe(0);
+});

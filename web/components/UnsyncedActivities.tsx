@@ -2,10 +2,11 @@ import { useEffect } from "preact/hooks";
 import { useSignal } from "@preact/signals";
 
 import { batchUpsertActivities } from "@/data/batchUpsertActivities";
-import { getActivitesThatAreNotSynced } from "@/data/database";
+import { getActivitesThatAreNotSynced, getAllActivities } from "@/data/database";
 import { Syncing } from "@/components/icons/Syncing";
 import { Edit } from "@/components/icons/Edit";
 import { Button } from "@/components/Button";
+import { ConfirmModal } from "@/components/ConfirmModal";
 import { Unsynced } from "@/components/icons/Unsynced";
 import type { Activity } from "@/data/serialization";
 import type { SyncState } from "@/data/syncStates";
@@ -18,6 +19,7 @@ export const UnsyncedActivities = ({
   onEditActivity: (id: string) => void;
 }) => {
   const unSyncedActivities = useSignal<Activity[]>([]);
+  const showForceSyncConfirm = useSignal(false);
 
   useEffect(() => {
     const updateUnsyncedActivities = async () => {
@@ -32,6 +34,25 @@ export const UnsyncedActivities = ({
   const onSyncAll = () => {
     batchUpsertActivities({ database }, unSyncedActivities.value);
   };
+
+  const onForceSyncAll = async () => {
+    const activities = await getAllActivities(database);
+    showForceSyncConfirm.value = false;
+    batchUpsertActivities({ database }, activities);
+  };
+
+  if (showForceSyncConfirm.value) {
+    return (
+      <ConfirmModal
+        title="Force Sync All Activities"
+        message="This re-uploads every activity, even ones already synced. It will OVERWRITE any edits made directly in the spreadsheet and RECREATE any activities that were deleted from it. Continue?"
+        confirmLabel="Force Sync All"
+        confirmVariant="danger"
+        onClose={() => (showForceSyncConfirm.value = false)}
+        onConfirm={onForceSyncAll}
+      />
+    );
+  }
 
   return (
     <div class="flex flex-col gap-y-4">
@@ -52,6 +73,9 @@ export const UnsyncedActivities = ({
       >
         Upload All Unsynced Activities
       </button>
+      <Button type="button" variant="danger" onClick={() => (showForceSyncConfirm.value = true)}>
+        Force Sync All Activities
+      </Button>
     </div>
   );
 };
