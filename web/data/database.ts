@@ -78,6 +78,15 @@ export const getUnsyncedActivities = async (database: IDBDatabase) => {
   });
 };
 
+export const getAllActivities = async (database: IDBDatabase) => {
+  return new Promise<Activity[]>((resolve, reject) => {
+    const activitiesStore = database.transaction("activities", "readonly").objectStore("activities");
+    const request = activitiesStore.getAll();
+    request.onsuccess = () => resolve(request.result.map(parseActivity).sort(startTimesDesc));
+    request.onerror = () => reject(request.error);
+  });
+};
+
 export const getActivitesThatAreNotSynced = async (database: IDBDatabase) => {
   return new Promise<Activity[]>((resolve, reject) => {
     const activitiesStore = database.transaction("activities", "readonly").objectStore("activities");
