@@ -10,6 +10,22 @@ Feature: Home page
     When I enter the start time as the end time
     Then I should see "Activity duration is less than 1 minute"
 
+  Scenario: shows the duration warning modal on save without touching date/time fields
+    Given I open the home page
+    And the therapist is set to "Miss Amanda"
+    And the camper "Alice" has been added and selected
+    Then I should not see "Activity duration is less than 1 minute"
+    When I click the "Save" button exactly
+    Then I should see the "Are you sure?" heading
+
+  Scenario: keeps the duration warning visible after cancelling the save confirmation
+    Given I open the home page
+    And the therapist is set to "Miss Amanda"
+    And the camper "Alice" has been added and selected
+    When I click the "Save" button exactly
+    And I click the "Cancel" button
+    Then I should see "Activity duration is less than 1 minute"
+
   Scenario: hides the duration warning again after saving
     Given I open the home page
     And the therapist is set to "Miss Amanda"

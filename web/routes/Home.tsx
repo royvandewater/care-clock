@@ -50,9 +50,8 @@ export const Home = ({ database }: { database: IDBDatabase }) => {
     };
   }, []);
 
-  const warning = datetimeInteracted.value
-    ? getDatetimeWarning(activity.value.startTime, activity.value.endTime)
-    : undefined;
+  const durationWarning = getDatetimeWarning(activity.value.startTime, activity.value.endTime);
+  const warning = datetimeInteracted.value ? durationWarning : undefined;
 
   const saveActivity = async () => {
     controlsDisabled.value = true;
@@ -73,7 +72,8 @@ export const Home = ({ database }: { database: IDBDatabase }) => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (warning) {
+    if (durationWarning) {
+      datetimeInteracted.value = true;
       showConfirmWarningModal.value = true;
       return;
     }
@@ -117,11 +117,11 @@ export const Home = ({ database }: { database: IDBDatabase }) => {
     );
   }
 
-  if (showConfirmWarningModal.value && warning) {
+  if (showConfirmWarningModal.value && durationWarning) {
     return (
       <div class="h-full max-w-md mx-auto p-4 space-y-6 flex flex-col gap-4 z-0">
         <ConfirmModal
-          message={`${warning}. Save anyway?`}
+          message={`${durationWarning}. Save anyway?`}
           confirmLabel="Save anyway"
           onClose={() => (showConfirmWarningModal.value = false)}
           onConfirm={async () => {
