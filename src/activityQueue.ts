@@ -4,7 +4,7 @@ import type { z } from "zod";
 
 import { Activity } from "./types";
 import { settleBatch, type BatchItemResult } from "./batch";
-import { fromISOString, toDurationString, toEasternLocaleString } from "./date";
+import { fromISOString, toDurationString, toEasternLocaleString, toRoundedMinutes } from "./date";
 import { getSheetFromEnv } from "./sheets";
 import { Serializer } from "./serializer";
 
@@ -67,6 +67,7 @@ export class ActivityQueueDO extends DurableObject<Env> {
       if (activity.endTime) {
         newRow.End = toEasternLocaleString(activity.endTime);
         newRow.Duration = getDuration(activity.startTime, activity.endTime);
+        newRow.Minutes = getMinutes(activity.startTime, activity.endTime);
       }
 
       if (activity.groupName) {
@@ -91,6 +92,7 @@ export class ActivityQueueDO extends DurableObject<Env> {
     row.set("Start", toEasternLocaleString(activity.startTime));
     row.set("End", activity.endTime ? toEasternLocaleString(activity.endTime) : null);
     row.set("Duration", activity.endTime ? getDuration(activity.startTime, activity.endTime) : null);
+    row.set("Minutes", activity.endTime ? getMinutes(activity.startTime, activity.endTime) : null);
     await row.save();
   }
 
@@ -111,4 +113,11 @@ const getDuration = (startTime: string, endTime: string) => {
   const endTimeDate = fromISOString(endTime);
   const duration = endTimeDate.getTime() - startTimeDate.getTime();
   return toDurationString(duration);
+};
+
+const getMinutes = (startTime: string, endTime: string) => {
+  const startTimeDate = fromISOString(startTime);
+  const endTimeDate = fromISOString(endTime);
+  const duration = endTimeDate.getTime() - startTimeDate.getTime();
+  return toRoundedMinutes(duration);
 };

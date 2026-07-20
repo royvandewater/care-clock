@@ -1,6 +1,6 @@
 import { parse, format, parseISO } from "date-fns";
 
-import { assert } from "./assert";
+import { assert } from "./assert.ts";
 
 const DATE_FORMAT = "MM/dd/yyyy hh:mm:ss aa";
 const SHEET_TIME_ZONE = "America/New_York";
@@ -52,4 +52,12 @@ export const toEasternLocaleString = (isoString: string) => {
  */
 export const toDurationString = (duration: number) => {
   return duration / (1000 * 60 * 60 * 24);
+};
+
+/**
+ * @param duration - The duration in milliseconds
+ * @returns the duration rounded to the nearest whole minute
+ */
+export const toRoundedMinutes = (duration: number) => {
+  return Math.round(duration / (1000 * 60));
 };
