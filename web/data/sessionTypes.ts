@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const sessionTypes = ["Individual", "Co-Treat", "Tri-treat", "Group", "Consult", "Training"] as const;
+export const sessionTypes = ["Individual", "Co-Treat", "Tri-Treat", "Group", "Consult", "Training"] as const;
 export type SessionType = (typeof sessionTypes)[number];
 
 /**
