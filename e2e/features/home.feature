@@ -60,6 +60,17 @@ Feature: Home page
     And I fill in "With Who" with "Miss Valerie"
     And I fill in the description with "Running automated tests"
 
+  Scenario: Filling out the form for a tri-treat session
+    Given I open the home page
+    And the therapist is set to "Miss Amanda"
+    And the camper "Alice" has been added and selected
+    When I select the "Tri-Treat" session type
+    And I fill in "With Who" with "Miss Valerie"
+    And I fill in "And Who" with "Miss Tori"
+    And I fill in the description with "Running automated tests"
+    Then the "With Who" field should have value "Miss Valerie"
+    And the "And Who" field should have value "Miss Tori"
+
   Scenario: Filling out the form for an individual session
     Given I open the home page
     And the therapist is set to "Miss Amanda"
