@@ -49,8 +49,8 @@ importers:
         specifier: ^5.20260718.1
         version: 5.20260718.1
       '@cucumber/cucumber':
-        specifier: ^13.1.1
-        version: 13.1.1
+        specifier: ^13.2.0
+        version: 13.2.0
       '@playwright/test':
         specifier: ^1.61.1
         version: 1.61.1
@@ -320,8 +320,8 @@ packages:
   '@cucumber/cucumber-expressions@20.0.0':
     resolution: {integrity: sha512-t2FBLKuU0U1nP5FM8pHiVonYcXVm07fvXr/H9osdvrjcLXSWc5OCbOOqV/k5S56w/YndPv1Sv2/m/x1KBYvIlA==}
 
-  '@cucumber/cucumber@13.1.1':
-    resolution: {integrity: sha512-HdFYYoC6yVvvOg98MnVQ1KDc2YbmN3n2Jtr7haERcVNuTRpILc7s7Hc8vNTIMT1eI+Hp7V/UmGt6kLkeYXNDSQ==}
+  '@cucumber/cucumber@13.2.0':
+    resolution: {integrity: sha512-QjhTG6FWVdG66qkj1BGONecAIqEIDx4g+ZnTdaQVmhECDfGPYyfEcBX3k71p/h1YKvWEUWmhol77Y7FZ36pARA==}
     engines: {node: 22 || 24 || >=26}
     hasBin: true
 
@@ -2260,7 +2260,7 @@ snapshots:
 
   '@babel/template@7.28.6':
     dependencies:
-      '@babel/code-frame': 7.29.0
+      '@babel/code-frame': 7.29.7
       '@babel/parser': 7.29.3
       '@babel/types': 7.29.0
 
@@ -2361,7 +2361,7 @@ snapshots:
     dependencies:
       regexp-match-indices: 1.0.2
 
-  '@cucumber/cucumber@13.1.1':
+  '@cucumber/cucumber@13.2.0':
     dependencies:
       '@cucumber/ci-environment': 14.0.0
       '@cucumber/cucumber-expressions': 20.0.0
