@@ -26,6 +26,10 @@ overrides:
   # 0.34.5 exactly; miniflare 4.20260722.0 moves to 0.35.2 but is still inside
   # the 14-day minimumReleaseAge window, so force the patched release here.
   'sharp@<0.35.0': 0.35.2
+  # CVE-2026-69153 (GHSA-fxqj-rqcc-2cmp): postcss <= 8.5.22 reads arbitrary .map
+  # files via an attacker-controlled sourceMappingURL when `from` is unset.
+  # vite resolves postcss to 8.5.21, so force the patched release.
+  'postcss@<8.5.23': 8.5.23
 minimumReleaseAgeExclude:
   # Remove on or after 2026-06-23, once 4.12.25 clears the 14-day minimumReleaseAge.
   - hono@4.12.25
@@ -34,3 +38,5 @@ minimumReleaseAgeExclude:
   - '@esbuild/*'
   # Remove on or after 2026-08-07, once 7.29.0 clears the 14-day minimumReleaseAge.
   - undici@7.29.0
+  # Remove on or after 2026-08-07, once 8.5.23 clears the 14-day minimumReleaseAge.
+  - postcss@8.5.23
