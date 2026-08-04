@@ -15,10 +15,12 @@ overrides:
   # via the dev server on Windows. vite and wrangler pin esbuild to 0.27.3
   # exactly, so force the patched release.
   'esbuild@>=0.27.3 <0.28.1': 0.28.1
-  # CVE-2026-9697 (GHSA-vmh5-mc38-953g): undici >= 7.23.0 < 7.28.0 bypasses TLS
-  # certificate validation via dropped requestTls in the SOCKS5 ProxyAgent.
-  # Pulled in transitively by miniflare under wrangler/@cloudflare/vite-plugin.
-  'undici@>=7.23.0 <7.28.0': 7.28.0
+  # undici < 7.29.0 is affected by CVE-2026-13697 (GHSA-4cwx-7wf7-3272),
+  # CVE-2026-16728 (GHSA-8xcm-r25x-g524), CVE-2026-14643 (GHSA-jr45-8vmc-qm54),
+  # CVE-2026-16729 (GHSA-v3r7-h72x-cjcm) and CVE-2026-15157 (GHSA-m8rv-5g2x-5cg5),
+  # plus CVE-2026-9697 (GHSA-vmh5-mc38-953g). Pulled in transitively by miniflare
+  # under wrangler/@cloudflare/vite-plugin, which pins 7.28.0 exactly.
+  'undici@<7.29.0': 7.29.0
   # GHSA-f88m-g3jw-g9cj: sharp < 0.35.0 bundles a libvips with CVE-2026-33327,
   # CVE-2026-33328, CVE-2026-35590 and CVE-2026-35591. miniflare pins sharp to
   # 0.34.5 exactly; miniflare 4.20260722.0 moves to 0.35.2 but is still inside
@@ -30,5 +32,5 @@ minimumReleaseAgeExclude:
   # Remove on or after 2026-06-25, once 0.28.1 clears the 14-day minimumReleaseAge.
   - esbuild@0.28.1
   - '@esbuild/*'
-  # Remove on or after 2026-06-29, once 7.28.0 clears the 14-day minimumReleaseAge.
-  - undici@7.28.0
+  # Remove on or after 2026-08-07, once 7.29.0 clears the 14-day minimumReleaseAge.
+  - undici@7.29.0
