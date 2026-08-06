@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.46.0",
-    "@cloudflare/workers-types": "^5.20260722.1",
+    "@cloudflare/workers-types": "^5.20260723.1",
     "@cucumber/cucumber": "^13.2.0",
     "@playwright/test": "^1.61.1",
     "@preact/preset-vite": "^2.10.6",
