@@ -34,7 +34,7 @@
    * Environment Variables
    * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
    */
-  "vars": { "GOOGLE_SHEET_ID": "1HjCYWtonxlE1BjRlFCquFyu4_r9S9dKQmSi0ZBzNYmg" },
+  "vars": { "GOOGLE_SHEET_ID": "1Eh61bMCf8CLYsi8zgken50Rd-3ru4hTTV8ZdEeD0sT4" },
   /**
    * Note: Use secrets to store sensitive data.
    * https://developers.cloudflare.com/workers/configuration/secrets/
