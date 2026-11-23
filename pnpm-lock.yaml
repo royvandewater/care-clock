@@ -7,7 +7,7 @@ settings:
 overrides:
   uuid@<11.1.1: 11.1.1
   esbuild@>=0.27.3 <0.28.1: 0.28.1
-  undici@<7.29.0: 7.29.0
+  undici@<7.30.1: 7.30.1
   sharp@<0.35.0: 0.35.2
   postcss@<8.5.23: 8.5.23
 
@@ -222,7 +222,6 @@ packages:
 
   '@cloudflare/vite-plugin@1.68.0':
     resolution: {integrity: sha512-RY1JYJbfXDhmHzJEZS0JNyHnysDzNgLlUQBcmj1+POq0BCZjo0b4kZLn4L0UA6eC6BNdtwz6YddEPdJZ1vqeuw==}
-    hasBin: true
     peerDependencies:
       vite: ^6.1.0 || ^7.0.0 || ^8.0.0
       wrangler: ^4.157.0
