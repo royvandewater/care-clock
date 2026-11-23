@@ -33,6 +33,11 @@ overrides:
   # files via an attacker-controlled sourceMappingURL when `from` is unset.
   # vite resolves postcss to 8.5.21, so force the patched release.
   'postcss@<8.5.23': 8.5.23
+  # CVE-2026-73088 (GHSA-73wf-gq98-2v4g): browserslist <= 4.28.6 crashes or writes
+  # to the prototype when parsing an untrusted browserslist-stats.json. pnpm
+  # update leaves @babel/helper-compilation-targets on 4.28.2, so force the
+  # patched release.
+  'browserslist@<4.28.7': 4.28.7
 minimumReleaseAgeExclude:
   # Remove on or after 2026-06-23, once 4.12.25 clears the 14-day minimumReleaseAge.
   - hono@4.12.25
