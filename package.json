@@ -28,7 +28,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "^1.46.0",
+    "@cloudflare/vite-plugin": "^1.68.0",
     "@cloudflare/workers-types": "^5.20260722.1",
     "@cucumber/cucumber": "^13.2.0",
     "@playwright/test": "^1.61.1",
@@ -48,7 +48,7 @@
     "tailwindcss": "4.3.3",
     "typescript": "^7.0.2",
     "vite": "^8.1.5",
-    "wrangler": "^4.113.0",
+    "wrangler": "^4.158.0",
     "zod": "^4.4.3"
   },
   "packageManager": "pnpm@11.15.1+sha512.81350b07e53c9538a02f1f2303b4290fa2d7be04e56e2a970c4cc4b417dc761de196edabd49d55c7dc9580db81007c44143e4e3d7e462b3000d23c255122d065"
