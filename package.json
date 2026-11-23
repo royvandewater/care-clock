@@ -25,7 +25,7 @@
     "preact-iso": "^2.12.1",
     "preact-jsx-runtime": "^1.2.0",
     "uuid": "^14.0.1",
-    "zod": "^4.4.3"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.68.0",
